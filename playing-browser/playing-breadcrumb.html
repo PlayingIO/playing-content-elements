@@ -1,0 +1,177 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../nuxeo-ui-elements/nuxeo-routing-behavior.html">
+
+<!--
+`playing-breadcrumb`
+@group Playing UI
+@element playing-breadcrumb
+-->
+<dom-module id="playing-breadcrumb">
+  <template>
+
+    <style>
+      :host {
+        min-width: 30%;
+        min-height: 3em;
+        flex: 1;
+      }
+
+      .breadcrumb {
+        margin: .5em 1em 0 0;
+      }
+
+      .ancestors {
+        display: block;
+        line-height: 2em;
+        font-size: .75rem;
+        margin-top: -3px;
+      }
+
+      .breadcrumb-item {
+        text-decoration: none;
+      }
+
+      .current {
+        font-weight: 400;
+        display: initial;
+        white-space: nowrap;
+        color: var(--nuxeo-app-header);
+      }
+
+      .current-icon iron-icon {
+        width: 1.6rem;
+        height: 1.5rem;
+        margin: .3em .5rem 0 0;
+        background-color: rgba(255,255,255,0.7);
+        padding: .2em;
+        border-radius: 2px;
+      }
+
+      a.playing-breadcrumb,
+      .breadcrumb-divider {
+        opacity: .5;
+        font-weight: 300;
+      }
+
+      .breadcrumb-divider {
+        vertical-align: middle;
+      }
+
+      a.playing-breadcrumb:hover {
+        color: var(--nuxeo-link-hover-color);
+        opacity: 1;
+      }
+
+      .doc-path, .ancestors {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .ancestors span.breadcrumb-item:last-of-type .breadcrumb-divider {
+        display: none;
+      }
+
+      a.breadcrumb-item-ancestor:nth-last-child(-n+1),
+      a.breadcrumb-item-ancestor:nth-last-child(-n+2)
+      a.breadcrumb-item-ancestor:nth-last-child(-n+3) {
+        display: inline-block;
+      }
+
+      @media (max-width: 1024px) {
+        :host {
+          min-width: 60%;
+        }
+
+        .current-icon {
+          display: none;
+        }
+      }
+
+    </style>
+
+    <mostly-connection id="nxcon"></mostly-connection>
+
+    <div class="breadcrumb layout horizontal">
+      <div class="current-icon">
+        <iron-icon src="[[_icon(document)]]"></iron-icon>
+      </div>
+      <div class="doc-path">
+        <div class="current breadcrumb-item breadcrumb-item-current">[[_title(document)]]</div>
+        <div class="ancestors">
+          <template is="dom-repeat" items="[[_breadcrumb(document)]]">
+            <span class$="breadcrumb-item [[_computeCssClass(index, document)]]">
+              <a href$="[[urlFor('browse', item.path)]]">
+                <span class="breadcrumb-item-title">[[item.title]]</span>
+              </a>
+              <span class="breadcrumb-divider">></span>
+            </span>
+          </template>
+        </div>
+      </div>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-breadcrumb',
+      behaviors: [Nuxeo.RoutingBehavior, Mostly.I18nBehavior],
+      properties: {
+        document: {
+          type: Object,
+          observer: '_documentChanged'
+        }
+      },
+
+      _documentChanged: function(newVal, oldVal) {
+        //console.log('breadcrumb:_documentChanged', newVal, oldVal);
+      },
+
+      _breadcrumb: function() {
+        if (this._metadata) {
+          return this._metadata.breadcrumbs;
+        }
+      },
+
+      _computeCssClass: function(index) {
+        if (this._metadata) {
+          if (index === this._metadata.breadcrumbs.length - 1) {
+            return 'breadcrumb-item-current';
+          } else if (index === this._metadata.breadcrumbs.length - 2) {
+            return 'breadcrumb-item-parent';
+          } else if (index === this._metadata.breadcrumbs.length - 3) {
+            return 'breadcrumb-item-grand-parent';
+          } else {
+            return 'breadcrumb-item-ancestor';
+          }
+        }
+      },
+
+      _title: function(document) {
+        if (document) {
+          return (document.type === 'Root') ? this.i18n('browse.root') : document.title;
+        }
+      },
+
+      _icon: function(document)  {
+        if (document && document['icon']) {
+          return this.$.nxcon.url + document['icon'];
+        } else {
+          return '';
+        }
+      },
+
+      get _metadata() {
+        if (this.document) {
+          return this.document.metadata;
+        }
+      }
+
+    });
+  </script>
+</dom-module>

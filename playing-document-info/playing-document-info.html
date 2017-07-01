@@ -1,0 +1,83 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
+<link rel="import" href="../widgets/playing-tags.html">
+<link rel="import" href="../../user-elements/widgets/playing-user-tag.html">
+<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date.html">
+
+<!--
+`playing-document-info`
+@group Playing UI
+@element playing-document-info
+-->
+<dom-module id="playing-document-info">
+  <template>
+
+    <style>
+      .item {
+        @apply(--layout-horizontal);
+        line-height: 2.2rem;
+      }
+
+      .item label {
+        width: 100px;
+        min-width: 100px;
+      }
+
+    </style>
+
+    <div class="item" hidden$="[[!_showProcess]]">
+      <label>[[i18n('documentInfo.process')]]</label>
+      <div><mostly-tag uppercase>[[i18n('documentInfo.process.running')]]</mostly-tag></div>
+    </div>
+    <div class="item">
+      <label>[[i18n('documentInfo.state')]]</label>
+      <div><mostly-tag uppercase>[[_stateLabel(document.state)]]</mostly-tag></div>
+    </div>
+    <div class="item">
+      <label>[[i18n('documentInfo.lastModified')]]</label>
+      <nuxeo-date datetime="[[document.properties.dc:modified]]"></nuxeo-date>
+    </div>
+    <div class="item">
+      <label>[[i18n('documentInfo.created')]]</label>
+      <nuxeo-date datetime="[[document.properties.dc:created]]"></nuxeo-date>
+    </div>
+    <div class="item">
+      <label>[[i18n('documentInfo.by')]]</label>
+      <playing-user-tag user="[[document.properties.dc:creator]]"></playing-user-tag>
+    </div>
+    <div class="item">
+      <label>[[i18n('documentInfo.contributors')]]</label>
+      <playing-tags type="user" items="[[document.properties.dc:contributors]]"></playing-tags>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'playing-document-info',
+    behaviors: [Mostly.LayoutBehavior],
+    properties: {
+      document: {
+        type: Object,
+        observer: '_documentChanged'
+      },
+      _showProcess: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      }
+    },
+
+    _documentChanged: function() {
+      this._showProcess = this.document && this.document.metadata &&
+        this.document.metadata.runningWorkflows && this.document.metadata.runningWorkflows.length > 0;
+    },
+
+    _stateLabel: function(state) {
+      var t = this.i18n('label.ui.state.' + state);
+      return t === 'label.ui.state.' + state ? state : t;
+    }
+  });
+</script>

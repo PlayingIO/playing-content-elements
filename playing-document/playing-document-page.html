@@ -1,0 +1,146 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-card/paper-card.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../nuxeo-ui-elements/nuxeo-layout-behavior.html">
+<link rel="import" href="../widgets/playing-tag-suggestion.html">
+<link rel="import" href="../playing-document-info/playing-document-info.html">
+<link rel="import" href="../playing-collections/playing-document-collections.html">
+<link rel="import" href="playing-document-view.html">
+<link rel="import" href="playing-document-metadata.html">
+<link rel="import" href="playing-document-edit.html">
+
+<!--
+`playing-document-page`
+@group Playing UI
+@element playing-document-page
+-->
+<dom-module id="playing-document-page">
+  <template>
+    <style>
+
+      .page {
+        @apply(--layout-horizontal);
+      }
+
+      .page .main {
+        @apply(--layout-vertical);
+        @apply(--layout-flex-2);
+        padding-right: 1.3rem;
+        max-width: 65%;
+      }
+
+      .page .side {
+        @apply(--layout-vertical);
+        @apply(--layout-flex);
+      }
+
+      @media (max-width: 1024px) {
+        .page {
+          flex-direction: column;
+        }
+        .page .main {
+          padding: 0;
+          margin-bottom: 1rem;
+          max-width: initial;
+        }
+      }
+
+      #edit {
+        position: absolute;
+        z-index: 1;
+        top: 8px;
+        right: 8px;
+      }
+
+      ::content paper-icon-button  {
+        @apply(--nuxeo-action);
+      }
+
+      ::content paper-icon-button:hover  {
+        @apply(--nuxeo-action-hover);
+      }
+
+    </style>
+
+    <div class="page">
+
+      <div class="main">
+        <playing-document-view document="[[document]]"></playing-document-view>
+      </div>
+
+      <div class="side">
+
+        <!-- info -->
+        <paper-card>
+          <playing-document-info document="[[document]]"></playing-document-info>
+        </paper-card>
+
+        <!-- metadata / edit -->
+        <paper-card>
+          <div hidden$="[[edit]]">
+            <paper-icon-button noink id="edit" icon="nuxeo:edit" on-tap="_editMode" hidden$="[[!_canEdit(document)]]"></paper-icon-button>
+            <playing-document-metadata document="[[document]]"></playing-document-metadata>
+          </div>
+          <playing-document-edit document="[[document]]" hidden$="[[!edit]]"></playing-document-edit>
+        </paper-card>
+
+        <!-- collections -->
+        <paper-card hidden$="[[!_showCollections(document)]]">
+          <h3>[[i18n('documentPage.collections')]]</h3>
+          <playing-document-collections document="[[document]]"></playing-document-collections>
+        </paper-card>
+
+        <!-- tags -->
+        <paper-card>
+          <h3>[[i18n('documentPage.tags')]]</h3>
+          <playing-tag-suggestion document="[[document]]" allow-new-tags
+                                placeholder="[[i18n('documentPage.tags.placeholder')]]">
+          </playing-tag-suggestion>
+        </paper-card>
+
+      </div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'playing-document-page',
+      behaviors: [Mostly.LayoutBehavior],
+      properties: {
+        document: {
+          type: Object,
+          observer: '_documentChanged'
+        },
+
+        edit: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      _documentChanged: function(newVal, oldVal) {
+        console.log('document-page:_documentChanged', newVal, oldVal);
+        if (this.document) {
+          this.edit = false;
+        }
+      },
+
+      _isMutable: function(doc) {
+        return !this.hasFacet(doc, 'Immutable') && doc.type !== 'Root' && doc.state !== 'deleted';
+      },
+
+      _canEdit: function(doc) {
+        return doc && doc.type !== 'Root' && this.hasPermission(doc, 'Write') && this._isMutable(doc);
+      },
+
+      _editMode: function() {
+        this.edit = true;
+      },
+
+      _showCollections: function (doc) {
+        return this.hasCollections(doc);
+      }
+    });
+  </script>
+
+</dom-module>

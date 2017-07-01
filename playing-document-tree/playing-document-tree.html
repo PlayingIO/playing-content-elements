@@ -1,0 +1,312 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../paper-spinner/paper-spinner.html">
+<link rel="import" href="../../nuxeo-ui-elements/nuxeo-routing-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-page-provider.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-tree/mostly-tree.html">
+<link rel="import" href="../playing-document/playing-document.html">
+
+<!--
+`playing-document-tree`
+@group Playing UI
+@element playing-document-tree
+-->
+
+<dom-module id="playing-document-tree">
+  <template>
+    <style>
+      :host {
+        display: block;
+        --mostly-tree-theme: {
+          padding: 1em;
+          color: var(--nuxeo-drawer-text);
+        };
+        --mostly-tree-node-theme: {
+          min-height: 24px;
+        };
+        --mostly-tree-children-theme: {
+          padding-left: 1em;
+        };
+        --mostly-tree-node-more-theme: {
+          line-height: 1.3em;
+          display: inline-block;
+          vertical-align: text-top;
+          margin-left: 1.3em;
+          word-break: break-word;
+        }
+      }
+
+      .content {
+        padding: 5px 0;
+        overflow: auto;
+        height: calc(100vh - 72px);
+      }
+
+      .node-name {
+        line-height: 1.3em;
+        display: inline-block;
+        vertical-align: text-top;
+        margin-left: 1.3em;
+        word-break: break-word;
+      }
+
+      #root a, a:active, a:visited, a:focus {
+        color: var(--nuxeo-drawer-text);
+      }
+
+      #root a:hover {
+        @apply(--nuxeo-link-hover);
+      }
+
+      iron-icon {
+        opacity: .3;
+        width: 1.3rem;
+        margin-right: -1.6em;
+        margin-top: -0.07rem;
+      }
+
+      [toggle] {
+        cursor: pointer;
+      }
+
+      .parents {
+        display: block;
+        line-height: 1.5em;
+      }
+
+      .parents + mostly-tree {
+        padding: 6px 5px;
+      }
+
+      .parents > mostly-tree {
+        padding: 4px 5px;
+      }
+
+      .parents a {
+        padding: .35em;
+        color: var(--nuxeo-drawer-text);
+        border-bottom: 1px solid var(--nuxeo-border);
+      }
+
+      .parents a:hover {
+        @apply(--nuxeo-link-hover);
+      }
+
+      .parents span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: block;
+        min-width: 1.3em;
+      }
+
+      .parent {
+        padding: .12em 0 0;
+      }
+
+      paper-spinner {
+        height: 1.1rem;
+        width: 1.1rem;
+        margin-right: -1.4em;
+      }
+
+      .noPermission {
+        opacity: .5;
+        display: block;
+        font-weight: 300;
+        padding: 1.5em .7em;
+        text-align: center;
+        font-size: 1.1rem;
+      }
+    </style>
+
+    <playing-document id="doc" doc-path="[[docPath]]" document="{{document}}" enrichers="hasFolderishChild"></playing-document>
+
+    <mostly-page-provider id="children"
+            provider="folders"
+            enrichers="hasFolderishChild"
+            schemas="dublincore,common">
+    </mostly-page-provider>
+
+    <div class="header" hidden$="[[!label]]">[[i18n(label)]]</div>
+
+    <div class="content">
+      <div class="parents" hidden$="[[_noPermission]]">
+        <a href$="[[urlFor('browse', '/')]]" class="layout horizontal" hidden$="[[_hideRoot(document)]]">
+          <span><iron-icon icon="icons:chevron-left"></iron-icon></span>
+          <span class="parent">[[i18n('browse.root')]]</span>
+        </a>
+        <template is="dom-repeat" items="[[parents]]" as="item">
+          <a href$="[[urlFor('browse', item.path)]]" class="layout horizontal">
+            <span><iron-icon icon="icons:chevron-left"></iron-icon></span>
+            <span class="parent">[[item.title]]</span>
+          </a>
+        </template>
+      </div>
+      <mostly-tree id="tree" data="[[document]]" controller="[[controller]]" node-key="uid">
+        <template class="horizontal layout">
+          <template class="flex" is="dom-if" if="[[!isLeaf]]">
+            <paper-spinner active hidden$=[[!loading]]></paper-spinner>
+            <iron-icon icon="[[_expandIcon(opened)]]" toggle="" hidden$=[[loading]]></iron-icon>
+          </template>
+          <span class="node-name flex">
+            <a href$="[[urlFor('browse', item.path)]]">[[_title(item)]]</a>
+          </span>
+        </template>
+      </mostly-tree>
+      <div class="noPermission" hidden$="[[!_noPermission]]">[[i18n('browse.tree.noDocument')]]</div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'playing-document-tree',
+      behaviors: [Nuxeo.RoutingBehavior, Mostly.I18nBehavior, Mostly.FiltersBehavior],
+      properties: {
+        controller: Object,
+        auto: {
+          type: Boolean,
+          value: false
+        },
+        rootDocPath: {
+          type: String,
+          value: '/',
+          observer: '_rootDocPathChanged'
+        },
+        docPath: {
+          type: String,
+          value: '/'
+        },
+        document: {
+          type: Object,
+          observer: '_documentChanged'
+        },
+        currentDocument: {
+          type: Object,
+          observer: '_currentDocumentChanged'
+        },
+        parents: {
+          type: Array,
+          value: []
+        },
+        label: String,
+        visible: {
+          type: Boolean
+        },
+        cannotSee: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      observers: [
+        '_fetchDocument(docPath, visible)'
+      ],
+
+      ready: function() {
+        window.addEventListener('playing-documents-deleted', e => {
+          this.removeDocuments(e.detail.documentIds);
+        });
+
+        this.controller = {
+          getChildren: (node, page) => {
+            this.$.children.params = { parent: node._id };
+            this.$.children.page = page;
+            return this.$.children.fetch().then(resp => {
+              return {
+                items: resp.data,
+                isNextAvailable: this.$.children.isNextPageAvailable
+              }
+            });
+          },
+
+          isLeaf: node => {
+            var hasFolderishChild = node.metadata && node.metadata.hasFolderishChild;
+            return !hasFolderishChild;
+          }
+        };
+      },
+
+      _hideRoot: function(doc) {
+        return this.rootDocPath !== '/' || (doc && doc.type === 'folder' && doc.title === 'Root');
+      },
+
+      _fetchDocument: function() {
+        if (this.visible && this.docPath) {
+          this._noPermission = false;
+          this.$.doc.execute().catch(err => {
+            if (err && err.status === 403) {
+              this._noPermission = true;
+            } else {
+              throw err;
+            }
+          });
+        }
+      },
+
+      _currentDocumentChanged: function() {
+        var doc = this.currentDocument;
+        if (doc && doc.path.startsWith(this.rootDocPath)) {
+
+          if (this.docPath === doc.path && this.document && this.document.title !== doc.title) {
+            //If document is the same as before but its name changed, get the document again
+            this.$.doc.get();
+          }
+
+          if (this.docPath !== doc.path && !this.hasFacet(doc, 'HiddenInNavigation')) {
+            this.$.tree.style.display = 'none';
+            this.parents = [];
+
+            if (doc.type === 'folder' && doc.title === 'Root') {
+              this.docPath = doc.path;
+              return;
+            }
+
+            var entries = doc.metadata.breadcrumbs;
+            var lastEntry = entries[entries.length - 1];
+            if (this.hasFacet(lastEntry, 'Folderish') || entries.length === 1) {
+              this.docPath = lastEntry.path;
+            } else {
+              this.docPath = entries[entries.length - 2].path;
+            }
+
+            for (var i = 0; i < entries.length - 1; i++) {
+              var entry = entries[i];
+              if (!this.hasFacet(entry, 'HiddenInNavigation') && entry.path.startsWith(this.rootDocPath)) {
+                this.push('parents', entry);
+              }
+            }
+
+          }
+        }
+      },
+
+      _documentChanged: function() {
+        if (this.document) {
+          this.$.tree.style.display = 'block';
+        }
+      },
+
+      _rootDocPathChanged: function() {
+        this.docPath = this.rootDocPath;
+      },
+
+      _expandIcon: function(opened) {
+        return 'hardware:keyboard-arrow-' + (opened ? 'down' : 'right');
+      },
+
+      _icon: function(opened) {
+        return opened ? 'icons:folder-open' : 'icons:folder';
+      },
+
+      _title: function(item) {
+        return (item.type === 'folder' && item.title === 'Root') ? this.i18n('browse.root') : item.title;
+      },
+
+      removeDocuments: function(documentIds) {
+        this.$.tree.removeNodes(documentIds);
+      }
+    });
+  </script>
+</dom-module>

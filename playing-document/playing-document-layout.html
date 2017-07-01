@@ -1,0 +1,64 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/mostly-layout.html">
+
+<!--
+`playing-document-layout`
+@group Playing UI
+@element playing-document-layout
+-->
+<dom-module id="playing-document-layout">
+  <template>
+    <mostly-layout id="layout"
+            href="[[_href(document, layout)]]"
+            model="[[_model(document)]]"
+            error="[[i18n('documentView.layoutNotFound', document.type)]]"
+            on-element-changed="_elementChanged">
+    </mostly-layout>
+  </template>
+  <script>
+    Polymer({
+      is: 'playing-document-layout',
+      behaviors: [Mostly.I18nBehavior],
+      properties: {
+        document: {
+          type: Object,
+          notify: true
+        },
+        layout: {
+          type: String,
+          value: 'view'
+        }
+      },
+
+      get element() {
+        return this.$.layout.element;
+      },
+
+      validate: function() {
+        return this.$.layout.validate();
+      },
+
+      _href: function (document, layout) {
+        if (document) {
+          console.log('document-layout', document, layout);
+          var doctype = document.type.toLowerCase();
+          var folder = '../playing-' + doctype;
+          var name = ['playing', doctype, layout, 'layout'].join('-');
+          return this.resolveUrl(folder + '/' + name + '.html');
+        }
+      },
+
+      _model: function (document) {
+        return { document: document };
+      },
+
+      _elementChanged: function() {
+        // forward document path change events
+        this.element.addEventListener('document-changed', function(e) {
+          this.notifyPath(e.detail.path, e.detail.value);
+        }.bind(this));
+      }
+
+    });
+  </script>
+</dom-module>

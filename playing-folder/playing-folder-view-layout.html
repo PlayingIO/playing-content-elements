@@ -1,0 +1,26 @@
+<!--
+`playing-folder-view-layout`
+@group Playing UI
+@element playing-folder-view-layout
+-->
+<dom-module id="playing-folder-view-layout">
+
+  <template>
+    <playing-document-content document="[[document]]"></playing-document-content>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-folder-view-layout',
+      properties: {
+        /**
+         * @doctype Folder
+         */
+        document: {
+          type: Object
+        }
+      }
+    });
+  </script>
+
+</dom-module>

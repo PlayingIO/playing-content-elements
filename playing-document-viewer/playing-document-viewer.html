@@ -1,0 +1,48 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../playing-document/playing-document-preview.html">
+<link rel="import" href="../playing-dropzone/playing-dropzone.html">
+<link rel="import" href="../playing-document-blob/playing-document-blob.html">
+
+<!--
+`playing-document-viewer`
+@group Playing UI
+@element playing-document-viewer
+-->
+<dom-module id="playing-document-viewer">
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+
+      playing-dropzone {
+        height: 60vh;
+      }
+
+      playing-document-preview {
+        width: 100%;
+      }
+
+      playing-document-blob {
+        margin-top: 8px;
+      }
+    </style>
+
+    <playing-dropzone document="{{document}}" hidden$="[[document.properties.file:content.data]]" update-document></playing-dropzone>
+    <playing-document-preview document="[[document]]" hidden$="[[!document.properties.file:content.data]]"></playing-document-preview>
+    <playing-document-blob document="[[document]]" hidden$="[[!document.properties.file:content.data]]"></playing-document-blob>
+
+  </template>
+
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'playing-document-viewer',
+    behaviors: [Mostly.I18nBehavior],
+    properties: {
+      document: Object
+    }
+  });
+</script>

@@ -1,0 +1,309 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-page-provider.html">
+<link rel="import" href="../../nuxeo-ui-elements/nuxeo-slots.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
+<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
+<link rel="import" href="../../user-elements/widgets/playing-user-tag.html">
+<link rel="import" href="../../mostly-elements/mostly-aggregation/mostly-dropdown-aggregation.html">
+<link rel="import" href="../../mostly-elements/mostly-data-grid/mostly-data-grid.html">
+<link rel="import" href="../../mostly-elements/mostly-data-table/iron-data-table.html">
+<link rel="import" href="../../mostly-elements/mostly-thumbnail/mostly-thumbnail.html">
+<link rel="import" href="../../mostly-elements/mostly-thumbnail/mostly-grid-thumbnail.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-results.html">
+
+<!--
+`playing-document-content`
+@group Nuxeo UI
+@element mostly-document-content
+-->
+<dom-module id="playing-document-content">
+  <template>
+
+    <style>
+
+      .results {
+        @apply(--layout-vertical);
+        @apply(--layout-flex);
+        min-height: calc(100vh - 14em);
+        margin-top: 8px;
+      }
+
+      .results.dragging {
+        border: 2px dashed var(--nuxeo-primary-color);
+      }
+
+      mostly-data-grid {
+        display: block;
+        position: relative;
+      }
+
+      mostly-tag {
+        margin-right: 2px;
+      }
+
+      .ellipsis {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: block;
+        width: calc(100% - 38px);
+      }
+
+      .capitalize {
+        text-transform: capitalize;
+      }
+    </style>
+
+    <mostly-connection id="nxcon"></mostly-connection>
+
+    <mostly-page-provider id="nxProvider" auto
+            provider="[[provider]]"
+            page-size="[[pageSize]]"
+            aggregations="{{aggregations}}"
+            enrichers="thumbnail, permissions"
+            page="[[pageNumber]]"
+            params="[[params]]"
+            schemas="dublincore,common,uid,file"
+            headers='{"X-NXfetch.document": "properties", "X-NXtranslate.directoryEntry": "label"}'
+            fetch-aggregates>
+    </mostly-page-provider>
+
+    <div id="dropzone">
+
+      <mostly-results name="[[document.uid]]" nx-provider="[[nxProvider]]" selected-items="{{selectedItems}}">
+        <div class="selectionActions">
+          <nuxeo-slot slot="BROWSE_ACTIONS" model="[[browseActionContext]]"></nuxeo-slot>
+        </div>
+
+        <!-- Grid view -->
+        <mostly-data-grid class="results" name="grid" icon="nuxeo:view-thumbnails"
+                         empty-label="[[emptyLabel]]"
+                         empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
+                         selection-enabled display-quick-filters>
+          <template>
+            <mostly-grid-thumbnail class="grid-box"
+                                           tabindex$="{{tabIndex}}"
+                                           selected$="{{selected}}"
+                                           doc="[[item]]" on-navigate="_navigate"
+                                           selected-items="[[selectedItems]]">
+            </mostly-grid-thumbnail>
+          </template>
+        </mostly-data-grid>
+
+        <!-- Table view -->
+        <mostly-data-table class="results" name="table" icon="nuxeo:view-list"
+                          settings-enabled
+                          empty-label="[[emptyLabel]]"
+                          empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
+                          selection-enabled
+                          display-quick-filters
+                          on-row-clicked="_navigate">
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.title')]]"
+                                   field="dc:title" sort-by="dc:title" filter-by="title"  flex="100">
+            <template>
+              <mostly-thumbnail document="[[item]]"></mostly-thumbnail>
+              <a class="title ellipsis" href$="[[urlFor('browse', item.path)]]" on-tap="_navigate">[[item.title]]</a>
+            </template>
+          </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.modified')]]"
+                                   field="dc:modified" sort-by="dc:modified"
+                                   filter-by="dc_modified_agg"
+                                   flex="50">
+            <template is="header">
+              <mostly-dropdown-aggregation
+                placeholder="[[i18n('documentContentView.datatable.header.modified')]]"
+                data="[[aggregations.dc_modified_agg]]"
+                value="{{column.filterValue}}" multiple>
+              </mostly-dropdown-aggregation>
+            </template>
+            <template>
+              <nuxeo-date datetime="[[item.properties.dc:modified]]"></nuxeo-date>
+            </template>
+          </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.lastContributor')]]"
+                                   filter-by="dc_last_contributor_agg" field="dc:lastContributor" sort-by="dc:lastContributor" flex="50">
+            <template is="header">
+              <mostly-dropdown-aggregation
+                placeholder="[[i18n('documentContentView.datatable.header.lastContributor')]]"
+                data="[[aggregations.dc_last_contributor_agg]]"
+                value="{{column.filterValue}}" multiple>
+              </mostly-dropdown-aggregation>
+            </template>
+            <template>
+              <playing-user-tag user="[[item.properties.dc:lastContributor]]"></playing-user-tag>
+            </template>
+          </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.state')]]"
+                                   field="currentLifeCycleState" hidden>
+            <template><span class="capitalize">[[item.state]]</span></template>
+          </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.version')]]"
+                                   field="versionLabel" hidden>
+            <template>
+              [[formatVersion(item)]]
+            </template>
+          </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.created')]]"
+                                   field="dc:created" sort-by="dc:created" flex="50" hidden>
+            <template>
+              <nuxeo-date datetime="[[item.properties.dc:created]]"></nuxeo-date>
+            </template>
+          </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.author')]]"
+                                   field="dc:creator" sort-by="dc:creator" hidden>
+            <template>
+              <playing-user-tag user="[[item.properties.dc:creator]]"></playing-user-tag>
+            </template>
+          </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.nature')]]"
+                                   field="dc:nature" hidden>
+            <template>
+              <mostly-tag hidden$="[[!item.properties.dc:nature]]">
+                [[formatDirectory(item.properties.dc:nature)]]
+              </mostly-tag>
+            </template>
+          </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.coverage')]]"
+                                   field="dc:coverage" hidden>
+            <template>
+              <mostly-tag hidden$="[[!item.properties.dc:coverage]]">
+                [[formatDirectory(item.properties.dc:coverage)]]
+              </mostly-tag>
+            </template>
+          </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.subjects')]]"
+                                   field="dc:subjects" hidden flex="60">
+            <template>
+              <template is="dom-repeat" items="[[item.properties.dc:subjects]]" as="subject">
+                <mostly-tag>[[formatDirectory(subject)]]</mostly-tag>
+              </template>
+            </template>
+          </mostly-data-table-column>
+        </mostly-data-table>
+
+      </mostly-results>
+
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-document-content',
+      behaviors: [Nuxeo.LayoutBehavior],
+      properties: {
+        document: {
+          type: Object
+        },
+        params: {
+          type: Object,
+          value: {},
+          notify: true
+        },
+        provider: {
+          type: String,
+          value: 'documents'
+        },
+        pageSize: {
+          type: Number,
+          value: 40
+        },
+        currentIndex: {
+          type: Number,
+          notify: true
+        },
+        browseActionContext: {
+          type: Object,
+          computed: '_browseActionContext(document, selectedItems)'
+        }
+      },
+
+      listeners: {
+        'document-created': '_handleDocumentCreated',
+        'dropzone.dragover': '_dragoverImport',
+        'dropzone.dragleave': '_dragleaveImport',
+        'dropzone.drop': '_dropImport'
+      },
+
+      observers: [
+        '_refresh(params)',
+        '_observeDocument(document)'
+      ],
+
+      ready: function() {
+        this.nxProvider = this.$.nxProvider;
+      },
+
+      _observeDocument: function() {
+        if (this.document) {
+          this.params = {'ecm_parentId': this.document.uid};
+        }
+      },
+
+      _refreshAndFetch: function() {
+        var pn = this.nxProvider.page;
+        this._refresh();
+        if (pn === 1) {
+          // normally the page provider is on auto mode
+          // so the fetch should be triggered when changing page
+          this.nxProvider.fetch();
+        }
+      },
+
+      _refresh: function() {
+        this.$.nxProvider.page = 1;
+      },
+
+      _navigate: function(e) {
+        this.fire('navigate', {doc: (e.model || e.detail).item});
+        e.stopPropagation();
+      },
+
+      _computedClass: function(isSelected) {
+        var classes = 'grid-box';
+        if (isSelected) {
+          classes += ' selected';
+        }
+        return classes;
+      },
+
+      _dragoverImport: function(e) {
+        e.preventDefault();
+        this.fire('notify', {message: this.i18n('documentContentView.drag.import'), duration: 0});
+        this._toggleDragging(true);
+      },
+
+      _dragleaveImport: function() {
+        this.fire('notify', {close: true});
+        this._toggleDragging(false);
+        this.toggleClass('dragging', false, this.$.grid);
+        this.toggleClass('dragging', false, this.$.table);
+      },
+
+      _dropImport: function(e) {
+        e.preventDefault();
+        this.fire('notify', {close: true});
+        this._toggleDragging(false);
+        this.fire('create-document', {files: e.dataTransfer.files});
+      },
+
+      _toggleDragging: function(flag) {
+        Polymer.dom(this.root).querySelectorAll('.results').forEach(function(e) {
+          this.toggleClass('dragging', flag, e);
+        }.bind(this));
+      },
+
+      _handleDocumentCreated: function() {
+        this.fire('document-updated');
+      },
+
+      _browseActionContext: function() {
+        return {document: this.document, selectedItems: this.selectedItems};
+      }
+
+    });
+  </script>
+
+</dom-module>

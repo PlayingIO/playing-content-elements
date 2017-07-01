@@ -1,0 +1,66 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
+<link rel="import" href="../../user-elements/widgets/playing-user-tag.html">
+<link rel="import" href="../../user-elements/widgets/playing-group-tag.html">
+
+<!--
+An element to display a list of tags.
+
+Example:
+
+    <playing-tags type="user" tags='["User 1", "User 2", "User 3"]'></playing-tags>
+
+@group Nuxeo UI
+@element playing-tags
+@demo demo/widgets/index.html
+-->
+<dom-module id="playing-tags">
+  <style>
+    :host {
+      display: inline-block;
+    }
+  </style>
+
+  <template>
+    <template is="dom-repeat" items="[[items]]" as="item">
+      <template is="dom-if" if="[[_type('tag')]]">
+        <mostly-tag>[[item]]</mostly-tag>
+      </template>
+      <template is="dom-if" if="[[_type('user')]]">
+        <playing-user-tag user="[[item]]"></playing-user-tag>
+      </template>
+      <template is="dom-if" if="[[_type('group')]]">
+        <playing-group-tag group="[[item]]"></playing-group-tag>
+      </template>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-tags',
+      properties: {
+
+        /**
+         * Type ("tag", "user", "group").
+         */
+        type: {
+          type: String,
+          value: 'tag'
+        },
+
+        /**
+         * Array of user/group entities or strings.
+         */
+        items: {
+          type: Array
+        }
+      },
+
+      _type: function(value) {
+        return this.type === value;
+      }
+
+    });
+  </script>
+
+</dom-module>

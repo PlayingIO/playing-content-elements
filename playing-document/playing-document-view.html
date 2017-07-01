@@ -1,0 +1,37 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="playing-document-preview.html">
+<link rel="import" href="../playing-document-blob/playing-document-blob.html">
+<link rel="import" href="../playing-dropzone/playing-dropzone.html">
+<link rel="import" href="playing-document-layout.html">
+
+<!--
+`playing-document-view`
+@group Playing UI
+@element playing-document-view
+-->
+<dom-module id="playing-document-view">
+  <template>
+
+    <style>
+      ::content playing-document-viewer,
+      ::content playing-document-attachments,
+      ::content playing-note-editor,
+      ::content playing-picture-info,
+      ::content playing-picture-formats,
+      ::content playing-video-info,
+      ::content playing-video-conversions {
+        @apply(--paper-card);
+      }
+    </style>
+
+    <playing-document-layout document="[[document]]" layout="view"></playing-document-layout>
+  </template>
+  <script>
+    Polymer({
+      is: 'playing-document-view',
+      properties: {
+        document: Object
+      }
+    });
+  </script>
+</dom-module>

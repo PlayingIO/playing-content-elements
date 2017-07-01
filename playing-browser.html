@@ -1,0 +1,144 @@
+<!--
+`playing-browser`
+@group Nuxeo UI
+@element playing-browser
+-->
+<dom-module id="playing-browser">
+  <template>
+    <style>
+
+      /* document actions */
+      .document-actions {
+        @apply(--layout-horizontal);
+        @apply(--layout-end-justified);
+        padding: 0 0 16px;
+      }
+
+      .document-actions ::content paper-icon-button {
+        @apply(--nuxeo-action);
+      }
+
+      .document-actions ::content paper-icon-button:hover {
+        @apply(--nuxeo-action-hover);
+      }
+
+      /* document views items (pills) */
+      ::content #documentViewsItems {
+        @apply(--layout-horizontal);
+        --paper-listbox-background-color: transparent;
+      }
+
+      @media (max-width: 1024px) {
+        paper-listbox {
+          padding-right: 7rem;
+        }
+      }
+
+    </style>
+
+    <!-- Main content -->
+    <mostly-page class="main">
+
+      <div class="header">
+        <playing-breadcrumb document="[[document]]"></playing-breadcrumb>
+        <paper-listbox id="documentViewsItems" selected="{{selectedTab}}" attr-for-selected="name">
+          <nuxeo-slot slot="DOCUMENT_VIEWS_ITEMS" model="[[viewsContext]]"></nuxeo-slot>
+        </paper-listbox>
+      </div>
+
+      <div class="content">
+
+        <div class="document-actions">
+          <nuxeo-slot slot="DOCUMENT_ACTIONS" model="[[actionContext]]"></nuxeo-slot>
+        </div>
+
+        <div id="nxContent">
+          <iron-pages selected="[[selectedTab]]" attr-for-selected="name" selected-attribute="visible">
+            <nuxeo-slot slot="DOCUMENT_VIEWS_PAGES" model="[[viewsContext]]"></nuxeo-slot>
+          </iron-pages>
+        </div>
+
+      </div>
+    </mostly-page>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-browser',
+      behaviors: [Nuxeo.RoutingBehavior, Mostly.I18nBehavior, Mostly.FiltersBehavior],
+      properties: {
+        document: {
+          type: Object,
+          observer: '_documentChanged'
+        },
+        selectedTab: {
+          type: String,
+          value: 'view',
+          notify: true
+        },
+        cvParams: {
+          type: Object,
+          notify: true
+        },
+        clipboard: {
+          type: Object
+        },
+        actionContext: {
+          type: Object,
+          computed: '_actionContext(document, clipboard)'
+        },
+
+        viewsContext: {
+          type: Object,
+          computed: '_viewsContext(document)'
+        }
+      },
+
+      listeners: {
+        'aceupdated': '_documentUpdated',
+        'acedeleted': '_documentUpdated',
+        'added-to-collection': '_documentUpdated',
+        'removed-from-collection': '_documentUpdated'
+      },
+
+      _documentChanged: function(newVal, oldVal) {
+        console.log('browser:_documentChanged', newVal, oldVal);
+      },
+
+      _documentUpdated: function() {
+        this.fire('document-updated');
+      },
+
+      download: function() {
+        location.href = this.document.properties['file:content'].data;
+      },
+
+      get _metadata() {
+        if (this.document) {
+          return this.document.metadata;
+        }
+      },
+
+      get _canReadChildren() {
+        return this._metadata && this._metadata.permissions.indexOf('ReadChildren') !== -1;
+      },
+
+      _actionContext: function() {
+        console.log('browser:_actionContext', this.document);
+        return { document: this.document, clipboard: this.clipboard };
+      },
+
+      _viewsContext: function() {
+        console.log('browser:_viewsContext', this.document);
+        return { document: this.document };
+      },
+
+      _navigateToView: function() {
+        this.navigateTo('browse', this.document.path);
+      }
+
+    });
+  </script>
+
+</dom-module>

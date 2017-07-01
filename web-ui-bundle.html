@@ -1,0 +1,51 @@
+<!-- BOOK MENU -->
+
+<nuxeo-slot-content name="browseDrawerItem" slot="DRAWER_ITEMS" order="20">
+  <template>
+    <mostly-menu-icon name="browser" icon="nuxeo:browse" label="app.browse"></mostly-menu-icon>
+  </template>
+</nuxeo-slot-content>
+<nuxeo-slot-content name="browseDrawerPage" slot="DRAWER_PAGES">
+  <template>
+    <playing-document-tree name="browser" id="navTree" label="app.browse" current-document="[[document]]"></playing-document-tree>
+  </template>
+</nuxeo-slot-content>
+
+<!-- PAGES -->
+
+<nuxeo-slot-content name="browsePage" slot="PAGES">
+  <template>
+    <playing-browser name="browse" id="browser" document="[[currentDocument]]" clipboard="[[clipboard]]" selected-tab="[[docAction]]"></playing-browser>
+  </template>
+</nuxeo-slot-content>
+
+<!-- BOOK VIEWS -->
+
+<nuxeo-slot-content name="documentViewItem" slot="DOCUMENT_VIEWS_ITEMS" order="10">
+  <template>
+    <mostly-page-item name="view" label="browser.view"></mostly-page-item>
+  </template>
+</nuxeo-slot-content>
+
+<!-- BOOK PAGES -->
+
+<nuxeo-slot-content name="documentViewPage" slot="DOCUMENT_VIEWS_PAGES" order="10">
+  <template>
+    <playing-document-page name="view" document="[[document]]"></playing-document-page>
+  </template>
+</nuxeo-slot-content>
+
+<!-- BOOK ACTIONS -->
+
+<nuxeo-slot-content name="addToColDocumentAction" slot="DOCUMENT_ACTIONS" order="10">
+  <template>
+    <mostly-add-to-collection-button document="[[document]]"></mostly-add-to-collection-button>
+  </template>
+</nuxeo-slot-content>
+
+<nuxeo-slot-content name="favoriteToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="20">
+  <template>
+    <mostly-favorites-toggle-button document="[[document]]"></mostly-favorites-toggle-button>
+  </template>
+</nuxeo-slot-content>
+
