@@ -1,7 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../paper-spinner/paper-spinner.html">
-<link rel="import" href="../../nuxeo-ui-elements/nuxeo-routing-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-page-provider.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-tree/mostly-tree.html">
@@ -162,7 +162,7 @@
   <script>
     Polymer({
       is: 'playing-document-tree',
-      behaviors: [Nuxeo.RoutingBehavior, Mostly.I18nBehavior, Mostly.FiltersBehavior],
+      behaviors: [Mostly.RoutingBehavior, Mostly.I18nBehavior, Mostly.FiltersBehavior],
       properties: {
         controller: Object,
         auto: {

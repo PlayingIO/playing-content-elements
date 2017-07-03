@@ -1,0 +1,88 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+
+<!--
+A button element for downloading the main file from a document.
+
+Example:
+
+    <playing-download-button document="[[document]]"></playing-download-button>
+
+@group Playing UI
+@element playing-download-button
+@demo demo/actions/index.html
+-->
+<dom-module id="playing-download-button">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+    </style>
+
+    <template is="dom-if" if="[[_isAvailable(document)]]">
+      <paper-icon-button icon="[[icon]]" on-tap="_download" noink></paper-icon-button>
+      <paper-tooltip>[[i18n('downloadButton.tooltip')]]</paper-tooltip>
+    </template>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-download-button',
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
+      properties: {
+
+        /**
+         * Input document.
+         */
+        document: Object,
+
+        /**
+         * Icon to use (iconset_name:icon_name).
+         */
+        icon: {
+          type: String,
+          value: 'nuxeo:download'
+        },
+
+        /**
+         *
+         * Path of the file object to download.
+         * For example `xpath="files:files/0/file"`.
+         */
+        xpath: {
+          type: String,
+          value: 'file:content'
+        }
+      },
+
+      _isAvailable: function(doc) {
+        return this.hasContent(doc);
+      },
+
+      _download: function() {
+        var blob = this.document && this._deepFind(this.document.properties, this.xpath);
+        if (blob){
+          location.href = blob.data;
+        }
+      },
+
+      _deepFind: function(obj, props) {
+        for (var i = 0, path = props.split('/'), len = path.length; i < len; i++) {
+          if(!obj || obj === []) {
+            break;
+          }
+          obj = obj[path[i]];
+        }
+        return obj;
+      }
+    });
+  </script>
+
+</dom-module>

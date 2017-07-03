@@ -8,38 +8,38 @@
   <template>
     <div role="widget">
       <label>[[i18n('label.dublincore.title')]]</label>
-      <div name="title">[[document.properties.dc:title]]</div>
+      <div name="title">[[document.title]]</div>
     </div>
 
-    <div role="widget" hidden$="[[!document.properties.dc:description]]">
+    <div role="widget" hidden$="[[!document.description]]">
       <label>[[i18n('label.dublincore.description')]]</label>
-      <div name="description" class="multiline">[[document.properties.dc:description]]</div>
+      <div name="description" class="multiline">[[document.description]]</div>
     </div>
 
-    <div role="widget" hidden$="[[!document.properties.dc:nature]]">
+    <div role="widget" hidden$="[[!document.nature]]">
       <label>[[i18n('label.dublincore.nature')]]</label>
-      <div name="nature">[[formatDirectory(document.properties.dc:nature)]]</div>
+      <div name="nature">[[formatDirectory(document.nature)]]</div>
     </div>
 
     <playing-directory-suggestion role="widget"
             label="[[i18n('label.dublincore.subjects')]]"
             directory-name="l10nsubjects"
             name="subjects"
-            value="{{document.properties.dc:subjects}}"
-            hidden$="[[!document.properties.dc:subjects.length]]"
+            value="{{document.subjects}}"
+            hidden$="[[!document.subjects.length]]"
             multiple="true"
             dbl10n="true"
             readonly>
     </playing-directory-suggestion>
 
-    <div role="widget" hidden$="[[!document.properties.dc:coverage]]">
+    <div role="widget" hidden$="[[!document.coverage]]">
       <label>[[i18n('label.dublincore.coverage')]]</label>
-      <div name="coverage">[[formatDirectory(document.properties.dc:coverage)]]</div>
+      <div name="coverage">[[formatDirectory(document.coverage)]]</div>
     </div>
 
-    <div role="widget" hidden$="[[!document.properties.dc:expired]]">
+    <div role="widget" hidden$="[[!document.expired]]">
       <label>[[i18n('label.dublincore.expire')]]</label>
-      <div name="expired">[[formatDate(document.properties.dc:expired)]]</div>
+      <div name="expired">[[formatDate(document.expired)]]</div>
     </div>
   </template>
 

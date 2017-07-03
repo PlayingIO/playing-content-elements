@@ -818,7 +818,7 @@
         if (docData && Object.keys(docData).length > 0) {
           copiedDocData = JSON.parse(JSON.stringify(docData));
         }
-        copiedDocData.document.properties['dc:title'] = destFile.name;
+        copiedDocData.document.title = destFile.name;
         this._setFileProp(destIdx, 'docData', copiedDocData);
         this._setFileProp(destIdx, 'checked', true);
       },
@@ -837,8 +837,8 @@
             type: this.selectedDocType,
           });
           this.set([propName, pos, 'sanitizedName'].join('.'),
-                    this._sanitizeName(this.document.properties['dc:title']));
-          this.set([propName, pos, 'title'].join('.'), this.document.properties['dc:title']);
+                    this._sanitizeName(this.document.title));
+          this.set([propName, pos, 'title'].join('.'), this.document.title);
         }
       },
 
@@ -852,7 +852,7 @@
           properties = JSON.parse(JSON.stringify(docData.document)).properties;
         }
         if (title) {
-          properties['dc:title'] = title;
+          properties['title'] = title;
         }
         this._docProperties = properties;
         this._updateDocument();

@@ -35,20 +35,20 @@
       <div><mostly-tag uppercase>[[_stateLabel(document.state)]]</mostly-tag></div>
     </div>
     <div class="item">
-      <label>[[i18n('documentInfo.lastModified')]]</label>
-      <nuxeo-date datetime="[[document.properties.dc:modified]]"></nuxeo-date>
+      <label>[[i18n('documentInfo.updatedAt')]]</label>
+      <nuxeo-date datetime="[[document.updatedAt]]"></nuxeo-date>
     </div>
     <div class="item">
-      <label>[[i18n('documentInfo.created')]]</label>
-      <nuxeo-date datetime="[[document.properties.dc:created]]"></nuxeo-date>
+      <label>[[i18n('documentInfo.createdAt')]]</label>
+      <nuxeo-date datetime="[[document.createdAt]]"></nuxeo-date>
     </div>
     <div class="item">
       <label>[[i18n('documentInfo.by')]]</label>
-      <playing-user-tag user="[[document.properties.dc:creator]]"></playing-user-tag>
+      <playing-user-tag user="[[document.creator]]"></playing-user-tag>
     </div>
     <div class="item">
       <label>[[i18n('documentInfo.contributors')]]</label>
-      <playing-tags type="user" items="[[document.properties.dc:contributors]]"></playing-tags>
+      <playing-tags type="user" items="[[document.contributors]]"></playing-tags>
     </div>
 
   </template>

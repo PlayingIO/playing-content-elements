@@ -290,7 +290,7 @@
         if (!this._validate() || !this.canCreate) {
           return;
         }
-        this.document.name = this._sanitizeName(this.document.properties['dc:title']);
+        this.document.name = this._sanitizeName(this.document.title);
         this.$.docRequest.post().then(function(response) {
           this.$.creationStats.storeType(this.selectedDocType.id);
           this._clear();
