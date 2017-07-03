@@ -211,7 +211,7 @@
 
         this.controller = {
           getChildren: (node, page) => {
-            this.$.children.params = { parent: node._id };
+            this.$.children.params = { parent: node.id };
             this.$.children.page = page;
             return this.$.children.fetch().then(resp => {
               return {
