@@ -54,7 +54,7 @@
       }
     </style>
 
-    <playing-document id="doc" doc-id="[[document.uid]]" response="{{document}}" headers="[[headers]]"></playing-document>
+    <playing-document id="doc" doc-id="[[document.id]]" response="{{document}}" headers="[[headers]]"></playing-document>
 
     <form id="form" is="iron-form">
       <playing-document-layout id="document-edit" document="{{document}}" layout="edit"></playing-document-layout>
@@ -115,7 +115,7 @@
         }
         this.$.doc.data = {
           'entity-type': 'document',
-          uid: this.document.uid,
+          id: this.document.id,
           properties: this._dirtyProperties
         };
 

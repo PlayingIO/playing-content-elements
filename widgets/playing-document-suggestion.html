@@ -250,7 +250,7 @@ An element for selecting one or more documents.
 
       _docIdFunction: function(doc) {
         if (this.idProperty === 'ecm:uuid') {
-          return doc.uid;
+          return doc.id;
         } else {
           return doc.properties[this.idProperty];
         }

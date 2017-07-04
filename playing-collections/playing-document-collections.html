@@ -38,8 +38,8 @@
     </style>
 
     <mostly-operation op="Collection.RemoveFromCollection"
-                     input="[[document.uid]]"
-                     id="op">
+            input="[[document.id]]"
+            id="op">
     </mostly-operation>
 
     <template is="dom-repeat" items="[[document.metadata.collections]]">
@@ -65,10 +65,10 @@
       remove: function(evt) {
         var op = this.$.op;
         op.params = {
-          'collection': evt.currentTarget.dataset.uid
+          'collection': evt.currentTarget.dataset.id
         };
         op.execute().then(function() {
-          this.fire('removed-from-collection', {doc: this.document, collectionId: evt.target.dataset.uid});
+          this.fire('removed-from-collection', {doc: this.document, collectionId: evt.target.dataset.id});
         }.bind(this));
       }
 

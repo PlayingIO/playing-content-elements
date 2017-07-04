@@ -262,7 +262,7 @@
         }
 
         this.newDocument(this.selectedDocType.type, this._getDocumentProperties()).then(function(document) {
-          document.parentRef = this.parent.uid;
+          document.parentRef = this.parent.id;
           this.document = document;
           this.stage = 'edit';
         }.bind(this));

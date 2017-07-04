@@ -66,13 +66,12 @@
             page="[[pageNumber]]"
             params="[[params]]"
             schemas="dublincore,common,uid,file"
-            headers='{"X-NXfetch.document": "properties", "X-NXtranslate.directoryEntry": "label"}'
             fetch-aggregates>
     </mostly-page-provider>
 
     <div id="dropzone">
 
-      <mostly-results name="[[document.uid]]" nx-provider="[[nxProvider]]" selected-items="{{selectedItems}}">
+      <mostly-results name="[[document.id]]" nx-provider="[[nxProvider]]" selected-items="{{selectedItems}}">
         <div class="selectionActions">
           <nuxeo-slot slot="BROWSE_ACTIONS" model="[[browseActionContext]]"></nuxeo-slot>
         </div>
@@ -94,12 +93,12 @@
 
         <!-- Table view -->
         <mostly-data-table class="results" name="table" icon="nuxeo:view-list"
-                  settings-enabled
-                  empty-label="[[emptyLabel]]"
-                  empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
-                  selection-enabled
-                  display-quick-filters
-                  on-row-clicked="_navigate">
+                settings-enabled
+                empty-label="[[emptyLabel]]"
+                empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
+                selection-enabled
+                display-quick-filters
+                on-row-clicked="_navigate">
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.title')]]"
                     field="title" sort-by="title" filter-by="title"  flex="100">
             <template>
@@ -126,9 +125,9 @@
                   filter-by="dc_last_contributor_agg" field="lastContributor" sort-by="lastContributor" flex="50">
             <template is="header">
               <mostly-dropdown-aggregation
-                        placeholder="[[i18n('documentContentView.datatable.header.lastContributor')]]"
-                        data="[[aggregations.dc_last_contributor_agg]]"
-                        value="{{column.filterValue}}" multiple>
+                      placeholder="[[i18n('documentContentView.datatable.header.lastContributor')]]"
+                      data="[[aggregations.dc_last_contributor_agg]]"
+                      value="{{column.filterValue}}" multiple>
               </mostly-dropdown-aggregation>
             </template>
             <template>
@@ -136,29 +135,29 @@
             </template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.state')]]"
-                                   field="currentLifeCycleState" hidden>
+                  field="currentLifeCycleState" hidden>
             <template><span class="capitalize">[[item.state]]</span></template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.version')]]"
-                                   field="versionLabel" hidden>
+                  field="versionLabel" hidden>
             <template>
               [[formatVersion(item)]]
             </template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.createdAt')]]"
-                                   field="createdAt" sort-by="createdAt" flex="50" hidden>
+                  field="createdAt" sort-by="createdAt" flex="50" hidden>
             <template>
               <nuxeo-date datetime="[[item.createdAt]]"></nuxeo-date>
             </template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.author')]]"
-                                   field="creator" sort-by="creator" hidden>
+                  field="creator" sort-by="creator" hidden>
             <template>
               <playing-user-tag user="[[item.creator]]"></playing-user-tag>
             </template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.nature')]]"
-                                   field="nature" hidden>
+                  field="nature" hidden>
             <template>
               <mostly-tag hidden$="[[!item.nature]]">
                 [[formatDirectory(item.nature)]]
@@ -166,7 +165,7 @@
             </template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.coverage')]]"
-                                   field="coverage" hidden>
+                  field="coverage" hidden>
             <template>
               <mostly-tag hidden$="[[!item.coverage]]">
                 [[formatDirectory(item.coverage)]]
@@ -238,7 +237,7 @@
 
       _observeDocument: function() {
         if (this.document) {
-          this.params = {'ecm_parentId': this.document.uid};
+          this.params = {'ecm_parentId': this.document.id};
         }
       },
 
