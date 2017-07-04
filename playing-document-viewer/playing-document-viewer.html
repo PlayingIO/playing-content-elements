@@ -29,9 +29,9 @@
       }
     </style>
 
-    <playing-dropzone document="{{document}}" hidden$="[[document.properties.file:content.data]]" update-document></playing-dropzone>
-    <playing-document-preview document="[[document]]" hidden$="[[!document.properties.file:content.data]]"></playing-document-preview>
-    <playing-document-blob document="[[document]]" hidden$="[[!document.properties.file:content.data]]"></playing-document-blob>
+    <playing-dropzone document="{{document}}" hidden$="[[document.file.url]]" update-document></playing-dropzone>
+    <playing-document-preview document="[[document]]" hidden$="[[!document.file.url]]"></playing-document-preview>
+    <playing-document-blob document="[[document]]" hidden$="[[!document.file.url]]"></playing-document-blob>
 
   </template>
 

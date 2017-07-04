@@ -79,13 +79,13 @@ Example:
     </template>
 
     <template mime-pattern="text/(?:.*-)?markdown">
-      <marked-element markdown="[[_blob.data]]">
+      <marked-element markdown="[[_blob.url]]">
         <div class="markdown-html"></div>
       </marked-element>
     </template>
 
     <template mime-pattern="application/pdf">
-      <mostly-pdf-viewer src="[[_blob.data]]"></mostly-pdf-viewer>
+      <mostly-pdf-viewer src="[[_blob.url]]"></mostly-pdf-viewer>
     </template>
 
     <template mime-pattern=".*">
@@ -113,7 +113,7 @@ Example:
          */
         xpath: {
           type: String,
-          value: 'file:content'
+          value: 'file'
         },
 
         _blob: Object,
@@ -148,12 +148,12 @@ Example:
           // adapt the Note to mimic a Blob
           if (this.document.type === 'Note') {
             this._blob = {
-              data: this.document.properties['note:note'],
-              'mime-type': this.document.properties['note:mime_type']
+              data: this.document['note:note'],
+              mimeType: this.document['note:mime_type']
             };
           } else {
             // by default just use the field at xpath as a Blob
-            this._blob = this.document && this._deepFind(this.document.properties, this.xpath);
+            this._blob = this.document && this._deepFind(this.document, this.xpath);
           }
           // update our previewer
           if (this._blob) {
@@ -173,7 +173,7 @@ Example:
         for (var i = 0; i < previewers.length; i++) {
           var previewer = previewers[i];
           var regex = new RegExp(previewer.getAttribute('mime-pattern'));
-          if (this._blob['mime-type'].match(regex)) {
+          if (this._blob.mimeType.match(regex)) {
             // Insert our previewer
             this.templatize(previewer);
             var instance = this.stamp();
@@ -194,8 +194,8 @@ Example:
       },
 
       _computeImageSource: function() {
-        if (this.document && this.document.properties && this.document.properties['picture:views']) {
-          var filteredViews = this.document.properties['picture:views'].filter(function(view) {
+        if (this.document && this.document['picture:views']) {
+          var filteredViews = this.document['picture:views'].filter(function(view) {
             return view.title === 'FullHD';
           });
           if (filteredViews.length > 0) {
@@ -204,18 +204,18 @@ Example:
         }
         if (this.xpath) {
           this._updateBlob();
-          if (this._blob && this._blob['mime-type'].match('image.*')) {
-            return this._blob.data;
+          if (this._blob && this._blob.mimeType.match('image.*')) {
+            return this._blob.url;
           }
         }
       },
 
       _computeVideoSources: function() {
-        if (this.document && this.document.properties && this.document.properties['vid:transcodedVideos']) {
-          return this.document.properties['vid:transcodedVideos'].map(function(conversion) {
+        if (this.document && this.document['vid:transcodedVideos']) {
+          return this.document['vid:transcodedVideos'].map(function(conversion) {
             return {
-              data: conversion.content.data,
-              type: conversion.content['mime-type']
+              url: conversion.content.url,
+              type: conversion.content.mimeType
             };
           });
         }
@@ -223,19 +223,19 @@ Example:
 
       _computeAudioSource: function() {
         if (this._blob) {
-          return this._blob.data;
+          return this._blob.url;
         }
       },
 
       _computeIFrameSource: function() {
         if (this.document && this.document.metadata && this.document.metadata.preview) {
           var url = this.document.metadata.preview.url;
-          if (this.xpath !== 'file:content') {
+          if (this.xpath !== 'file') {
             url = url.replace('/@preview/', '/@blob/' + this.xpath + '/@preview/');
           }
           return url;
         } else if (this._blob) {
-          return this._blob.data;
+          return this._blob.url;
         }
       }
 

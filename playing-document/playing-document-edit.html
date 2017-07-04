@@ -135,10 +135,10 @@
           this._dirtyProperties = {};
         } else {
           // copy dirty properties (cannot patch complex or list properties)
-          var match = e.path.match(/^document\.properties\.([^\.]*)/);
+          var match = e.path.match(/^document\.([^\.]*)/);
           if (match) {
             var prop = match[1];
-            this._dirtyProperties[prop] = this.document.properties[prop];
+            this._dirtyProperties[prop] = this.document[prop];
           }
         }
       }

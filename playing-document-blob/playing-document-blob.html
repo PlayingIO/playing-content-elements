@@ -41,7 +41,7 @@
     <template is="dom-if" if="[[blob]]">
       <div class="row">
         <div class="info">
-          <div><a href="[[blob.data]]">[[blob.name]]</a></div>
+          <div><a href="[[blob.url]]">[[blob.name]]</a></div>
           <div class="detail">[[formatSize(blob.length)]]</div>
         </div>
         <div class="actions">
@@ -63,7 +63,7 @@
       document: Object,
       xpath: {
         type: String,
-        value: 'file:content'
+        value: 'file'
       },
       blob: Object,
       actionContext: Object
@@ -74,8 +74,13 @@
     ],
 
     _update: function(user, document, xpath) {
-      this.blob = document && this._deepFind(document.properties, xpath);
-      this.actionContext = {user: this.user, document: this.document, blob: this.blob, xpath: this.xpath};
+      this.blob = document && this._deepFind(document, xpath);
+      this.actionContext = {
+        user: this.user,
+        document: this.document,
+        blob: this.blob,
+        xpath: this.xpath
+      };
     },
 
     _deepFind: function(obj, props) {

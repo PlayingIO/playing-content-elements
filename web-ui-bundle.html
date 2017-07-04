@@ -19,7 +19,7 @@
   </template>
 </nuxeo-slot-content>
 
-<!-- BOOK VIEWS -->
+<!-- DOCUMENT VIEWS -->
 
 <nuxeo-slot-content name="documentViewItem" slot="DOCUMENT_VIEWS_ITEMS" order="10">
   <template>
@@ -27,7 +27,7 @@
   </template>
 </nuxeo-slot-content>
 
-<!-- BOOK PAGES -->
+<!-- DOCUMENT PAGES -->
 
 <nuxeo-slot-content name="documentViewPage" slot="DOCUMENT_VIEWS_PAGES" order="10">
   <template>
@@ -35,17 +35,30 @@
   </template>
 </nuxeo-slot-content>
 
-<!-- BOOK ACTIONS -->
+<!-- DOCUMENT ACTIONS -->
 
 <nuxeo-slot-content name="addToColDocumentAction" slot="DOCUMENT_ACTIONS" order="10">
   <template>
-    <mostly-add-to-collection-button document="[[document]]"></mostly-add-to-collection-button>
+    <playing-add-to-collection-button document="[[document]]"></playing-add-to-collection-button>
   </template>
 </nuxeo-slot-content>
 
-<nuxeo-slot-content name="favoriteToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="20">
+<!-- BLOB ACTIONS -->
+
+<nuxeo-slot-content name="deleteBlobAction" slot="BLOB_ACTIONS" order="10">
   <template>
-    <playing-favorites-toggle-button document="[[document]]"></playing-favorites-toggle-button>
+    <playing-delete-blob-button document="[[document]]" xpath="[[xpath]]"></playing-delete-blob-button>
   </template>
 </nuxeo-slot-content>
 
+<nuxeo-slot-content name="previewBlobAction" slot="BLOB_ACTIONS" order="20">
+  <template>
+    <playing-preview-button document="[[document]]" xpath="[[xpath]]"></playing-preview-button>
+  </template>
+</nuxeo-slot-content>
+
+<nuxeo-slot-content name="downloadBlobAction" slot="BLOB_ACTIONS" order="30">
+  <template>
+    <playing-download-button document="[[document]]" xpath="[[xpath]]"></playing-download-button>
+  </template>
+</nuxeo-slot-content>

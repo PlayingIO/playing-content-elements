@@ -40,10 +40,10 @@
 
       _href: function (document, layout) {
         if (document) {
-          console.log('document-layout', document, layout);
           var doctype = document.type.toLowerCase();
           var folder = '../playing-' + doctype;
           var name = ['playing', doctype, layout, 'layout'].join('-');
+          console.log('>>> document-layout', folder + '/' + name);
           return this.resolveUrl(folder + '/' + name + '.html');
         }
       },

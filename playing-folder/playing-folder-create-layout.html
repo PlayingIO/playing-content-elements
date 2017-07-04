@@ -7,16 +7,16 @@
 
   <template>
     <nuxeo-input role="widget"
-                 label="[[i18n('title')]]"
-                 name="title"
-                 value="{{document.title}}"
-                 autofocus required>
+            label="[[i18n('title')]]"
+            name="title"
+            value="{{document.title}}"
+            autofocus required>
     </nuxeo-input>
 
     <nuxeo-textarea role="widget"
-                    label="[[i18n('label.description')]]"
-                    name="description"
-                    value="{{document.description}}">
+            label="[[i18n('label.description')]]"
+            name="description"
+            value="{{document.description}}">
     </nuxeo-textarea>
 
     <playing-directory-suggestion role="widget" label="[[i18n('label.dublincore.nature')]]"

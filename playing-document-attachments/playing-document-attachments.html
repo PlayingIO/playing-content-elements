@@ -1,0 +1,55 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../playing-document-blob/playing-document-blob.html">
+<link rel="import" href="../playing-dropzone/playing-dropzone.html">
+
+<!--
+`playing-document-attachments`
+@group Playing UI
+@element playing-document-attachments
+-->
+<dom-module id="playing-document-attachments">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      playing-dropzone {
+        margin-top: 8px;
+      }
+
+      playing-document-blob {
+        border-top: 1px solid var(--nuxeo-border);
+        padding: 8px 0;
+      }
+    </style>
+
+    <h3><iron-icon icon="editor:attach-file"></iron-icon>[[i18n('documentAttachments.heading')]]</h3>
+
+    <div class="vertical layout">
+      <template is="dom-repeat" items="[[document.files]]">
+        <playing-document-blob document="[[document]]" xpath="files/[[index]]/url"></playing-document-blob>
+      </template>
+    </div>
+
+    <playing-dropzone document="{{document}}"
+            xpath="files"
+            uploaded-message="[[i18n('documentAttachments.upload.uploaded')]]"
+            blob-list update-document>
+    </playing-dropzone>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-document-attachments',
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
+      properties: {
+        document: Object
+      }
+    });
+  </script>
+
+</dom-module>

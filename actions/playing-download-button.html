@@ -58,7 +58,7 @@ Example:
          */
         xpath: {
           type: String,
-          value: 'file:content'
+          value: 'file'
         }
       },
 
@@ -67,9 +67,9 @@ Example:
       },
 
       _download: function() {
-        var blob = this.document && this._deepFind(this.document.properties, this.xpath);
+        var blob = this.document && this._deepFind(this.document, this.xpath);
         if (blob){
-          location.href = blob.data;
+          location.href = blob.url;
         }
       },
 

@@ -46,7 +46,7 @@
       }
 
       .suggester {
-        background-color: var(--nuxeo-dialog-buttons-bar);
+        background-color: var(--mostly-dialog-buttons-bar);
         padding: 8px 16px;
         margin: 1rem 32px;
       }
@@ -849,7 +849,7 @@
           this.selectedDocType = this._importDocTypes.find(function(type) {
             return type.id === docData.type.id;
           });
-          properties = JSON.parse(JSON.stringify(docData.document)).properties;
+          properties = JSON.parse(JSON.stringify(docData.document));
         }
         if (title) {
           properties['title'] = title;
@@ -1110,7 +1110,7 @@
         var blobProperty = this.documentBlobProperties[file.docData.type.id] ||
                            this.documentBlobProperties['default'];
         // XXX if fileData.type == Note, then the file's contents should be passed instead
-        this.document.properties[blobProperty] = file.providerId ? {
+        this.document[blobProperty] = file.providerId ? {
           'providerId': file.providerId,
           'user': file.user,
           'fileId': file.fileId
