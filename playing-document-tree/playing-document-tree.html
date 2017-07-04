@@ -264,11 +264,13 @@
             }
 
             var entries = doc.metadata.breadcrumbs;
-            var lastEntry = entries[entries.length - 1];
-            if (this.hasFacet(lastEntry, 'Folderish') || entries.length === 1) {
-              this.docPath = lastEntry.path;
-            } else {
-              this.docPath = entries[entries.length - 2].path;
+            if (entries && entries.length > 0) {
+              var lastEntry = entries[entries.length - 1];
+              if (this.hasFacet(lastEntry, 'Folderish') || entries.length === 1) {
+                this.docPath = lastEntry.path;
+              } else {
+                this.docPath = entries[entries.length - 2].path;
+              }
             }
 
             for (var i = 0; i < entries.length - 1; i++) {

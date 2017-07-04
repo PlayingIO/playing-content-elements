@@ -1,0 +1,21 @@
+<dom-module id="playing-file-view-layout">
+
+  <template>
+    <playing-document-viewer role="widget" document="[[document]]"></playing-document-viewer>
+    <playing-document-attachments role="widget" document="[[document]]"></playing-document-attachments>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-file-view-layout',
+      behaviors: [Mostly.LayoutBehavior],
+      properties: {
+        /**
+         * @doctype File
+         */
+        document: Object
+      }
+    });
+  </script>
+
+</dom-module>

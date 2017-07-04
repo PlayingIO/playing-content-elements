@@ -132,9 +132,9 @@ element.
     _computePath: function(docId, docPath) {
       var path = '';
       if (docId) {
-        path = '/folders/' + docId;
+        path = '/documents/' + docId;
       } else if (docPath) {
-        path = '/folders/null/first?path=' + docPath;
+        path = '/documents/null/first?path=' + docPath;
       }
       return path;
     },
