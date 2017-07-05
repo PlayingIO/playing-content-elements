@@ -100,7 +100,7 @@
         }
         if (properties) {
           for (var prop in properties) {
-            doc.properties[prop] = properties[prop];
+            doc[prop] = properties[prop];
           }
         }
         return doc;
@@ -115,7 +115,7 @@
           var field = node.fields[fieldName]
           if (field !== null && typeof field === 'object' &&
               field.type && field.type === 'complex') {
-            this._deepFind(doc.properties, nodePath)[prefix + ':' + fieldName] = {};
+            this._deepFind(doc, nodePath)[prefix + ':' + fieldName] = {};
             this._initializeFields(doc, field, field, nodePath === '' ? fieldName : nodePath + '.' + fieldName);
           }
         }.bind(this));
@@ -157,12 +157,11 @@
       },
 
       _suggesterChildrenChanged: function() {
-        var valid = (this.parent ? this.targetPath.replace(/(.+)\/$/, "$1") === this.parent.path : false) ||
-                    (this.suggesterParent ?
-                    this.targetPath.replace(/(.+)\/$/, "$1") === this.suggesterParent.path : false) ||
-                    (this.suggesterChildren ? this.suggesterChildren.some(function(child) {
-                      return this.targetPath === child.path;
-                    }.bind(this)) : false);
+        var valid = (this.parent ? this.targetPath.replace(/(.+)\/$/, "$1") === this.parent.path : false)
+         || (this.suggesterParent ? this.targetPath.replace(/(.+)\/$/, "$1") === this.suggesterParent.path : false)
+         || (this.suggesterChildren ? this.suggesterChildren.some(child => {
+              return this.targetPath === child.path;
+            }) : false);
         this.set('isValidTargetPath', valid);
         this.fire('nx-document-creation-suggester-parent-changed', {isValidTargetPath: valid});
       },

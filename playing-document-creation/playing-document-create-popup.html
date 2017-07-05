@@ -1,0 +1,201 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../playing-document/playing-document.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-tabs/paper-tabs.html">
+<link rel="import" href="../../iron-pages/iron-pages.html">
+<link rel="import" href="../../nuxeo-ui-elements/nuxeo-slots.html">
+<link rel="import" href="../playing-document/playing-document-create.html">
+<link rel="import" href="../playing-document/playing-document-import.html">
+
+<!--
+`playing-document-create-popup`
+@group Playing UI
+@element playing-document-create-popup
+-->
+<dom-module id="playing-document-create-popup">
+  <template>
+    <style>
+
+      :host {
+        --paper-tabs-selection-bar-color: var(--nuxeo-primary-color);
+        display: block;
+      }
+
+      ::content paper-tabs {
+        border-bottom: 1px solid var(--divider-color);
+      }
+
+      ::content paper-tab {
+        text-transform: uppercase;
+      }
+
+      paper-tabs,
+      #holder {
+        margin: 0;
+        padding: 0;
+      }
+
+      iron-pages,
+      playing-document-import {
+        /*Firefox fix (NXP-22349)*/
+        min-height: 100%;
+      }
+
+      #holder {
+        height: 80vh;
+        width: 65vw;
+      }
+
+    </style>
+
+    <playing-document id="defaultDoc"
+            doc-path="[[parentPath]]"
+            enrichers="permissions, subtypes"
+            response="{{parent}}">
+    </playing-document>
+
+    <paper-dialog id="createDocDialog"
+            opened="{{opened}}"
+            modal
+            no-auto-focus>
+
+      <paper-tabs hidden$=[[!_showTabs]] selected="{{selectedTab}}" attr-for-selected="name" noink>
+        <nuxeo-slot slot="CREATE_POPUP_ITEMS" model="[[importContext]]"></nuxeo-slot>
+      </paper-tabs>
+      <div id="holder" class="vertical layout flex">
+        <iron-pages selected="[[selectedTab]]" attr-for-selected="name" class="vertical layout flex" selected-attribute="visible">
+          <nuxeo-slot slot="CREATE_POPUP_PAGES" model="[[importContext]]"></nuxeo-slot>
+          <playing-document-create id="simpleCreation"
+                  name="create"
+                  parent="[[parent]]"
+                  target-path="{{parentPath}}"
+                  suggester-children="{{suggesterChildren}}"></playing-document-create>
+          <playing-document-import id="bulkCreation"
+                  name="import"
+                  parent="[[parent]]"
+                  target-path="{{parentPath}}"
+                  suggester-children="{{suggesterChildren}}"></playing-document-import>
+      </iron-pages>
+      </div>
+    </paper-dialog>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-document-create-popup',
+      behaviors: [Mostly.I18nBehavior],
+      properties: {
+        parent: {
+          type: Object
+        },
+
+        _showTabs: {
+          type: Boolean,
+          value: true
+        },
+        selectedTab: {
+          type: String,
+          value: ''
+        },
+        parentPath: {
+          type: String
+        },
+        defaultPath: {
+          type: String
+        },
+        opened: {
+          type: Boolean,
+          value: false,
+          observer: '_openedChanged'
+        },
+        importContext: {
+          type: Object,
+          computed: '_importContext(parent, i18n)'
+        }
+      },
+
+      listeners: {
+        'nx-creation-wizard-hide-tabs': '_hideTabs',
+        'nx-creation-wizard-show-tabs': '_displayTabs',
+        'nx-document-creation-finished': '_close',
+        'nx-document-creation-suggester-parent-changed': '_parentPathChanged'
+      },
+
+      _hideTabs: function() {
+        this._showTabs = false;
+      },
+
+      _displayTabs: function() {
+        this._showTabs = true;
+      },
+
+      _close: function() {
+        if (this.$.createDocDialog.opened) {
+          this.$.createDocDialog.toggle();
+          this._showTabs = true;
+        }
+      },
+
+      toggleDialogCreate: function(type) {
+        this.selectedTab = 'create';
+        this._showTabs = false;
+        this._fetchParent().then(function() {
+          this.$.simpleCreation.init(type);
+          this.$.bulkCreation.init();
+          this.$.createDocDialog.toggle();
+        }.bind(this));
+      },
+
+      toggleDialogImport: function(files) {
+        this.selectedTab = 'import';
+        this._fetchParent().then(function() {
+          this.$.bulkCreation.init(files);
+          this.$.createDocDialog.toggle();
+        }.bind(this));
+      },
+
+      toggleDialog: function() {
+        this._fetchParent().then(function() {
+          this.$.bulkCreation.init();
+          this.$.createDocDialog.toggle();
+        }.bind(this));
+      },
+
+      _fetchParent: function() {
+        if (!this.parentPath) {
+          this.set('parentPath', this.defaultPath);
+        }
+        if (!this.parent || !this.parent.metadata) {
+          return this.$.defaultDoc.get();
+        } else {
+          return Promise.resolve();
+        }
+      },
+
+      _parentPathChanged: function(e) {
+        if (e.detail.isValidTargetPath &&
+          (!this.parent || (this.parent.path !== this.parentPath.replace(/(.+)\/$/, "$1")))) {
+          this.$.defaultDoc.get();
+        }
+      },
+
+      _openedChanged: function() {
+        if (this.opened) {
+          if (this.selectedTab === '') {
+            this.selectedTab = 'create';
+          }
+        } else {
+          this.selectedTab = '';
+        }
+      },
+
+      _importContext: function() {
+        return {parent: this.parent, i18n: this.i18n};
+      }
+
+    });
+  </script>
+
+</dom-module>

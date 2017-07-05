@@ -158,7 +158,7 @@
         },
         xpath: {
           type: String,
-          value: 'file:content'
+          value: 'file'
         },
         updateDocument: {
           type: Boolean,
@@ -210,7 +210,7 @@
             }
           }).then(this._handleBlobListUploaded.bind(this));
         } else {
-          this.document.properties[this.xpath] = {
+          this.document[this.xpath] = {
             'upload-batch': data.detail.batchId,
             'upload-fileId': '0'
           };
@@ -234,7 +234,7 @@
           return this.$.bulkAttach.execute().then(this._handleBlobListUploaded.bind(this));
         } else {
           var file = e.detail.blobs[e.detail.blobs.length - 1];
-          this.document.properties[this.xpath] = {
+          this.document[this.xpath] = {
             'providerId': file.providerId,
             'user': file.user,
             'fileId': file.fileId
@@ -263,8 +263,8 @@
 
       _handleBlobListUploaded: function() {
         return this.$.doc.get().then(function(response) {
-          this.document.properties[this.xpath] = response.properties[this.xpath];
-          this.notifyPath('document.properties.' + this.xpath, this.document.properties[this.xpath]);
+          this.document[this.xpath] = response[this.xpath];
+          this.notifyPath('document.' + this.xpath, this.document[this.xpath]);
           this.fire('notify', {message: this.uploadedMessage});
           this.progress = false;
           this._hasFiles = false;
@@ -273,7 +273,7 @@
 
       _deleteFile: function() {
         this.$.input.value = '';
-        this.document.properties[this.xpath] = '';
+        this.document[this.xpath] = '';
         this._hasFiles = false;
       },
 

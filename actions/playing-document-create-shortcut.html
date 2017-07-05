@@ -1,0 +1,57 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-fab/paper-fab.html">
+<link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+
+<!--
+`playing-document-create-shortcut`
+@group Playing UI
+@element playing-document-create-shortcut
+-->
+<dom-module id="playing-document-create-shortcut">
+  <template>
+    <style is="custom-style">
+      :host {
+        display: inline-block;
+      }
+
+      #createBtn {
+        color: var(--nuxeo-button-primary-text);
+        --paper-fab-background: var(--nuxeo-button-primary);
+        --paper-fab-keyboard-focus-background: var(--nuxeo-button-primary-focus);
+      }
+
+      paper-fab:hover,
+      paper-fab:focus {
+        background-color: var(--nuxeo-button-primary-focus);
+      }
+
+      paper-fab ::content iron-icon {
+        filter: brightness(100);
+      }
+
+    </style>
+
+    <paper-fab mini noink id="createBtn" src="[[icon]]" on-tap="_tap"></paper-fab>
+    <paper-tooltip for="createBtn" position="left">[[i18n(label)]]</paper-tooltip>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-document-create-shortcut',
+      behaviors: [Mostly.I18nBehavior],
+      properties: {
+        type: String,
+        icon: String,
+        label: String
+      },
+
+      _tap: function() {
+        this.fire('create-document', {type: this.type});
+      }
+
+    });
+  </script>
+
+</dom-module>
