@@ -43,6 +43,12 @@
   </template>
 </nuxeo-slot-content>
 
+<nuxeo-slot-content name="previewDocumentAction" slot="DOCUMENT_ACTIONS" order="70">
+  <template>
+    <playing-preview-button document="[[document]]"></playing-preview-button>
+  </template>
+</nuxeo-slot-content>
+
 <!-- BLOB ACTIONS -->
 
 <nuxeo-slot-content name="deleteBlobAction" slot="BLOB_ACTIONS" order="10">
