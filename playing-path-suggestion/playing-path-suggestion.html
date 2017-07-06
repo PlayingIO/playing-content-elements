@@ -144,7 +144,7 @@ Custom property | Description | Default
             this.hideResults();
           } else {
             this.data = this.children.map(function(child) {
-              return child.path + '/'
+              return child.path
             });
             this.displayResults();
           }
@@ -183,7 +183,9 @@ Custom property | Description | Default
       _queryChildren: function(parent, term) {
         this.service = 'documents';
         this.params = {
-          parent: parent.id,
+          'parent': parent.id,
+          'type': 'folder',
+          'path[$like]': term
           // mixinType: { $in: ['Folderish', 'HiddenInNavigation'] },
           // isCheckedInVersion: 0,
           // currentLifeCycleState: { $ne: 'deleted' }

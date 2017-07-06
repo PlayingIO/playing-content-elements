@@ -68,63 +68,6 @@
         '_updateDocument(selectedDocType, parent)'
       ],
 
-      newDocument: function(type, properties) {
-        var doc = {
-          'entity-type': 'document',
-          'type': type,
-          'name': '',
-          'title': '',
-          'description': ''
-        };
-        // NXP-22300: initialize complex properties
-        if (!(type in schemaRegistry)) {
-          if (!schemaFetcher) {
-            schemaFetcher = document.createElement('mostly-resource');
-          }
-          schemaFetcher.path = '/config/types/' + this.selectedDocType.type;
-          return schemaFetcher.get().then(function(doctype) {
-            // cache doctype schemas
-            schemaRegistry[doctype.name] = doctype;
-            return this._newDocument(doctype, doc, properties);
-          }.bind(this));
-        } else {
-          return Promise.resolve(this._newDocument(schemaRegistry[type], doc, properties));
-        }
-      },
-
-      _newDocument: function(doctype, doc, properties) {
-        if (doctype.schemas) {
-          doctype.schemas.forEach(function(schema) {
-            this._initializeFields(doc, schema);
-          }.bind(this));
-        }
-        if (properties) {
-          for (var prop in properties) {
-            doc[prop] = properties[prop];
-          }
-        }
-        return doc;
-      },
-
-      _initializeFields: function(doc, node, nodePath) {
-        if (typeof nodePath === 'undefined') {
-          nodePath = '';
-        }
-        var prefix = (node['@prefix'] ? node['@prefix'] : node['name']);
-        Object.keys(node.fields).forEach(function(fieldName) {
-          var field = node.fields[fieldName]
-          if (field !== null && typeof field === 'object' &&
-              field.type && field.type === 'complex') {
-            this._deepFind(doc, nodePath)[prefix + ':' + fieldName] = {};
-            this._initializeFields(doc, field, field, nodePath === '' ? fieldName : nodePath + '.' + fieldName);
-          }
-        }.bind(this));
-      },
-
-      _deepFind: function(node, path) {
-        return path ? path.split('.').reduce(function(obj,p) { return obj[p]; }, node) : node;
-      },
-
       _parentChanged: function() {
         if (this.parent) {
           if (!this.targetPath || this.targetPath.replace(/(.+)\/$/, "$1") !== this.parent.path) {
@@ -212,7 +155,7 @@
       },
 
       _getTypeIcon: function(type) {
-        return this._isValidType(type) ? 'images/doctypes/' + type.id + '.svg' : '';
+        return this._isValidType(type) ? 'bower_components/playing-content-elements/images/doctypes/' + type.id + '.svg' : '';
       },
 
       // extension point

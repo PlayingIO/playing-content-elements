@@ -162,10 +162,10 @@
           <div name="typeSelection" class="typeSelection">
             <template is="dom-repeat" items="[[subtypes]]" as="type">
               <paper-button noink
-                            name$="[[type.type]]"
-                            class="docTypeButton vertical layout"
-                            on-tap="_selectType"
-                            data-args$="[[type]]">
+                      name$="[[type.type]]"
+                      class="docTypeButton vertical layout"
+                      on-tap="_selectType"
+                      data-args$="[[type]]">
                 <iron-icon src="[[_getTypeIcon(type)]]"></iron-icon>
                 <span>[[_getTypeLabel(type)]]</span>
               </paper-button>
@@ -261,11 +261,22 @@
           return;
         }
 
-        this.newDocument(this.selectedDocType.type, this._getDocumentProperties()).then(function(document) {
-          document.parentRef = this.parent.id;
-          this.document = document;
-          this.stage = 'edit';
-        }.bind(this));
+        var document = {
+          'type': this.selectedDocType.type.toLowerCase(),
+          'title': '',
+          'description': ''
+        };
+
+        // Object.assign(document.properties, this._getDocumentProperties());
+        var properties = this._getDocumentProperties();
+        if (properties) {
+          for (var prop in properties) {
+            document[prop] = properties[prop];
+          }
+        }
+
+        this.document = document;
+        this.stage = 'edit';
       },
 
       _selectType: function(e) {
@@ -291,12 +302,16 @@
           return;
         }
         this.document.name = this._sanitizeName(this.document.title);
-        this.$.docRequest.post().then(function(response) {
-          this.$.creationStats.storeType(this.selectedDocType.id);
-          this._clear();
-          this.navigateTo('browse', response.path);
-          this._notify(response);
-        }.bind(this));
+        this.$.docRequest.post().then(response => {
+          if (response.data) {
+            this.$.creationStats.storeType(this.selectedDocType.id);
+            this._clear();
+            this.navigateTo('browse', response.data.path);
+            this._notify(response);
+          } else {
+            console.error('Invalid _create response', response);
+          }
+        });
       },
 
       _back: function() {

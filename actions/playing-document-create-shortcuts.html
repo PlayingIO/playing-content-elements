@@ -61,7 +61,7 @@
           if (this.subtypes.indexOf(type) > -1) {
             var el = document.createElement('playing-document-create-shortcut');
             el.type = type;
-            el.icon =  'images/doctypes/' + type + '.svg';
+            el.icon =  'bower_components/playing-content-elements/images/doctypes/' + type + '.svg';
             el.label = this.i18n('label.document.type.' + type);
             shorcuts.push(el);
           }

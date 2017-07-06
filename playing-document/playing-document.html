@@ -109,18 +109,21 @@ element.
     /* Create the document. */
     post: function () {
       this.method = 'post';
+      this.docPath = '';
       return this.execute();
     },
 
     /* 'Update the document. */
     put: function () {
       this.method = 'put';
+      this.docPath = '';
       return this.execute();
     },
 
     /* Delete the document. */
     remove: function () {
       this.method = 'delete';
+      this.docPath = '';
       return this.execute();
     },
 
@@ -135,6 +138,8 @@ element.
         path = '/documents/' + docId;
       } else if (docPath) {
         path = '/documents/null/first?path=' + docPath;
+      } else {
+        path = '/documents';
       }
       return path;
     },

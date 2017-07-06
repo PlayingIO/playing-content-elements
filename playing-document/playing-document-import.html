@@ -1000,19 +1000,19 @@
         }
         this._notify(response, close);
         // store creation data
-        if (response.entries && Array.isArray(response.entries)) {
-          response.entries.forEach(function(f) {
+        if (response.data && Array.isArray(response.data)) {
+          response.data.forEach(f => {
             // XXX remove this to lower as soon as we get type information from the server
             this.$.creationStats.storeType(f.type.toLowerCase());
-          }.bind(this));
+          });
         } else if (response.type) {
           this.$.creationStats.storeType(response.type);
         }
         if (close) {
           this.cancelBatch();
           this._clear();
-          if (!response.entries || response.entries.length === 1) {
-            this.navigateTo('browse', (response.entries ? response.entries[0] : response).path);
+          if (!response.data || response.data.length === 1) {
+            this.navigateTo('browse', (response.data ? response.data[0] : response.data).path);
           } else {
             this.fire('document-updated');
             this.navigateTo('browse', this.targetPath);
@@ -1067,35 +1067,35 @@
             index = i - self.localFiles.length;
           }
           promises.push(
-            (function(indexesToRemove, index){
-              return ((arr[index].docData && arr[index].checked) ?
-                        self._processFileWithMetadata(arr[index]) :
-                        Promise.resolve({'entity-type': 'Documents', 'entries': []})).then(function(result) {
-                          indexesToRemove.push(index);
-                          return result;
-                        }.bind(this)).catch(function(error) {
-                          return error;
-                        }.bind(this))
-            }.bind(this))(i >= self.localFiles.length ? remoteIndexes : localIndexes, index));
+            (function(indexesToRemove, index) {
+              return ((arr[index].docData && arr[index].checked)
+                ? self._processFileWithMetadata(arr[index])
+                : Promise.resolve({'type': 'document', 'data': []})
+              ).then(result => {
+                indexesToRemove.push(index);
+                return result;
+              }).catch(error => {
+                return error;
+              })
+            })(i >= self.localFiles.length ? remoteIndexes : localIndexes, index));
         }
-        Promise.all(promises).then(function(results) {
-          var errorFree = results.filter(function(result) {
+        Promise.all(promises).then(results => {
+          var errorFree = results.filter(result => {
             return !(result instanceof Error);
           });
           this._handleSuccess(this._mergeResponses.apply(null, errorFree), !(errorFree.length < results.length));
           if (errorFree.length < results.length) {
             this.set('_creating', false);
             this.set('_importWithPropertiesError', 'These documents could not be created.');
-            localIndexes.sort().reverse().forEach(function(index) {
+            localIndexes.sort().reverse().forEach(index => {
               this.splice('localFiles', index, 1);
-            }.bind(this));
-            remoteIndexes.sort().reverse().forEach(function(index) {
+            });
+            remoteIndexes.sort().reverse().forEach(index => {
               this.splice('remoteFiles', index, 1);
-            }.bind(this));
+            });
             this._selectDoc(0);
           }
-
-        }.bind(this));
+        });
       },
 
       _processFileWithMetadata: function(file) {
@@ -1214,10 +1214,21 @@
           return;
         }
 
-        this.newDocument(this.selectedDocType.type, this._getDocumentProperties()).then(function(document) {
-          document.parentRef = this.parent.id;
-          this.document = document;
-        }.bind(this));
+        var document = {
+          'type': this.selectedDocType.type.toLowerCase(),
+          'title': '',
+          'description': ''
+        };
+
+        // Object.assign(document.properties, this._getDocumentProperties());
+        var properties = this._getDocumentProperties();
+        if (properties) {
+          for (var prop in properties) {
+            document[prop] = properties[prop];
+          }
+        }
+        
+        this.document = document;
       },
 
       _layoutUpdated: function(e) {
