@@ -17,9 +17,8 @@ Custom property | Description | Default
 `--playing-path-suggestion-results` | Mixin applied to the results pane | `{}`
 `--playing-path-suggestion-result` | Mixin applied to the result items | `{}`
 
-@group Nuxeo UI Elements
+@group Playing UI Elements
 @element playing-path-suggestion
-@demo demo/playing-path-suggestion/index.html
 -->
 <dom-module id="playing-path-suggestion">
   <style>
@@ -45,11 +44,11 @@ Custom property | Description | Default
   </style>
   <template>
     <mostly-page-provider id="provider"
-            query="[[query]]"
+            provider="[[service]]"
             params="[[params]]"
             page-size="20"
             current-page="{{children}}"></mostly-page-provider>
-    <mostly-document id="parent" enrichers="[[enrichers]]"></mostly-document>
+    <playing-document id="parent" enrichers="[[enrichers]]"></playing-document>
     <paper-typeahead id="typeahead"
             label="[[label]]"
             value="{{value}}"
@@ -71,7 +70,7 @@ Custom property | Description | Default
           notify: true
         },
 
-        query: String,
+        service: String,
 
         params: Object,
 
@@ -157,9 +156,9 @@ Custom property | Description | Default
           var idx = this.value.lastIndexOf('/');
           if (idx > -1) {
             var newParentPath = (idx == 0 ? '/' : this.value.substring(0, idx));
-            this._updateParent(newParentPath).then(function() {
+            this._updateParent(newParentPath).then(() => {
               this._queryChildren(this.parent, this.value.substring(idx+1))
-            }.bind(this));
+            });
           }
         }
       },
@@ -167,14 +166,13 @@ Custom property | Description | Default
       _updateParent: function(newParentPath) {
         if (!this.parent || newParentPath !== this.$.parent.docPath) {
           this.$.parent.docPath = newParentPath;
-          return this.$.parent.get().then(function(response) {
-            this.parent = response;
-          }.bind(this)).catch(function(error) {
-            if (!(error.code === 'DocumentNotFound' &&
-                  error.message === newParentPath)) {
+          return this.$.parent.get().then(response => {
+            this.parent = response.data;
+          }).catch(error => {
+            if (!(error.code === 'DocumentNotFound' && error.message === newParentPath)) {
               throw error;
             }
-          }.bind(this));
+          });
         } else {
           return new Promise(function(resolve) {
             resolve();
@@ -183,10 +181,13 @@ Custom property | Description | Default
       },
 
       _queryChildren: function(parent, term) {
-        this.query = 'SELECT * FROM Document WHERE ecm:parentId = \'' + parent.id + '\' AND ecm:name LIKE ? ' +
-                     'AND ecm:mixinType = \'Folderish\' AND ecm:mixinType != \'HiddenInNavigation\' ' +
-                     'AND ecm:isCheckedInVersion = 0 AND ecm:currentLifeCycleState != \'deleted\'';
-        this.params = [term+'%'];
+        this.service = 'documents';
+        this.params = {
+          parent: parent.id,
+          // mixinType: { $in: ['Folderish', 'HiddenInNavigation'] },
+          // isCheckedInVersion: 0,
+          // currentLifeCycleState: { $ne: 'deleted' }
+        };
         return this.$.provider.fetch();
       },
 

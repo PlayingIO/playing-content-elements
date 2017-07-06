@@ -130,28 +130,20 @@
           if (!this.targetPath || this.targetPath.replace(/(.+)\/$/, "$1") !== this.parent.path) {
             this.set('targetPath', this.parent.path);
           }
-          var subtypes = (this.parent.metadata && this.parent.metadata.subtypes) ?
-                                this.parent.metadata.subtypes.map(function(type) {
-                                  type.id = type.type.toLowerCase();
-                                  return type;
-                                }) : [];
+          var subtypes = [];
+          if (this.parent.metadata && this.parent.metadata.subtypes) {
+            subtypes = this.parent.metadata.subtypes.map(type => {
+              type.id = type.type.toLowerCase();
+              return type;
+            });
+          }
+                                
           var filteredSubtypes = [];
           if (this._canCreateIn(this.parent)) {
-            subtypes.forEach(function(type) {
-              if (type.facets.indexOf('HiddenInCreation') === -1) {
-                filteredSubtypes.push(type);
-              }
-            }.bind(this));
+            filteredSubtypes = subtypes.filter(type =>
+              type.facets.indexOf('HiddenInCreation') === -1);
           }
-          this.set('subtypes', filteredSubtypes.sort(function(a, b) {
-            if (a.id < b.id) {
-              return -1;
-            }
-            if (a.id > b.id) {
-              return 1;
-            }
-            return 0;
-          }));
+          this.set('subtypes', filteredSubtypes.sort((a, b) => (a.id < b.id)? -1 : 1));
         }
         this._validateLocation();
       },
@@ -199,10 +191,7 @@
 
       _canCreateIn: function(document) {
         if (document && document.metadata && document.metadata.permissions) {
-          // NXP-21408: prior to 8.10-HF01 the permissions enricher wouldn't return AddChildren,
-          // so we had to rely on Write.
-          return document.metadata.permissions.indexOf('Write') > -1 ||
-                document.metadata.permissions.indexOf('AddChildren') > -1;
+          return document.metadata.permissions.indexOf('AddChildren') > -1;
         } else {
           return false;
         }

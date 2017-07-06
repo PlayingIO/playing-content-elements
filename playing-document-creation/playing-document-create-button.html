@@ -51,9 +51,9 @@
     </style>
 
     <playing-document id="defaultDoc"
-                    doc-path="[[parent.path]]"
-                    enrichers="permissions, subtypes"
-                    response="{{parent}}">
+            doc-path="[[parent.path]]"
+            enrichers="permissions, subtypes"
+            document="{{parent}}">
     </playing-document>
 
     <div id="tray" on-mouseenter="_onMouseEnter" on-mouseleave="_onMouseLeave">
@@ -62,8 +62,8 @@
       </div>
 
       <paper-fab id="createBtn"
-                 noink icon="nuxeo:add"
-                 on-tap="_displayWizard"></paper-fab>
+              noink icon="nuxeo:add"
+              on-tap="_displayWizard"></paper-fab>
        <paper-tooltip for="createBtn" position="left">[[i18n('documentCreateButton.tooltip')]]</paper-tooltip>
     </div>
 
@@ -103,21 +103,23 @@
       _parentChanged: function() {
         if (this.parent) {
           if (!this.parent.metadata || !this.parent.metadata.subtypes ||
-            !this.parent.metadata.permissions) {
+              !this.parent.metadata.permissions) {
             this.$.defaultDoc.get();
           } else {
-            var subtypes = (this.parent.metadata && this.parent.metadata.subtypes) ?
-              this.parent.metadata.subtypes.map(function(type) {
+            var subtypes = [];
+            if (this.parent.metadata && this.parent.metadata.subtypes) {
+              subtypes = this.parent.metadata.subtypes.map(type => {
                 type.id = type.type.toLowerCase();
                 return type;
-              }) : [];
+              });
+            }
             var filteredSubtypes = [];
             if (this._canCreateIn(this.parent)) {
-              subtypes.forEach(function(type) {
+              filteredSubtypes = subtypes.map(type => {
                 if (type.facets.indexOf('HiddenInCreation') === -1) {
-                  filteredSubtypes.push(type.id);
+                  return type.id;
                 }
-              }.bind(this));
+              });
             }
             this.set('subtypes', filteredSubtypes);
           }
