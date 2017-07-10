@@ -245,16 +245,12 @@
 
       _handleBlobUploaded: function() {
         if (this.updateDocument) {
-
-          // TODO: NXP-20782: remove contributors or they will be duplicated
-          delete this.document.contributors;
-
-          this.$.doc.put().then(function(response) {
-            this.document = response;
+          this.$.doc.patch().then(response => {
+            this.document = response.data;
             this.fire('notify', {message: this.uploadedMessage});
             this.progress = false;
             this._hasFiles = false;
-          }.bind(this));
+          });
         } else {
           this.fire('notify', {message: this.uploadedMessage});
           this.progress = false;

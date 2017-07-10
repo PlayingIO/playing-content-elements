@@ -149,7 +149,7 @@ Example:
           if (this.document.type === 'Note') {
             this._blob = {
               data: this.document['note:note'],
-              mimeType: this.document['note:mime_type']
+              mimetype: this.document['note:mime_type']
             };
           } else {
             // by default just use the field at xpath as a Blob
@@ -173,7 +173,7 @@ Example:
         for (var i = 0; i < previewers.length; i++) {
           var previewer = previewers[i];
           var regex = new RegExp(previewer.getAttribute('mime-pattern'));
-          if (this._blob.mimeType.match(regex)) {
+          if (this._blob.mimetype.match(regex)) {
             // Insert our previewer
             this.templatize(previewer);
             var instance = this.stamp();
@@ -204,7 +204,7 @@ Example:
         }
         if (this.xpath) {
           this._updateBlob();
-          if (this._blob && this._blob.mimeType.match('image.*')) {
+          if (this._blob && this._blob.mimetype.match('image.*')) {
             return this._blob.url;
           }
         }
@@ -215,7 +215,7 @@ Example:
           return this.document['vid:transcodedVideos'].map(function(conversion) {
             return {
               url: conversion.content.url,
-              type: conversion.content.mimeType
+              type: conversion.content.mimetype
             };
           });
         }

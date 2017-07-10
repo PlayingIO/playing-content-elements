@@ -146,9 +146,9 @@
     },
 
     _accepts: function(file) {
-      var mimeType = ((file.type !== '') ? file.type.match(/^[^\/]*\//)[0] : null);
-      var fileType = file.name.match(/\.[^\.]*$/)[0];
-      if (this.accept && !(this.accept.indexOf(mimeType) > -1 || this.accept.indexOf(fileType) > -1)) {
+      var mimetype = ((file.type !== '') ? file.type.match(/^[^\/]*\//)[0] : null);
+      var filetype = file.name.match(/\.[^\.]*$/)[0];
+      if (this.accept && !(this.accept.indexOf(mimetype) > -1 || this.accept.indexOf(filetype) > -1)) {
         return false;
       } else {
         return true;

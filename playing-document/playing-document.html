@@ -120,6 +120,13 @@ element.
       return this.execute();
     },
 
+    /* 'Patch the document. */
+    patch: function () {
+      this.method = 'patch';
+      this.docPath = '';
+      return this.execute();
+    },
+
     /* Delete the document. */
     remove: function () {
       this.method = 'delete';
