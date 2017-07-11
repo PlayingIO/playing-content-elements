@@ -203,10 +203,11 @@
       importBatch: function(data) {
         data.stopPropagation();
         if (this.blobList) {
-          this.batchExecute('BlobHolder.AttachOnCurrentDocument', {
+          this.batchExecute('blobs', 'attachOnDocument', {
             useMainBlob: false,
             context: {
-              currentDocument: this.document.path
+              currentDocument: this.document.id,
+              documentType: this.document.type
             }
           }).then(this._handleBlobListUploaded.bind(this));
         } else {
@@ -226,7 +227,8 @@
           this.$.bulkAttach.params = {
             useMainBlob: false,
             context: {
-              currentDocument: this.document.path
+              currentDocument: this.document.id,
+              documentType: this.document.type
             },
             noMimeTypeCheck: true
           };
@@ -258,13 +260,14 @@
       },
 
       _handleBlobListUploaded: function() {
-        return this.$.doc.get().then(function(response) {
-          this.document[this.xpath] = response[this.xpath];
+        return this.$.doc.get().then(response => {
+          var data = response.data;
+          this.document[this.xpath] = data[this.xpath];
           this.notifyPath('document.' + this.xpath, this.document[this.xpath]);
           this.fire('notify', {message: this.uploadedMessage});
           this.progress = false;
           this._hasFiles = false;
-        }.bind(this));
+        });
       },
 
       _deleteFile: function() {

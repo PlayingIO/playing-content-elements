@@ -74,14 +74,15 @@
 
     },
 
-    batchExecute: function(operationId, params, headers) {
-      return this.$.nx.operation(operationId).then(operation => {
+    batchExecute: function(url, op, params, headers) {
+      return this.$.nx.operation(url, op).then(operation => {
         var options = {};
         if (headers) {
           options['headers'] = headers;
         }
         if (params.context) {
           operation = operation.context(params.context);
+          delete params.context;
         }
         return operation.input(this.uploader)
           .params(params)

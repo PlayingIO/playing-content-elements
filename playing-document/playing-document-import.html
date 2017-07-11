@@ -1040,7 +1040,7 @@
       },
 
       _smartImportLocalFiles: function(params) {
-        return this.batchExecute('FileManager.Import', params, {'nx_es_sync': 'true', 'X-Batch-No-Drop': 'true'});
+        return this.batchExecute('blobs', 'import', params, {'nx_es_sync': 'true', 'X-Batch-No-Drop': 'true'});
       },
 
       _smartImportRemoteFiles: function(params) {
