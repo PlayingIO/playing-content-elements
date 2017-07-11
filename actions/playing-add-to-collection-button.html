@@ -39,8 +39,8 @@ Example:
       }
     </style>
 
-    <mostly-operation id="addToCollectionOp" op="Document.AddToCollection" input="[[document.uid]]"></mostly-operation>
-    <mostly-operation id="createCollectionOp" op="Collection.Create"></mostly-operation>
+    <mostly-operation id="addToCollectionOp" path="documents" op="addToCollection" input="[[document.id]]"></mostly-operation>
+    <mostly-operation id="createCollectionOp" path="collection" op="create"></mostly-operation>
 
     <template is="dom-if" if="[[_isAvailable(document)]]">
       <paper-icon-button icon="[[icon]]" on-tap="_toggleDialog" noink></paper-icon-button>
@@ -142,7 +142,7 @@ Example:
             'description': this.description
           };
           return op.execute().then(function(response) {
-            this.collection = response.uid;
+            this.collection = response.data.id;
             this._addToCollection();
           }.bind(this));
         } else {
@@ -156,7 +156,7 @@ Example:
           'collection': this.collection
         };
         return op.execute().then(function() {
-          this.fire('added-to-collection', {docId: this.document.uid, collectionId: this.collection});
+          this.fire('added-to-collection', {docId: this.document.id, collectionId: this.collection});
           this._resetPopup();
         }.bind(this));
       },

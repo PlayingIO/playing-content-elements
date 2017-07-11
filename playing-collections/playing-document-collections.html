@@ -37,16 +37,17 @@
 
     </style>
 
-    <mostly-operation op="Collection.RemoveFromCollection"
-            input="[[document.id]]"
-            id="op">
+    <mostly-operation id="op"
+            path="collections"
+            op="removeFromCollection"
+            input="[[document.id]]">
     </mostly-operation>
 
     <template is="dom-repeat" items="[[document.metadata.collections]]">
       <mostly-tag>
        <div class="horizontal layout center" >
          <a class="title ellipsis" href$="[[urlFor('browse', item.path)]]">[[item.title]]</a>
-         <iron-icon icon="nuxeo:cross" name="remove" on-tap="remove" data-uid$="[[item.uid]]"></iron-icon>
+         <iron-icon icon="nuxeo:cross" name="remove" on-tap="remove" data-uid$="[[item.id]]"></iron-icon>
        </div>
      </mostly-tag>
     </template>

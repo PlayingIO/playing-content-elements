@@ -115,7 +115,7 @@
         file.error = false;
         file.complete = false;
         this.push('files', file);
-        var blob = new Nuxeo.Blob({ content: file });
+        var blob = new Blob({ content: file });
         this._uploadStarted(i, file);
         this.uploader.upload(blob).then(result => {
           this._uploadFinished(result.blob.fileIdx);
@@ -127,7 +127,7 @@
     },
 
     _newBatch: function() {
-      return this.$.nx.batchUpload().then(uploader => {
+      return this.$.nx.batchUpload('blobs').then(uploader => {
         this.uploader = uploader;
       });
     },

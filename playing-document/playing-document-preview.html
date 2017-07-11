@@ -173,7 +173,7 @@ Example:
         for (var i = 0; i < previewers.length; i++) {
           var previewer = previewers[i];
           var regex = new RegExp(previewer.getAttribute('mime-pattern'));
-          if (this._blob.mimetype.match(regex)) {
+          if (this._blob.mimetype && this._blob.mimetype.match(regex)) {
             // Insert our previewer
             this.templatize(previewer);
             var instance = this.stamp();

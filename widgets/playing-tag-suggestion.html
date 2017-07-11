@@ -47,12 +47,14 @@
     </mostly-select2>
 
     <mostly-operation id="addTagOp"
-            op="Services.TagDocument"
-            input="[[document.uid]]">
+            path="documents"
+            op="tagDocument"
+            input="[[document.id]]">
     </mostly-operation>
 
     <mostly-operation id="removeTagOp"
-            op="Services.UntagDocument"
+            path="documents"
+            op="untagDocument"
             input="[[document.id]]">
     </mostly-operation>
 
