@@ -1110,8 +1110,8 @@
           'user': file.user,
           'fileId': file.fileId
         } : {
-          'upload-batch': this.batchId,
-          'upload-fileId': file.index
+          'batch': this.batchId,
+          'index': file.index
         };
         return this.$.docRequest.post();
       },

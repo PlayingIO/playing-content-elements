@@ -211,8 +211,8 @@
           }).then(this._handleBlobListUploaded.bind(this));
         } else {
           this.document[this.xpath] = {
-            'upload-batch': data.detail.batchId,
-            'upload-fileId': '0'
+            'batch': data.detail.batchId,
+            'index': '0'
           };
           this._handleBlobUploaded();
         }
