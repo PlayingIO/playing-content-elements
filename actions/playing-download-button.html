@@ -54,7 +54,7 @@ Example:
         /**
          *
          * Path of the file object to download.
-         * For example `xpath="files:files/0/file"`.
+         * For example `xpath="files/0"`.
          */
         xpath: {
           type: String,
@@ -71,16 +71,6 @@ Example:
         if (blob){
           location.href = blob.url;
         }
-      },
-
-      _deepFind: function(obj, props) {
-        for (var i = 0, path = props.split('/'), len = path.length; i < len; i++) {
-          if(!obj || obj === []) {
-            break;
-          }
-          obj = obj[path[i]];
-        }
-        return obj;
       }
     });
   </script>

@@ -42,7 +42,7 @@
       <div class="row">
         <div class="info">
           <div><a href="[[blob.url]]">[[blob.name]]</a></div>
-          <div class="detail">[[formatSize(blob.length)]]</div>
+          <div class="detail">[[formatSize(blob.size)]]</div>
         </div>
         <div class="actions">
           <nuxeo-slot slot="BLOB_ACTIONS" model="[[actionContext]]"></nuxeo-slot>
@@ -60,12 +60,16 @@
     behaviors: [Mostly.I18nBehavior, Mostly.FormatBehavior],
     properties: {
       user: Object,
+      
       document: Object,
+
       xpath: {
         type: String,
         value: 'file'
       },
+      
       blob: Object,
+      
       actionContext: Object
     },
 
@@ -81,16 +85,6 @@
         blob: this.blob,
         xpath: this.xpath
       };
-    },
-
-    _deepFind: function(obj, props) {
-      for (var i = 0, path = props.split('/'), len = path.length; i < len; i++) {
-        if (!obj || obj === []) {
-          break;
-        }
-        obj = obj[path[i]];
-      }
-      return obj;
     }
 
   });
