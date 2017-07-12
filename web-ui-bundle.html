@@ -11,28 +11,11 @@
   </template>
 </nuxeo-slot-content>
 
-<nuxeo-slot-content name="collectionsDrawerItem" slot="DRAWER_ITEMS" order="70">
-  <template>
-    <mostly-menu-icon name="collections" icon="nuxeo:collections" label="app.collections"></mostly-menu-icon>
-  </template>
-</nuxeo-slot-content>
-<nuxeo-slot-content name="collectionsDrawerPage" slot="DRAWER_PAGES">
-  <template>
-    <playing-collections name="collections" id="collectionsForm"></playing-collections>
-  </template>
-</nuxeo-slot-content>
-
 <!-- PAGES -->
 
 <nuxeo-slot-content name="browsePage" slot="PAGES">
   <template>
     <playing-browser name="browse" id="browser" document="[[currentDocument]]" clipboard="[[clipboard]]" selected-tab="[[docAction]]"></playing-browser>
-  </template>
-</nuxeo-slot-content>
-
-<nuxeo-slot-content name="collectionsPage" slot="PAGES">
-  <template>
-    <playing-collection-results name="collection" id="collectionResults" on-navigate="_navigateFromCollection"></playing-collection-results>
   </template>
 </nuxeo-slot-content>
 
