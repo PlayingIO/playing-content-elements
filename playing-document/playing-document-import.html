@@ -296,7 +296,7 @@
     <playing-document id="docRequest"
             doc-path="[[targetPath]]"
             data="[[document]]"
-            headers='{"nx_es_sync": "true", "X-Batch-No-Drop": "true"}'
+            headers='{"X-Batch-No-Drop": "true"}'
             response="{{createResponse}}"></playing-document>
     <playing-document id="parentFetcher"
                     doc-path="[[targetPath]]"></playing-document>
@@ -1040,7 +1040,7 @@
       },
 
       _smartImportLocalFiles: function(params) {
-        return this.batchExecute('blobs', 'import', params, {'nx_es_sync': 'true', 'X-Batch-No-Drop': 'true'});
+        return this.batchExecute('blobs', 'import', params, { 'X-Batch-No-Drop': 'true'});
       },
 
       _smartImportRemoteFiles: function(params) {
@@ -1049,7 +1049,7 @@
         }).join();
         this.$.fileManagerImport.params = params;
         this.$.fileManagerImport.params.noMimeTypeCheck = true;
-        this.$.fileManagerImport.headers = {'nx_es_sync': 'true'};
+        this.$.fileManagerImport.headers = {};
         return this.$.fileManagerImport.execute();
       },
 

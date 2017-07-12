@@ -232,7 +232,7 @@
             },
             noMimeTypeCheck: true
           };
-          this.$.bulkAttach.headers = {'nx_es_sync': 'true'};
+          this.$.bulkAttach.headers = {};
           return this.$.bulkAttach.execute().then(this._handleBlobListUploaded.bind(this));
         } else {
           var file = e.detail.blobs[e.detail.blobs.length - 1];

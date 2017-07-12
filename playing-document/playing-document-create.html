@@ -141,7 +141,6 @@
     <playing-document id="docRequest"
             doc-path="[[targetPath]]"
             data="[[document]]"
-            headers='{"nx_es_sync": "true"}'
             enrichers="permissions, subtypes"
             response="{{createResponse}}"></playing-document>
 
@@ -228,6 +227,14 @@
 
         visible: {
           type: Boolean
+        },
+
+        parent: {
+          type: Object,
+        },
+
+        targetPath: {
+          type: String
         }
 
       },
@@ -264,7 +271,8 @@
         var document = {
           'type': this.selectedDocType.type.toLowerCase(),
           'title': '',
-          'description': ''
+          'description': '',
+          'parent': this.parent && this.parent.id
         };
 
         // Object.assign(document.properties, this._getDocumentProperties());
