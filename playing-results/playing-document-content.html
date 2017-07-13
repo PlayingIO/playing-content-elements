@@ -10,12 +10,12 @@
 <link rel="import" href="../../mostly-elements/mostly-data-grid/mostly-data-grid.html">
 <link rel="import" href="../../mostly-elements/mostly-data-table/iron-data-table.html">
 <link rel="import" href="../../mostly-elements/mostly-thumbnail/mostly-thumbnail.html">
-<link rel="import" href="../../mostly-elements/mostly-thumbnail/mostly-grid-thumbnail.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-results.html">
+<link rel="import" href="../playing-document-thumbnail/playing-document-grid-thumbnail.html">
 
 <!--
 `playing-document-content`
-@group Nuxeo UI
+@group Playing UI
 @element playing-document-content
 -->
 <dom-module id="playing-document-content">
@@ -82,12 +82,12 @@
                 empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
                 selection-enabled display-quick-filters>
           <template>
-            <mostly-grid-thumbnail class="grid-box"
+            <playing-document-grid-thumbnail class="grid-box"
                     tabindex$="{{tabIndex}}"
                     selected$="{{selected}}"
                     doc="[[item]]" on-navigate="_navigate"
                     selected-items="[[selectedItems]]">
-            </mostly-grid-thumbnail>
+            </playing-document-grid-thumbnail>
           </template>
         </mostly-data-grid>
 

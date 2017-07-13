@@ -3,10 +3,10 @@
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-data-grid/mostly-data-grid.html">
 <link rel="import" href="../../mostly-elements/mostly-data-table/iron-data-table.html">
-<link rel="import" href="../../mostly-elements/mostly-thumbnail/mostly-grid-thumbnail.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-results.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
 <link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
+<link rel="import" href="../playing-document-thumbnail/playing-document-grid-thumbnail.html">
 
 <!--
 `playing-default-results`
@@ -50,10 +50,10 @@
               empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
               selection-enabled display-quick-filters>
         <template>
-          <mostly-grid-thumbnail class="grid-box" tabindex$="{{tabIndex}}"
+          <playing-document-grid-thumbnail class="grid-box" tabindex$="{{tabIndex}}"
                   selected$="{{selected}}" selected-items="[[selectedItems]]"
                   doc="[[item]]" on-navigate="_navigate">
-          </mostly-grid-thumbnail>
+          </playing-document-grid-thumbnail>
         </template>
       </mostly-data-grid>
 
