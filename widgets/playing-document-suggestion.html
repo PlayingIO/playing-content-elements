@@ -156,7 +156,7 @@ An element for selecting one or more documents.
          **/
         idProperty: {
          type: String,
-         value: "ecm:uuid"
+         value: "uuid"
         },
 
         /**
@@ -249,10 +249,10 @@ An element for selecting one or more documents.
       },
 
       _docIdFunction: function(doc) {
-        if (this.idProperty === 'ecm:uuid') {
+        if (this.idProperty === 'uuid') {
           return doc.id;
         } else {
-          return doc.properties[this.idProperty];
+          return doc[this.idProperty];
         }
       }
 

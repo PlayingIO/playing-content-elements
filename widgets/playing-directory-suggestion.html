@@ -177,16 +177,16 @@ An element for selecting one or more entries from a given directory.
 
       _resolveEntry: function(entry) {
         if (entry && entry['entity-type'] && entry['entity-type'] === 'directoryEntry') {
-          if (entry.properties && entry.properties.label) {
+          if (entry && entry.label) {
             return {
-              id: entry.properties.id,
-              displayLabel: this.i18n(entry.properties.label)
+              id: entry.id,
+              displayLabel: this.i18n(entry.label)
             };
           } else {
             var label = 'label_' + ((window.mostly.I18n.language) ? window.mostly.I18n.language.split('-')[0] : 'en');
             return {
-              id: entry.properties.id,
-              displayLabel: entry.properties[label] || entry.properties['label_en']
+              id: entry.id,
+              displayLabel: entry[label] || entry['label_en']
             };
           }
         }

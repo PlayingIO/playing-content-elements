@@ -421,7 +421,7 @@
           <paper-button noink class="primary" on-tap="_import"
                   disabled$="[[!_canImport(_creating, hasLocalFilesUploaded,hasRemoteFiles,canCreate)]]">
             <template is="dom-if" if="[[!_isUploadingOrImporting(_creating, hasLocalFiles, hasLocalFilesUploaded)]]">
-              [[i18n('command.create')]]
+              [[i18n('command.createdAt')]]
             </template>
             <template is="dom-if" if="[[_isUploadingOrImporting(_creating, hasLocalFiles, hasLocalFilesUploaded)]]">
               <span class="importing-label" hidden$="[[_creating]]">[[i18n('documentImport.uploading')]]</span>
@@ -538,7 +538,7 @@
                   on-tap="_importWithProperties"
                   disabled$="[[!_canImportWithMetadata(_creating,canCreate,hasLocalFilesUploaded,hasRemoteFiles,localFiles.*,remoteFiles.*)]]">
             <template is="dom-if" if="[[_canImport(_creating, hasLocalFilesUploaded,hasRemoteFiles,canCreate)]]">
-              [[i18n('command.create')]]
+              [[i18n('command.createdAt')]]
             </template>
             <template is="dom-if" if="[[!_canImport(_creating, hasLocalFilesUploaded,hasRemoteFiles,canCreate)]]">
               <span class="importing-label" hidden$="[[_creating]]">[[i18n('documentImport.uploading')]]</span>
@@ -1220,7 +1220,7 @@
           'description': ''
         };
 
-        // Object.assign(document.properties, this._getDocumentProperties());
+        // Object.assign(document, this._getDocumentProperties());
         var properties = this._getDocumentProperties();
         if (properties) {
           for (var prop in properties) {

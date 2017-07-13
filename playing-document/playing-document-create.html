@@ -204,7 +204,7 @@
             <paper-button noink dialog-dismiss on-tap="_cancel">[[i18n('command.cancel')]]</paper-button>
           </div>
           <paper-button noink on-tap="_back">[[i18n('command.back')]]</paper-button>
-          <paper-button noink class="primary" on-tap="_create" disabled$="[[!canCreate]]">[[i18n('command.create')]]</paper-button>
+          <paper-button noink class="primary" on-tap="_create" disabled$="[[!canCreate]]">[[i18n('command.createdAt')]]</paper-button>
         </div>
       </div>
 
@@ -276,7 +276,7 @@
           'parent': this.parent && this.parent.id
         };
 
-        // Object.assign(document.properties, this._getDocumentProperties());
+        // Object.assign(document, this._getDocumentProperties());
         var properties = this._getDocumentProperties();
         if (properties) {
           for (var prop in properties) {
