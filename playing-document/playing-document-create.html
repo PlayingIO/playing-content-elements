@@ -270,6 +270,7 @@
 
         var document = {
           'type': this.selectedDocType.type.toLowerCase(),
+          'metadata': { packages: this.selectedDocType.packages },
           'title': '',
           'description': '',
           'parent': this.parent && this.parent.id
@@ -283,7 +284,7 @@
           }
         }
 
-        this.document = document;
+        this.document = document; // trigger playing-document-layout
         this.stage = 'edit';
       },
 
