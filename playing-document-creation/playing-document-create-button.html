@@ -104,6 +104,7 @@
         if (this.parent) {
           if (!this.parent.metadata || !this.parent.metadata.subtypes ||
               !this.parent.metadata.permissions) {
+            console.warn('_parentChanged without proper metadata', this.parent.metadata);
             this.$.defaultDoc.get();
           } else {
             var subtypes = [];
