@@ -56,9 +56,13 @@
 
       _elementChanged: function() {
         // forward document path change events
-        this.element.addEventListener('document-changed', function(e) {
-          this.notifyPath(e.detail.path, e.detail.value);
-        }.bind(this));
+        if (this.element) {
+          this.element.addEventListener('document-changed', (e) => {
+            this.notifyPath(e.detail.path, e.detail.value);
+          });
+        } else {
+          console.error('layout.element is undefined', this.$.layout);
+        }
       }
 
     });
