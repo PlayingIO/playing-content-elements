@@ -37,15 +37,25 @@
 
 <!-- DOCUMENT ACTIONS -->
 
-<nuxeo-slot-content name="addToColDocumentAction" slot="DOCUMENT_ACTIONS" order="10">
-  <template>
-    <playing-add-to-collection-button document="[[document]]"></playing-add-to-collection-button>
-  </template>
-</nuxeo-slot-content>
-
 <nuxeo-slot-content name="previewDocumentAction" slot="DOCUMENT_ACTIONS" order="70">
   <template>
     <playing-preview-button document="[[document]]"></playing-preview-button>
+  </template>
+</nuxeo-slot-content>
+
+<!-- RESULT SELECTION ACTIONS -->
+
+<nuxeo-slot-content name="addToClipboardSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="20">
+  <template>
+    <playing-clipboard-documents-button documents="[[selectedItems]]">
+    </playing-clipboard-documents-button>
+  </template>
+</nuxeo-slot-content>
+
+<nuxeo-slot-content name="deleteSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="30">
+  <template>
+    <playing-delete-documents-button documents="[[selectedItems]]">
+    </playing-delete-documents-button>
   </template>
 </nuxeo-slot-content>
 
