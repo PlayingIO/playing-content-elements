@@ -27,7 +27,10 @@
       }
     </style>
 
-    <mostly-select2 id="s2" operation="Tag.Suggestion"
+    <mostly-select2 id="s2"
+            path="tags"
+            operation="suggestion"
+            search-field="displayLabel"
             label="[[label]]"
             min-chars="[[minChars]]"
             tagging$="[[allowNewTags]]"
@@ -185,9 +188,9 @@
       _resultFormatter: function (tag) {
         var escapeHTML = window.Select2.util.escapeMarkup;
         if (tag.newTag) {
-            return "<span class='s2newTag'>" + "+ " +escapeHTML(tag.displayLabel) + "</span>"
+          return "<span class='s2newTag'>" + "+ " +escapeHTML(tag.displayLabel) + "</span>"
         } else {
-            return "<span class='s2existingTag'>" + escapeHTML(tag.displayLabel) + "</span>"
+          return "<span class='s2existingTag'>" + escapeHTML(tag.displayLabel) + "</span>"
         }
       },
 
@@ -197,38 +200,38 @@
 
       _addedTagHandler: function(entry) {
         if (this.document) {
-          this.$.addTagOp.params = {tags: entry.id};
-          this.$.addTagOp.execute().then(function(){
+          this.$.addTagOp.params = { tags: [entry.id] };
+          this.$.addTagOp.execute().then(() => {
             this.$.toast.hide();
             this.$.toast.text = this.i18n('tags.addedToDocument', entry.id);
             this.$.toast.open();
-          }.bind(this));
+          });
         }
       },
 
       _removedTagHandler: function(entry) {
         if (this.document) {
-          this.$.removeTagOp.params = {tags: entry.id};
-          this.$.removeTagOp.execute().then(function(){
+          this.$.removeTagOp.params = { tags: entry.id };
+          this.$.removeTagOp.execute().then(() => {
             this.$.toast.hide();
             this.$.toast.text = this.i18n('tags.removedFromDocument', entry.id);
             this.$.toast.open();
-          }.bind(this));
+          });
         }
       },
 
       _initSelection: function(element, callback) {
         return callback(
-          this.value.map(function(entry) {
-            return {id: entry, displayLabel: entry};
-          }.bind(this))
+          this.value.map((entry) => {
+            return { id: entry, displayLabel: entry };
+          })
         );
       },
 
       _observeDocument: function() {
         if (this.document) {
-          if (this.document.metadata && this.document.metadata.tags) {
-            this.value = this.document.metadata.tags;
+          if (this.document.tags) {
+            this.value = this.document.tags;
           } else {
             this.value = [];
             console.warn("Cannot use playing-tag-element on a document that has no tag in its metadata. Make sure you use the 'tags' enricher to fetch the document");

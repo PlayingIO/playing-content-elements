@@ -94,7 +94,7 @@
         <paper-card>
           <h3>[[i18n('documentPage.tags')]]</h3>
           <playing-tag-suggestion document="[[document]]" allow-new-tags
-                                placeholder="[[i18n('documentPage.tags.placeholder')]]">
+                  placeholder="[[i18n('documentPage.tags.placeholder')]]">
           </playing-tag-suggestion>
         </paper-card>
 
@@ -119,7 +119,6 @@
       },
 
       _documentChanged: function(newVal, oldVal) {
-        console.log('document-page:_documentChanged', newVal, oldVal);
         if (this.document) {
           this.edit = false;
         }
