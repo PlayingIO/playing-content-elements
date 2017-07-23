@@ -1,0 +1,133 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-data-list/mostly-data-list.html">
+<link rel="import" href="../playing-document-storage/playing-document-storage.html">
+<link rel="import" href="../playing-document-thumbnail/playing-document-thumbnail.html">
+
+<!--
+`playing-recent-documents`
+@group Playing UI
+@element playing-recent-documents
+-->
+<dom-module id="playing-recent-documents">
+  <template>
+    <style>
+
+      .content {
+        @apply(--layout-vertical);
+      }
+
+      mostly-data-list {
+        display: block;
+        position: relative;
+        min-height: calc(100vh - 61px)
+      }
+
+      .ellipsis {
+        display: inline-block;
+        width: 80%;
+        vertical-align: middle;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      .list-item {
+        cursor: pointer;
+        padding: 1em;
+        border-bottom: 1px solid var(--nuxeo-border);
+      }
+
+      .list-item:hover {
+        @apply(--nuxeo-block-hover);
+      }
+
+      .list-item.selected,
+      .list-item:focus,
+      .list-item.selected:focus {
+        @apply(--nuxeo-block-selected);
+      }
+
+      .list-item-detail {
+        margin-left: 40px;
+      }
+
+      .list-item-property {
+        opacity: .3;
+        margin-right: .2em;
+      }
+
+    </style>
+
+    <playing-document-storage id="storage" name="playing-recent-documents" documents="{{documents}}"></playing-document-storage>
+
+    <div class="header">[[i18n('app.recentlyViewed')]]</div>
+    <div class="content">
+      <mostly-data-list items="[[documents]]" id="recentDocumentsList" as="document"
+        selected-item="{{selectedRecent}}" items="{{favorites}}"
+        selection-enabled
+        empty-label="[[i18n('recentDocuments.empty')]]"
+        empty-label-when-filtered="[[i18n('recentDocuments.empty')]]">
+        <template>
+          <div tabindex$="{{tabIndex}}" class$="[[_computedClass(selected)]]">
+            <div class="list-item-box vertical layout">
+              <div class="list-item-info horizontal layout center" >
+                <playing-document-thumbnail document="[[document]]"></playing-document-thumbnail>
+                <span class="list-item-title ellipsis">[[document.title]]</span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </mostly-data-list>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'playing-recent-documents',
+      behaviors: [Nuxeo.RoutingBehavior, Nuxeo.I18nBehavior, Nuxeo.FiltersBehavior],
+      properties: {
+        documents: {
+          type: Array,
+          notify: true
+        },
+        maxSize: {
+          type: Number,
+          value: 10
+        },
+        selectedRecent: {
+          type: Object,
+          observer: '_selectedRecentChanged',
+          notify: true
+        }
+      },
+
+      add: function(doc) {
+        this.$.storage.add(doc);
+        if (this.documents.length > this.maxSize) {
+          this.splice('documents', -1, 1);
+        }
+      },
+
+      _computedClass: function(isSelected) {
+        var classes = 'list-item';
+        if (isSelected) {
+          classes += ' selected';
+        }
+        return classes;
+      },
+
+      _selectedRecentChanged: function(doc) {
+        if (doc) {
+          if (doc.isVersion) {
+            this.navigateTo('document', doc.uid);
+          } else {
+            this.navigateTo('browse', doc.path);
+          }
+        }
+      }
+
+    });
+  </script>
+</dom-module>

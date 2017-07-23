@@ -1,0 +1,79 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+<link rel="import" href="../../mostly-elements/es6-polyfills.html">
+
+<!--
+`playing-document-storage`
+@group Playing UI
+@element playing-document-storage
+-->
+<dom-module id="playing-document-storage">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+
+    <mostly-connection id="nxcon"></mostly-connection>
+
+    <iron-localstorage name="[[name]]" value="{{documents}}" on-iron-localstorage-load-empty="initialize">
+    </iron-localstorage>
+  </template>
+  <script>
+    Polymer({
+      is: 'playing-document-storage',
+
+      properties: {
+        name: 'playing-document-storage',
+        documents: {
+          type: Array,
+          notify: true
+        }
+      },
+
+      initialize: function() {
+        this.documents = [];
+      },
+
+      add: function(doc) {
+        if (this.contains(doc)) {
+          return;
+        }
+        var document = {
+          id: doc.id,
+          title: doc.title,
+          type: doc.type,
+          path: doc.path,
+          lastViewed: new Date()
+        };
+        if (doc.metadata && doc.metadata.thumbnail && doc.metadata.thumbnail.url) {
+          document.metadata = { thumbnail: { url: doc.metadata.thumbnail.url } }
+        }
+        return this.unshift('documents', document);
+      },
+
+      contains: function(doc) {
+        return this.documents && this._indexOf(doc) !== -1;
+      },
+
+      remove: function(doc) {
+        this.splice('documents', this._indexOf(doc), 1);
+      },
+
+      _indexOf: function(doc) {
+        return this.documents.findIndex(function(e) {
+          return e.id === doc.id;
+        });
+      },
+
+      ready: function() {
+        this.$.nxcon.connect().then((res) => {
+          this.name =  res.id + '-' + this.name;
+        });
+      }
+
+    });
+  </script>
+</dom-module>

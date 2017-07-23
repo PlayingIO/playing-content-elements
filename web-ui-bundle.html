@@ -11,6 +11,17 @@
   </template>
 </nuxeo-slot-content>
 
+<nuxeo-slot-content name="recentsDrawerItem" slot="DRAWER_ITEMS" order="50">
+  <template>
+    <mostly-menu-icon name="recents" icon="nuxeo:recent" label="app.recentlyViewed"></mostly-menu-icon>
+  </template>
+</nuxeo-slot-content>
+<nuxeo-slot-content name="recentsDrawerPage" slot="DRAWER_PAGES">
+  <template>
+    <playing-recent-documents name="recents" max-size="10" id="recent"></playing-recent-documents>
+  </template>
+</nuxeo-slot-content>
+
 <!-- PAGES -->
 
 <nuxeo-slot-content name="browsePage" slot="PAGES">

@@ -67,7 +67,7 @@
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.title')]]"
                 field="title" sort-by="title" flex="100">
           <template>
-            <mostly-thumbnail document="[[item]]"></mostly-thumbnail>
+            <playing-document-thumbnail document="[[item]]"></playing-document-thumbnail>
             <a class="title ellipsis" href$="[[urlFor('browse', item.path)]]" on-tap="_navigate">[[item.title]]</a>
           </template>
         </mostly-data-table-column>

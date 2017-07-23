@@ -1,0 +1,48 @@
+<!--
+`playing-document-thumbnail`
+@group Playing UI
+@element playing-document-thumbnail
+-->
+<dom-module id="playing-document-thumbnail">
+  <template>
+
+    <style>
+      :host {
+        height: 32px;
+      }
+
+      img {
+        box-sizing: border-box;
+        height: 32px;
+        width: 32px;
+        border-radius: 3px;
+        margin-right: 8px;
+        filter: brightness(1.2);
+        -webkit-filter: brightness(1.2);
+      }
+    </style>
+
+    <img src="[[_thumbnail(document)]]">
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-document-thumbnail',
+      properties: {
+        document: Object
+      },
+
+      _thumbnail: function(doc) {
+        if (doc && doc.id) {
+          if (doc.metadata && doc.metadata.thumbnail && doc.metadata.thumbnail.url) {
+            return doc.metadata.thumbnail.url;
+          }
+          if (doc.thumbnail && doc.thumbnail.url) {
+            return doc.thumbnail.url;
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>
