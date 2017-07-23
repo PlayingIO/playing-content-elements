@@ -22,6 +22,18 @@
   </template>
 </nuxeo-slot-content>
 
+
+<nuxeo-slot-content name="clipboardDrawerItem" slot="DRAWER_ITEMS" order="90">
+  <template>
+    <mostly-menu-icon name="clipboard" icon="nuxeo:clipboard" label="app.clipboard" badge="[[clipboardCount]]"></mostly-menu-icon>
+  </template>
+</nuxeo-slot-content>
+<nuxeo-slot-content name="clipboardDrawerPage" slot="DRAWER_PAGES">
+  <template>
+    <playing-clipboard name="clipboard" id="clipboard" target-document="[[currentDocument]]"></playing-clipboard>
+  </template>
+</nuxeo-slot-content>
+
 <!-- PAGES -->
 
 <nuxeo-slot-content name="browsePage" slot="PAGES">
@@ -47,6 +59,12 @@
 </nuxeo-slot-content>
 
 <!-- DOCUMENT ACTIONS -->
+
+<nuxeo-slot-content name="clipboardToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="50">
+  <template>
+    <playing-clipboard-toggle-button document="[[document]]" clipboard="[[clipboard]]"></playing-clipboard-toggle-button>
+  </template>
+</nuxeo-slot-content>
 
 <nuxeo-slot-content name="previewDocumentAction" slot="DOCUMENT_ACTIONS" order="70">
   <template>

@@ -65,10 +65,10 @@
     <div class="header">[[i18n('app.recentlyViewed')]]</div>
     <div class="content">
       <mostly-data-list items="[[documents]]" id="recentDocumentsList" as="document"
-        selected-item="{{selectedRecent}}" items="{{favorites}}"
-        selection-enabled
-        empty-label="[[i18n('recentDocuments.empty')]]"
-        empty-label-when-filtered="[[i18n('recentDocuments.empty')]]">
+              selected-item="{{selectedRecent}}" items="{{favorites}}"
+              selection-enabled
+              empty-label="[[i18n('recentDocuments.empty')]]"
+              empty-label-when-filtered="[[i18n('recentDocuments.empty')]]">
         <template>
           <div tabindex$="{{tabIndex}}" class$="[[_computedClass(selected)]]">
             <div class="list-item-box vertical layout">
@@ -86,7 +86,7 @@
   <script>
     Polymer({
       is: 'playing-recent-documents',
-      behaviors: [Nuxeo.RoutingBehavior, Nuxeo.I18nBehavior, Nuxeo.FiltersBehavior],
+      behaviors: [Mostly.RoutingBehavior, Mostly.I18nBehavior, Mostly.FiltersBehavior],
       properties: {
         documents: {
           type: Array,
@@ -121,7 +121,7 @@
       _selectedRecentChanged: function(doc) {
         if (doc) {
           if (doc.isVersion) {
-            this.navigateTo('document', doc.uid);
+            this.navigateTo('document', doc.id);
           } else {
             this.navigateTo('browse', doc.path);
           }

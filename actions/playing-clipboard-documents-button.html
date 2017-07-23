@@ -1,0 +1,58 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+
+<!--
+`playing-clipboard-documents-button`
+@group Playing UI
+@element playing-clipboard-documents-button
+-->
+<dom-module id="playing-clipboard-documents-button">
+  <template>
+
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      ::content iron-icon:hover {
+        fill: var(--nuxeo-link-hover-color);
+      }
+    </style>
+
+    <paper-icon-button noink
+            id="clipboardButton"
+            icon="icons:content-paste">
+    </paper-icon-button>
+    <paper-tooltip for="clipboardButton">[[i18n('clipboardDocumentsButton.addToClipboard')]]</paper-tooltip>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-clipboard-documents-button',
+      
+      behaviors: [Mostly.I18nBehavior],
+
+      properties: {
+        documents: {
+          type: Array,
+          notify: true,
+          value: []
+        }
+      },
+
+      listeners: {
+        'tap': 'addToClipBoard'
+      },
+
+      addToClipBoard: function() {
+        this.fire('add-to-clipboard', {documents: this.documents});
+        this.fire ('clear-selected-items');
+      }
+
+    });
+  </script>
+
+</dom-module>
