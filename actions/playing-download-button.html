@@ -68,8 +68,12 @@ Example:
 
       _download: function() {
         var blob = this.document && this._deepFind(this.document, this.xpath);
-        if (blob){
-          location.href = blob.url;
+        if (blob) {
+          // location.href = blob.url;
+          var link = document.createElement('a');
+          link.download = blob.name;
+          link.href = blob.url;
+          link.click();
         }
       }
     });
