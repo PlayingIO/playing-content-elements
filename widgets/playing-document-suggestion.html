@@ -5,14 +5,12 @@
 <!--
 An element for selecting one or more documents.
 
-    <nuxeo-document-suggestion></nuxeo-document-suggestion>
+    <playing-document-suggestion></playing-document-suggestion>
 
-@group Nuxeo Widgets
-@element nuxeo-document-suggestion
-@demo demo/widgets/index.html
-@homepage http://www.nuxeo.org
+@group Playing Widgets
+@element playing-document-suggestion
 -->
-<dom-module id="nuxeo-document-suggestion">
+<dom-module id="playing-document-suggestion">
   <template>
 
     <style>
@@ -21,9 +19,11 @@ An element for selecting one or more documents.
       }
     </style>
 
-    <nuxeo-operation id="op" op="Document.FetchByProperty"></nuxeo-operation>
+    <mostly-operation id="op" path="documents" op="fetchByProperty" method="get"></mostly-operation>
 
-    <mostly-select2 id="s2" operation="Repository.PageProvider"
+    <mostly-select2 id="s2"
+            path="repositories"
+            operations="pageProvider"
             label="[[label]]"
             min-chars="[[minChars]]"
             multiple="[[multiple]]"
@@ -44,7 +44,7 @@ An element for selecting one or more documents.
 
   <script>
     Polymer({
-      is: 'nuxeo-document-suggestion',
+      is: 'playing-document-suggestion',
       behaviors: [Polymer.IronFormElementBehavior, Polymer.IronValidatableBehavior, Mostly.RoutingBehavior],
       properties: {
 

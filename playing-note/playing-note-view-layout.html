@@ -1,0 +1,26 @@
+<!--
+`playing-note-view-layout`
+@group Playing UI
+@element playing-note-view-layout
+-->
+<dom-module id="playing-note-view-layout">
+
+  <template>
+    <playing-note-editor role="widget" document="[[document]]"></playing-note-editor>
+    <playing-document-attachments role="widget" document="[[document]]"></playing-document-attachments>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-note-view-layout',
+      behaviors: [Mostly.LayoutBehavior],
+      properties: {
+        /**
+         * @doctype Note
+         */
+        document: Object
+      }
+    });
+  </script>
+
+</dom-module>

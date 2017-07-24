@@ -11,10 +11,8 @@ An element for selecting one or more entries from a given directory.
             dbl10n="true"
             value="{{suggestions}}"></playing-directory-suggestion>
 
-@group Nuxeo Widgets
+@group Playing Widgets
 @element playing-directory-suggestion
-@demo demo/widgets/index.html
-@homepage http://www.playing.org
 -->
 <dom-module id="playing-directory-suggestion">
   <template>
@@ -25,7 +23,9 @@ An element for selecting one or more entries from a given directory.
       }
     </style>
 
-    <mostly-select2 id="s2" operation="Directory.SuggestEntries"
+    <mostly-select2 id="s2"
+            path="directories"
+            operation="suggestions"
             label="[[label]]"
             min-chars="[[minChars]]"
             multiple="[[multiple]]"

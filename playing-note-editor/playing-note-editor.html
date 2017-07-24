@@ -1,0 +1,145 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-input/paper-textarea.html">
+<link rel="import" href="../../nuxeo-ui-elements/nuxeo-icons.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
+<link rel="import" href="../playing-document/playing-document.html">
+<link rel="import" href="../playing-document/playing-document-preview.html">
+<link rel="import" href="playing-html-editor.html">
+
+<!--
+`playing-note-editor`
+@group Playing UI
+@element playing-note-editor
+-->
+<dom-module id="playing-note-editor">
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+
+      .main {
+        position: relative;
+      }
+
+      .edit {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+
+      paper-textarea {
+        min-height: 29em;
+        --paper-input-container-underline: {
+          border-bottom: none 0;
+        };
+        --paper-input-container-underline-focus: {
+          border-bottom: none 0;
+        };
+      }
+
+    </style>
+
+    <playing-document id="note" doc-id="[[document.id]]"></playing-document>
+
+    <div class="main">
+
+      <template is="dom-if" if="[[_isHTMLorXML(document)]]">
+        <div class="html-editor-container">
+          <playing-html-editor value="{{_value}}" read-only=[[!_canEdit(document)]] hide-toolbars="[[_isXML(document)]]"></playing-html-editor>
+          <div class="layout horizontal end-justified">
+            <paper-button name="editorSave" noink class="primary" on-tap="_editorSave" hidden$="[[!_canEdit(document)]]">[[i18n('command.save')]]</paper-button>
+          </div>
+        </div>
+      </template>
+
+      <template is="dom-if" if="[[!_isHTMLorXML(document)]]">
+        <template is="dom-if" if="[[_viewMode]]">
+          <paper-icon-button id="editNote" class="edit" icon="nuxeo:edit" on-tap="_edit" hidden$="[[!_canEdit(document)]]"></paper-icon-button>
+          <playing-document-preview document="[[document]]"></playing-document-preview>
+        </template>
+        <template is="dom-if" if="[[!_viewMode]]">
+          <paper-textarea value="{{_value}}" no-label-float placeholder="[[i18n('noteViewLayout.placeholder')]]"></paper-textarea>
+          <div class="layout horizontal end-justified">
+            <paper-button noink on-tap="_cancel">[[i18n('command.cancel')]]</paper-button>
+            <paper-button name="editorSave" noink class="primary" on-tap="_editorSave">[[i18n('command.save')]]</paper-button>
+          </div>
+        </template>
+      </template>
+
+    </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'playing-note-editor',
+      behaviors: [Mostly.LayoutBehavior],
+      properties: {
+        document: {
+          type: Object,
+          observer: '_documentChanged'
+        },
+        _viewMode: {
+          type: Boolean,
+          value: true
+        },
+        _value: {
+          type: String,
+          value: ''
+        }
+      },
+
+      _documentChanged: function() {
+        this._value = this.document.note;
+      },
+
+      _isXML: function() {
+        return this.document && this.document.mimetype === 'text/xml';
+      },
+
+      _isHTML: function() {
+        return this.document && this.document.mimetype === 'text/html';
+      },
+
+      _isHTMLorXML: function() {
+        return this._isHTML() || this._isXML();
+      },
+
+      _editorSave: function() {
+        this.$.note.data = {
+          'type': 'note',
+          'note': this._value
+        };
+        this.$.note.patch().then(() => {
+          this.fire('notify', { message: this.i18n('noteViewLayout.note.saved') });
+          this._viewMode = true;
+          this.fire('document-updated');
+        });
+      },
+
+      _isMutable: function(document) {
+        return !this.hasFacet(document, 'Immutable') && document.type !== 'Root' && document.state !== 'deleted';
+      },
+
+      _canEdit: function(document) {
+        return document.type !== 'root' && this.hasPermission(document, 'Write') && this._isMutable(document);
+      },
+
+      _edit: function() {
+        this._value = this.document.note;
+        this._viewMode = false;
+      },
+
+      _cancel: function() {
+        this._value = '';
+        this._viewMode = true;
+      }
+    });
+  })();
+</script>
