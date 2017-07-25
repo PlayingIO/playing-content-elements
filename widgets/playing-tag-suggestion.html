@@ -27,8 +27,9 @@
 
     <mostly-select2 id="s2"
             path="tags"
-            operation="suggestion"
-            search-field="displayLabel"
+            operation="find"
+            search-field="label"
+            display-field="label"
             label="[[label]]"
             min-chars="[[minChars]]"
             tagging$="[[allowNewTags]]"
@@ -186,14 +187,14 @@
       _resultFormatter: function (tag) {
         var escapeHTML = window.Select2.util.escapeMarkup;
         if (tag.newTag) {
-          return "<span class='s2newTag'>" + "+ " +escapeHTML(tag.displayLabel) + "</span>"
+          return "<span class='s2newTag'>" + "+ " + escapeHTML(tag.label) + "</span>"
         } else {
-          return "<span class='s2existingTag'>" + escapeHTML(tag.displayLabel) + "</span>"
+          return "<span class='s2existingTag'>" + escapeHTML(tag.label) + "</span>"
         }
       },
 
       _newEntryFormatter: function (term) {
-        return { id: term, displayLabel: term,  newTag: true };
+        return { id: term, label: term,  newTag: true };
       },
 
       _addedTagHandler: function(entry) {
@@ -221,7 +222,7 @@
       _initSelection: function(element, callback) {
         return callback(
           this.value.map((entry) => {
-            return { id: entry, displayLabel: entry };
+            return { id: entry, label: entry };
           })
         );
       },
