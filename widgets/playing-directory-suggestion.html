@@ -176,7 +176,7 @@ An element for selecting one or more entries from a given directory.
       },
 
       _resolveEntry: function(entry) {
-        if (entry && entry['entity-type'] && entry['entity-type'] === 'directoryEntry') {
+        if (entry && entry['type'] && entry['type'] === 'directoryEntry') {
           if (entry && entry.label) {
             return {
               id: entry.id,

@@ -1027,7 +1027,7 @@
       },
 
       _mergeResponses: function() {
-        var response = {'entity-type': 'Documents', 'entries': []};
+        var response = {'type': 'document', 'entries': []};
         for (var i = 0; i < arguments.length; i++) {
           var current = arguments[i];
           if (current && current.entries) {

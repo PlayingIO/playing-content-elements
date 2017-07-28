@@ -115,12 +115,7 @@
         if (!this._validate()) {
           return;
         }
-        this.$.doc.data = {
-          'entity-type': 'document',
-          id: this.document.id,
-          properties: this._dirtyProperties
-        };
-
+        this.$.doc.data = this._dirtyProperties
         this.$.doc.patch().then(this._refresh.bind(this));
       },
 
