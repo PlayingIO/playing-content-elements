@@ -1,6 +1,6 @@
 {
   "name": "playing-content-elements",
-  "description": "Content management web components for gameplay ",
+  "description": "Content management web components for playful application",
   "version": "1.0.0",
   "license": "MIT",
   "devDependencies": {
