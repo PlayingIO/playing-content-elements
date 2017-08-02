@@ -1,0 +1,142 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-card/paper-card.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-data-table/iron-data-table.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
+<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date.html">
+<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date-picker.html">
+<link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
+<link rel="import" href="../../playing-feed-elements/playing-feed/playing-feed-page-provider.html">
+
+<!--
+`playing-document-activity`
+@group Playing UI
+@element playing-document-activity
+-->
+<dom-module id="playing-document-activity">
+  <template>
+    <style>
+      paper-input {
+        margin-left: 1em;
+      }
+
+      mostly-data-table {
+        @apply(--paper-card);
+        height: calc(100vh - 24em);
+      }
+    </style>
+
+    <playing-feed-page-provider id="provider" page-size="40" current-page="{{entries}}">
+    </playing-feed-page-provider>
+
+    <paper-card class="layout horizontal end-justified flex">
+      <nuxeo-date-picker role="widget" label="[[i18n('documentActivity.filter.after')]]"
+                   value="{{startDate::change}}">
+      </nuxeo-date-picker>
+      <nuxeo-date-picker role="widget" label="[[i18n('documentActivity.filter.before')]]"
+                   value="{{endDate::change}}">
+      </nuxeo-date-picker>
+    </paper-card>
+
+    <mostly-data-table nx-provider="provider" empty-label="[[i18n('documentActivity.empty')]]">
+      <mostly-data-table-column name="[[i18n('documentActivity.verb')]]"
+        sort-by="verb">
+        <template>[[_formatActivity(item.verb)]]</template>
+      </mostly-data-table-column>
+      <mostly-data-table-column name="[[i18n('documentActivity.date')]]"
+        sort-by="createdAt">
+        <template><nuxeo-date datetime="[[item.createdAt]]"></nuxeo-date></template>
+      </mostly-data-table-column>
+      <mostly-data-table-column name="[[i18n('documentActivity.username')]]"
+        sort-by="actor">
+        <template><playing-user-tag user="[[item.actor]]"></playing-user-tag></template>
+      </mostly-data-table-column>
+      <mostly-data-table-column name="[[i18n('documentActivity.category')]]"
+        sort-by="category">
+        <template>[[_formatActivity(item.category)]]</template>
+      </mostly-data-table-column>
+      <mostly-data-table-column name="[[i18n('documentActivity.message')]]">
+        <template>[[item.message]]</template>
+      </mostly-data-table-column>
+      <mostly-data-table-column name="[[i18n('documentActivity.state')]]">
+        <template><mostly-tag uppercase>[[item.state]]</mostly-tag></template>
+      </mostly-data-table-column>
+    </mostly-data-table>
+
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'playing-document-activity',
+      behaviors: [Mostly.FormatBehavior],
+      properties: {
+        document: Object,
+        response: Object,
+        visible: {
+          type: Boolean,
+          value: false,
+          observer: '_refresh'
+        },
+        startDate: {
+          type: String,
+          notify: true,
+          observer: '_observeStartDate'
+        },
+        endDate: {
+          type: String,
+          notify: true,
+          observer: '_observeEndDate'
+        }
+      },
+
+      _observeStartDate: function() {
+        if (this.startDate && this.startDate.length > 0) {
+          this.$.provider.params['createdAt[$gt]'] = this.startDate;
+          if (this.endDate && this.endDate.length > 0) {
+            var start = Date.parse(this.startDate);
+            var end = Date.parse(this.endDate);
+            if (start > end) {
+              this.endDate = moment(start).add(7, 'day').format('YYYY-MM-DD');
+            }
+          }
+          this._refresh();
+        } else if(this.$.provider.params['createdAt[$gt]']) {
+          delete this.$.provider.params['createdAt[$gt]'];
+          this._refresh();
+        }
+      },
+
+      _observeEndDate: function() {
+        if (this.endDate && this.endDate.length > 0) {
+          this.$.provider.params['createdAt[$lt]'] = this.endDate;
+          if (this.startDate && this.startDate.length > 0) {
+            var start = Date.parse(this.startDate);
+            var end = Date.parse(this.endDate);
+            if (start > end) {
+              this.startDate = moment(end).subtract(7, 'day').format('YYYY-MM-DD');
+            }
+          }
+          this._refresh();
+        } else if(this.$.provider.params['createdAt[$lt]']) {
+          delete this.$.provider.params['createdAt[$lt]'];
+          this._refresh();
+        }
+      },
+
+      _refresh: function() {
+        if (this.document && this.visible) {
+          this.$.provider.page = 1;
+          this.$.provider.docId = this.document.id;
+          this.$.provider.fetch();
+        }
+      },
+
+      _formatActivity: function(key) {
+        return key && this.i18n('activity.' + key);
+      }
+
+    });
+  })();
+</script>

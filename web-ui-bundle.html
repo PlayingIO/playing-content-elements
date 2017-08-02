@@ -50,11 +50,23 @@
   </template>
 </nuxeo-slot-content>
 
+<nuxeo-slot-content name="documentHistoryItem" slot="DOCUMENT_VIEWS_ITEMS" order="30">
+  <template>
+    <mostly-page-item name="activity" label="browser.activity"></mostly-page-item>
+  </template>
+</nuxeo-slot-content>
+
 <!-- DOCUMENT PAGES -->
 
 <nuxeo-slot-content name="documentViewPage" slot="DOCUMENT_VIEWS_PAGES" order="10">
   <template>
     <playing-document-page name="view" document="[[document]]"></playing-document-page>
+  </template>
+</nuxeo-slot-content>
+
+<nuxeo-slot-content name="documentActivityPage" slot="DOCUMENT_VIEWS_PAGES" order="30">
+  <template>
+    <playing-document-activity name="activity" document="[[document]]"></playing-document-activity>
   </template>
 </nuxeo-slot-content>
 
