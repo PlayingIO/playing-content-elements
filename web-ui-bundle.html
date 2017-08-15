@@ -22,7 +22,6 @@
   </template>
 </nuxeo-slot-content>
 
-
 <nuxeo-slot-content name="clipboardDrawerItem" slot="DRAWER_ITEMS" order="90">
   <template>
     <mostly-menu-icon name="clipboard" icon="nuxeo:clipboard" label="app.clipboard" badge="[[clipboardCount]]"></mostly-menu-icon>
@@ -70,6 +69,29 @@
   </template>
 </nuxeo-slot-content>
 
+<!-- DOCUMENT CREATE ACTIONS -->
+
+<nuxeo-slot-content name="defaultDocumentCreateActions" slot="DOCUMENT_CREATE_ACTIONS" order="10">
+  <template>
+    <playing-document-create-shortcuts host-visible$=[[hostVisible]]
+            subtypes="[[subtypes]]"></playing-document-create-shortcuts>
+  </template>
+</nuxeo-slot-content>
+
+<!-- DOCUMENT CREATION WIZARD -->
+
+<nuxeo-slot-content name="documentCreateItem" slot="CREATE_POPUP_ITEMS" order="10">
+  <template>
+    <paper-tab name="create">[[i18n('documentCreatePopup.create')]]</paper-tab>
+  </template>
+</nuxeo-slot-content>
+
+<nuxeo-slot-content name="documentImportItem" slot="CREATE_POPUP_ITEMS" order="20">
+  <template>
+    <paper-tab name="import">[[i18n('documentCreatePopup.import')]]</paper-tab>
+  </template>
+</nuxeo-slot-content>
+
 <!-- DOCUMENT ACTIONS -->
 
 <nuxeo-slot-content name="clipboardToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="50">
@@ -93,6 +115,13 @@
 <nuxeo-slot-content name="exportDocumentAction" slot="DOCUMENT_ACTIONS" order="80">
   <template>
     <playing-export-button document="[[document]]"></playing-export-button>
+  </template>
+</nuxeo-slot-content>
+
+<!-- TODO: -->
+<nuxeo-slot-content name="workflowDocumentAction" slot="DOCUMENT_ACTIONS" order="90">
+  <template>
+    <playing-workflow-button document="[[document]]"></playing-workflow-button>
   </template>
 </nuxeo-slot-content>
 

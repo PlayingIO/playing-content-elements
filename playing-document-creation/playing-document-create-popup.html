@@ -141,26 +141,26 @@
       toggleDialogCreate: function(type) {
         this.selectedTab = 'create';
         this._showTabs = false;
-        this._fetchParent().then(function() {
+        this._fetchParent().then(() => {
           this.$.simpleCreation.init(type);
           this.$.bulkCreation.init();
           this.$.createDocDialog.toggle();
-        }.bind(this));
+        });
       },
 
       toggleDialogImport: function(files) {
         this.selectedTab = 'import';
-        this._fetchParent().then(function() {
+        this._fetchParent().then(() => {
           this.$.bulkCreation.init(files);
           this.$.createDocDialog.toggle();
-        }.bind(this));
+        });
       },
 
       toggleDialog: function() {
-        this._fetchParent().then(function() {
+        this._fetchParent().then(() => {
           this.$.bulkCreation.init();
           this.$.createDocDialog.toggle();
-        }.bind(this));
+        });
       },
 
       _fetchParent: function() {
@@ -175,8 +175,9 @@
       },
 
       _parentPathChanged: function(e) {
-        if (e.detail.isValidTargetPath &&
-          (!this.parent || (this.parent.path !== this.parentPath.replace(/(.+)\/$/, "$1")))) {
+        if (e.detail.isValidTargetPath
+          && (!this.parent || (this.parent.path !== this.parentPath.replace(/(.+)\/$/, "$1"))))
+        {
           this.$.defaultDoc.get();
         }
       },
