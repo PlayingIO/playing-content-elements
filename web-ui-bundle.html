@@ -78,6 +78,12 @@
   </template>
 </nuxeo-slot-content>
 
+<nuxeo-slot-content name="lockToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="60">
+  <template>
+    <playing-lock-toggle-button document="[[document]]"></playing-lock-toggle-button>
+  </template>
+</nuxeo-slot-content>
+
 <nuxeo-slot-content name="previewDocumentAction" slot="DOCUMENT_ACTIONS" order="70">
   <template>
     <playing-preview-button document="[[document]]"></playing-preview-button>
