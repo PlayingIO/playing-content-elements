@@ -90,6 +90,12 @@
   </template>
 </nuxeo-slot-content>
 
+<nuxeo-slot-content name="exportDocumentAction" slot="DOCUMENT_ACTIONS" order="80">
+  <template>
+    <playing-export-button document="[[document]]"></playing-export-button>
+  </template>
+</nuxeo-slot-content>
+
 <!-- RESULT SELECTION ACTIONS -->
 
 <nuxeo-slot-content name="addToClipboardSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="20">

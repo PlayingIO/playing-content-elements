@@ -1,0 +1,107 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+
+<!--
+A button element for exporting document's content.
+
+Example:
+
+    <playing-export-button document="[[document]]"></playing-export-button>
+
+@group Playing UI
+@element playing-export-button
+@demo demo/actions/index.html
+-->
+<dom-module id="playing-export-button">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      .item {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        padding-top: 0.4em;
+        padding-bottom: 0.4em;
+      }
+
+      .item iron-icon {
+        margin-right: 1em;
+      }
+    </style>
+
+    <template is="dom-if" if="[[_isAvailable(document)]]">
+      <paper-icon-button icon="[[icon]]" on-tap="_toggleDialog" noink></paper-icon-button>
+      <paper-tooltip>[[i18n('exportButton.tooltip')]]</paper-tooltip>
+    </template>
+
+    <mostly-dialog id="dialog" with-backdrop>
+      <h2>[[i18n('exportButton.dialog.heading')]]</h2>
+
+      <template is="dom-repeat" items="[[_filterRenditions(document)]]">
+        <div class="item">
+          <iron-icon src="[[item.icon]]"></iron-icon> <a href="[[item.url]]">[[i18n(item.name)]]</a>
+        </div>
+      </template>
+
+      <div class="buttons">
+        <paper-button dialog-dismiss>[[i18n('exportButton.dialog.cancel')]]</paper-button>
+      </div>
+    </mostly-dialog>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-export-button',
+      behaviors: [Nuxeo.I18nBehavior, Nuxeo.FiltersBehavior],
+      properties: {
+
+        /**
+         * Input document.
+         */
+        document: Object,
+
+        /**
+         * Icon to use (iconset_name:icon_name).
+         */
+        icon: {
+          type: String,
+          value: 'nuxeo:export'
+        }
+      },
+
+      _isAvailable: function(document) {
+        return document;
+      },
+
+      _toggleDialog: function() {
+        this.$.dialog.toggle();
+      },
+
+      _filterRenditions: function(document) {
+        if (document && document.metadata && document.metadata.renditions) {
+          return document.metadata.renditions.filter(function(rendition) {
+            return rendition.kind !== 'playing:video:conversion'
+                && rendition.kind !== 'playing:picture:conversion';
+          }).map(function(item) {
+            item.name = 'exportButton.' + item.name;
+            return item;
+          });
+        } else {
+          return [];
+        }
+      }
+
+    });
+  </script>
+
+</dom-module>
