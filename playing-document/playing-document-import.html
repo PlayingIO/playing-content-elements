@@ -299,7 +299,7 @@
             headers='{"X-Batch-No-Drop": "true"}'
             response="{{createResponse}}"></playing-document>
     <playing-document id="parentFetcher"
-                    doc-path="[[targetPath]]"></playing-document>
+            doc-path="[[targetPath]]"></playing-document>
 
     <iron-a11y-keys keys="enter" on-keys-pressed="_submitKeyHandler"></iron-a11y-keys>
 
@@ -1044,9 +1044,8 @@
       },
 
       _smartImportRemoteFiles: function(params) {
-        this.$.fileManagerImport.input = 'blobs:' + this.remoteFiles.map(function(file) {
-          return file.key;
-        }).join();
+        this.$.fileManagerImport.input = 'blobs:'
+          + this.remoteFiles.map(file => file.key).join();
         this.$.fileManagerImport.params = params;
         this.$.fileManagerImport.params.noMimeTypeCheck = true;
         this.$.fileManagerImport.headers = {};
@@ -1121,11 +1120,11 @@
           this.splice('remoteFiles', e.model.index, 1);
         } else {
           this.$.blobRemover.path = 'upload/' + this.batchId + '/' + e.model.file.index;
-          this.$.blobRemover.remove().then(function() {
+          this.$.blobRemover.remove().then(() => {
             this.splice('localFiles', e.model.index, 1);
             this.hasLocalFiles = this.localFiles && this.localFiles.length > 0;
             this.$.uploadFiles.value = '';
-          }.bind(this), this._handleError.bind(this));
+          }, this._handleError.bind(this));
         }
       },
 

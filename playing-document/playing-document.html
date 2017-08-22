@@ -22,11 +22,16 @@ element.
         display: none;
       }
     </style>
-    <mostly-resource id="nxResource" connection-id="{{connectionId}}"
-            method="{{method}}" auto="{{auto}}"
-            path="{{path}}" data="{{data}}" enrichers="{{enrichers}}"
-            params="{{params}}" headers="{{headers}}"
-            type="{{type}}" response="{{response}}"
+    <mostly-resource id="nxResource" auto="{{auto}}"
+            connection-id="{{connectionId}}"
+            method="{{method}}"
+            path="{{path}}" data="{{data}}"
+            enrichers="{{enrichers}}"
+            params="{{params}}"
+            select="{{select}}"
+            headers="{{headers}}"
+            type="{{type}}"
+            response="{{response}}"
             schemas="[[schemas]]"></mostly-resource>
   </template>
 </dom-module>

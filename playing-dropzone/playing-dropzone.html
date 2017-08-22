@@ -213,7 +213,7 @@
         } else {
           this.document[this.xpath] = {
             'batch': data.detail.batchId,
-            'index': '0'
+            'index': 0
           };
           this._handleBlobUploaded();
         }
@@ -223,7 +223,8 @@
         this._hasFiles = true;
         this.set('files', e.detail.blobs);
         if (this.blobList) {
-          this.$.bulkAttach.input = 'blobs:' + this.files.map(function(file) { return file.key; }).join();
+          this.$.bulkAttach.input = 'blobs:'
+            + this.files.map(file => file.key).join();
           this.$.bulkAttach.params = {
             useMainBlob: false,
             context: {
@@ -249,12 +250,12 @@
         if (this.updateDocument) {
           this.$.doc.patch().then(response => {
             this.document = response.data;
-            this.fire('notify', {message: this.uploadedMessage});
+            this.fire('notify', { message: this.uploadedMessage });
             this.progress = false;
             this._hasFiles = false;
           });
         } else {
-          this.fire('notify', {message: this.uploadedMessage});
+          this.fire('notify', { message: this.uploadedMessage });
           this.progress = false;
         }
       },
@@ -264,7 +265,7 @@
           var data = response.data;
           this.document[this.xpath] = data[this.xpath];
           this.notifyPath('document.' + this.xpath, this.document[this.xpath]);
-          this.fire('notify', {message: this.uploadedMessage});
+          this.fire('notify', { message: this.uploadedMessage });
           this.progress = false;
           this._hasFiles = false;
         });
