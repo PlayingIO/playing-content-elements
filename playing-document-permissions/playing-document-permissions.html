@@ -1,1 +1,305 @@
-<!-- TODO -->
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-styles/paper-styles.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../paper-toast/paper-toast.html">
+<link rel="import" href="../../iron-icons/editor-icons.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+
+<link rel="import" href="../playing-document/playing-document.html">
+<link rel="import" href="playing-document-acl-table.html">
+<link rel="import" href="playing-popup-permission.html">
+<link rel="import" href="playing-popup-confirm.html">
+
+
+<!--
+An element providing document permissions management
+
+    <playing-document-permissions doc-path="/default-domain"></playing-document-permissions>
+
+@group Playing UI
+@element playing-document-permissions
+@demo demo/playing-document-permissions/index.html
+-->
+<dom-module id="playing-document-permissions">
+  <template>
+
+    <style>
+      .bubbleBox {
+        @apply(--paper-card);
+        background-color: #fff;
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+        display: block;
+        padding: 0 1em 1em;
+        margin-bottom: 16px;
+      }
+
+      .bubbleHeader {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 16px 0;
+      }
+
+      .bubbleHeader h3 {
+        @apply(--layout-flex);
+        float: left;
+        line-height: normal;
+        border: 0;
+        display: inline-block;
+        margin: 0;
+        padding: 0.3em 0;
+      }
+
+      .bubbleHeader paper-button {
+        margin: 0;
+      }
+
+      .tag {
+        background: none #f3f6f9;
+        border-radius: 16px;
+        color: #333;
+        display: inline-block;
+        font-size: .8rem;
+        line-height: inherit;
+        margin: 0 .3em .5em 0;
+        padding: .1em .8em .2em;
+        text-decoration: none;
+        transition: none;
+      }
+
+      input {
+        width: 100%;
+        line-height: 1.4em;
+        padding: .5em;
+      }
+
+      .tips {
+        border-left: 4px solid var(--nuxeo-warn-text, #333);
+        opacity: .5;
+        display: block;
+        margin: 8px 0;
+        padding: 8px;
+      }
+
+      .label, .chip {
+        background-color: #7e90a5;
+        border-radius: 3px;
+        color: #fff;
+        font-size: .9rem;
+        font-weight: bold;
+        line-height: 130%;
+        margin: 0 .2em .2em 0;
+        padding: .06em .3em;
+        text-transform: uppercase;
+        vertical-align: baseline;
+        white-space: nowrap;
+      }
+
+      .required::after {
+        content: '*';
+        color: red;
+      }
+
+      .emptyResult {
+        opacity: .5;
+        display: block;
+        font-weight: 300;
+        padding: 1.5em .7em;
+        text-align: center;
+      }
+
+    </style>
+
+    <paper-toast id="toast"></paper-toast>
+
+    <playing-document id="doc" auto
+            doc-id="{{docId}}"
+            doc-path="{{docPath}}"
+            document="{{doc}}"
+            enrichers="acls, permissions, userVisiblePermissions"
+            params="{{params}}"></playing-document>
+
+    <!-- Local permissions -->
+    <div class="bubbleBox">
+      <div class="bubbleHeader jsLocalPermissions">
+        <h3>[[i18n('documentPermissions.locallyDefined')]]</h3>
+        <template is="dom-if" if="[[_hasPermission(doc,'Everything')]]">
+          <playing-popup-permission id="localPermissions" doc-id="{{doc.id}}"
+            user-visible-permissions="{{doc.metadata.userVisiblePermissions}}">
+          </playing-popup-permission>
+        </template>
+      </div>
+      <div>
+        <playing-document-acl-table doc="[[doc]]" acl-filter="_excludeInheritedAcls" ace-filter="_excludeExternalUserAces"
+          show-actions="[[_hasPermission(doc,'Everything')]]">
+          <p class="emptyResult">[[i18n('documentPermissions.noLocalPermissions')]]</p>
+        </playing-document-acl-table>
+      </div>
+    </div>
+
+    <!-- Inherited permissions -->
+    <div class="bubbleBox">
+      <div class="bubbleHeader">
+        <h3>[[i18n('documentPermissions.inherited')]]</h3>
+        <template is="dom-if" if="[[_empty(inheritedAces)]]">
+          <span class="label label-warning">[[i18n('documentPermissions.blocked')]]</span>
+        </template>
+        <template is="dom-if" if="[[_hasPermission(doc,'Everything')]]">
+          <template is="dom-if" if="[[!_empty(inheritedAces)]]">
+            <paper-button id="block" on-tap="blockInheritance">[[i18n('documentPermissions.block')]]</paper-button>
+          </template>
+          <template is="dom-if" if="[[_empty(inheritedAces)]]">
+            <paper-button id="unblock" on-tap="unblockInheritance">[[i18n('documentPermissions.unblock')]]</paper-button>
+          </template>
+        </template>
+      </div>
+      <div>
+        <div class="tips" hidden$="[[_empty(inheritedAces)]]">
+          [[i18n('documentPermissions.blockDescription')]]
+        </div>
+        <playing-document-acl-table doc="[[doc]]" aces="{{inheritedAces}}" acl-filter="_onlyInheritedAcls" show-actions="false">
+          <p class="emptyResult">[[i18n('documentPermissions.noInheritedText')]]</p>
+        </playing-document-acl-table>
+      </div>
+    </div>
+
+    <!-- External users permissions -->
+    <div class="bubbleBox">
+      <div class="bubbleHeader">
+        <h3>[[i18n('documentPermissions.external')]]</h3>
+        <template is="dom-if" if="[[_hasPermission(doc, 'Everything')]]">
+          <playing-popup-permission id="externalPermissions"
+                  doc-id="{{doc.id}}"
+                  user-visible-permissions="{{doc.metadata.userVisiblePermissions}}"
+                  share-with-external="true"></playing-popup-permission>
+        </template>
+      </div>
+      <div class="tips">
+        [[i18n('documentPermissions.externalDescription')]]
+      </div>
+      <playing-document-acl-table doc="[[doc]]"
+              ace-filter="_onlyExternalUserAces"
+              acl-filter="_excludeInheritedAcls"
+              show-actions="[[_hasPermission(doc,'Everything')]]"
+              share-with-external="true">
+        <p class="emptyResult">[[i18n('documentPermissions.noExternalPermission')]]</p>
+      </playing-document-acl-table>
+    </div>
+
+    <mostly-operation id="blockOp"
+            path="documents"
+            op="blockPermissionInheritance"
+            input="{{doc.id}}"></mostly-operation>
+    <mostly-operation id="unblockOp"
+            path="documents"
+            op="unblockPermissionInheritance"
+            input="{{doc.id}}"></mostly-operation>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-document-permissions',
+      behaviors: [Mostly.I18nBehavior],
+      properties: {
+        doc: {
+          type: Object,
+          value: null
+        },
+        docId: {
+          type: String,
+          value: ''
+        },
+        docPath: {
+          type: String,
+          value: ''
+        },
+        params: {
+          type: Object,
+          value: {
+            "fetch.acls": "username,creator,extended",
+            "depth": "children",
+            "time": new Date().getTime()
+          }
+        }
+      },
+
+      listeners: {
+        'acecreated': 'onACECreated',
+        'aceupdated': 'onACEUpdated',
+        'acedeleted': 'onACEDeleted',
+        'notification': 'onNotification'
+      },
+
+      refresh: function () {
+        this.params.time = new Date().getTime();
+        this.$.doc.get();
+      },
+
+      onACECreated: function() {
+        this.$.toast.text = this.i18n('documentPermissions.permissionCreated');
+        this.$.toast.show();
+        this.refresh();
+      },
+
+      onACEUpdated: function() {
+        this.$.toast.text = this.i18n('documentPermissions.permissionUpdated');
+        this.$.toast.show();
+        this.refresh();
+      },
+
+      onACEDeleted: function() {
+        this.$.toast.text = this.i18n('documentPermissions.permissionDeleted');
+        this.$.toast.show();
+        this.refresh();
+      },
+
+      onNotification: function() {
+        this.$.toast.text = this.i18n('documentPermissions.permissionNotificationSent');
+        this.$.toast.show();
+      },
+
+      _hasPermission: function (doc, name) {
+        var permissions = this.doc && this.doc.metadata && this.doc.metadata.permissions;
+        return permissions && permissions.indexOf('Everything') !== -1;
+      },
+
+      _empty: function(arr) {
+        return arr.length == 0;
+      },
+
+      _excludeInheritedAcls: function (acl) {
+        return acl.name !== 'inherited';
+      },
+
+      _onlyInheritedAcls: function (acl) {
+        return acl.name === 'inherited';
+      },
+
+      _excludeExternalUserAces: function (ace) {
+        return ace.granted && (ace.status === 'pending' || ace.status === 'effective') && ace.externalUser === false;
+      },
+
+      _onlyExternalUserAces: function (ace) {
+        return ace.granted && (ace.status === 'pending' || ace.status === 'effective') && ace.externalUser === true;
+      },
+
+      blockInheritance: function () {
+        this.$.blockOp.execute().then(this.refresh.bind(this));
+      },
+
+      unblockInheritance: function () {
+        this.$.unblockOp.execute().then(this.refresh.bind(this));
+      }
+
+    });
+  </script>
+</dom-module>

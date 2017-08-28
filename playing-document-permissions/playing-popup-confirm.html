@@ -1,0 +1,86 @@
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<!--
+Element providing a confirmation popup.
+
+@group Playing UI
+@element playing-popup-confirm
+-->
+<dom-module id="playing-popup-confirm">
+  <template>
+
+    <style>
+      input {
+        width: 100%;
+        line-height: 1.4em;
+        padding: 0.5em;
+      }
+    </style>
+
+    <paper-dialog id="dialog">
+      <paper-dialog-scrollable>
+        <content></content>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button dialog-dismissive on-tap="_onCancel">{{cancelLabel}}</paper-button>
+        <paper-button dialog-affirmative class="colorful" on-tap="_onConfirm">{{deleteLabel}}</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-popup-confirm',
+
+      properties: {
+        /**
+         * Cancel handler.
+         */
+        onCancel: Function,
+
+        /**
+         * Confirm handler.
+         */
+        onConfirm: Function,
+
+        deleteLabel: {
+          type: String,
+          value: 'Delete'
+        },
+        cancelLabel: {
+          type: String,
+          value: 'Cancel'
+        }
+      },
+
+      /**
+       * Toggle the popup. Optionally you can specific the comfirm handler as parameter.
+       */
+      toggle: function(func) {
+        if(typeof func === 'function') {
+          this.onConfirm = func;
+        }
+
+        this.$.dialog.toggle();
+      },
+
+      _onCancel: function() {
+        if(this.onCancel) {
+          this.onCancel();
+        }
+
+        this.toggle();
+      },
+
+      _onConfirm: function() {
+        if(this.onConfirm) {
+          this.onConfirm();
+        }
+
+        this.toggle();
+      }
+    });
+  </script>
+</dom-module>
