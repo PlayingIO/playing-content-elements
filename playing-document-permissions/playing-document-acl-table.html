@@ -83,7 +83,7 @@ Element displaying a table with document ACLs.
       </div>
       <template is="dom-repeat" items="[[aces]]" as="ace" sort="_sortAces" strip-whitespace>
         <div class$="acl-table-row [[ace.status]]">
-          <div class="flex-2"><span class$="[[entityClass(ace.username)]]" title="[[entityTooltip(ace.username)]]">[[entityDisplay(ace.username)]]</span>
+          <div class="flex-2"><span class$="[[entityClass(ace.user)]]" title="[[entityTooltip(ace.user)]]">[[entityDisplay(ace.user)]]</span>
           </div>
           <div class="flex-2"><span class="label">[[i18n(ace.permission)]]</span></div>
           <div class="flex-2"><span>{{formatTimeFrame(ace)}}</span></div>
@@ -112,7 +112,7 @@ Element displaying a table with document ACLs.
                       <div class="flex-2 tmp-tab">[[i18n('documentAclTable.grantedBy')]]</div>
                     </div>
                     <div class$="acl-table-row [[ace.status]]">
-                      <div class="flex-2"><span class$="[[entityClass(ace.username)]]" title="[[entityTooltip(ace.username)]]">[[entityDisplay(ace.username)]]</span>
+                      <div class="flex-2"><span class$="[[entityClass(ace.user)]]" title="[[entityTooltip(ace.user)]]">[[entityDisplay(ace.user)]]</span>
                       </div>
                       <div class="flex-2"><span class="label">[[i18n(ace.permission)]]</span></div>
                       <div class="flex-2"><span>{{formatTimeFrame(ace)}}</span></div>
@@ -259,34 +259,7 @@ Element displaying a table with document ACLs.
       },
 
       entityDisplay: function (entity) {
-        if (!entity) {
-          return '';
-        }
-
-        if (typeof entity === 'object') {
-          if (entity['entity-type'] === 'user') {
-            var id = entity.id;
-            var first = entity.properties.firstName;
-            var last = entity.properties.lastName;
-            if (first === null || first.length === 0) {
-              if (last === null || last.length === 0) {
-                return id;
-              } else {
-                return last;
-              }
-            } else {
-              if (last === null || last.length === 0) {
-                return first;
-              } else {
-                return first + ' ' + last;
-              }
-            }
-          } else if (entity['entity-type'] === 'group') {
-            var groupLabel = entity.grouplabel;
-            return groupLabel !== null && groupLabel.length > 0 ? groupLabel : entity.groupname;
-          }
-        }
-        return entity;
+        return entity && entity.displayLabel || entity || '';
       },
 
       entityClass: function (entity) {
@@ -295,9 +268,9 @@ Element displaying a table with document ACLs.
         }
 
         if (typeof entity === 'object') {
-          if (entity['entity-type'] === 'user') {
+          if (entity['type'] === 'user') {
             return 'tag user';
-          } else if (entity['entity-type'] === 'group') {
+          } else if (entity['type'] === 'group') {
             return 'tag group';
           }
         }
@@ -310,10 +283,10 @@ Element displaying a table with document ACLs.
         }
 
         if (typeof entity === 'object') {
-          if (entity['entity-type'] === 'user') {
-            var email = entity.properties.email;
+          if (entity['type'] === 'user') {
+            var email = entity.email;
             return entity.id + (email !== null && email.length > 0 ? ' - ' + email : '');
-          } else if (entity['entity-type'] === 'group') {
+          } else if (entity['type'] === 'group') {
             return entity.groupname;
           }
         }

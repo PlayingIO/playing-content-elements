@@ -38,7 +38,7 @@
     </style>
     <mostly-operation id="createOp"
             path="documents"
-            op="Document.AddPermission"
+            op="addPermission"
             input={{docId}}
             params={{params}}
             on-response="handleResponse"></mostly-operation>
@@ -65,6 +65,7 @@
           <template is="dom-if" if="{{!shareWithExternal}}">
             <div>
                 <playing-user-suggestion name="userGroup"
+                        search-type="user-group"
                         label="[[i18n('popupPermission.userGroup')]]"
                         value="{{params.username}}"></playing-user-suggestion>
             </div>
@@ -78,6 +79,7 @@
             </div>
           </template>
         </template>
+
         <!-- Right row -->
         <div layout horizontal>
           <mostly-select name="right"
