@@ -49,6 +49,17 @@
   </template>
 </nuxeo-slot-content>
 
+<nuxeo-slot-content name="documentPermissionsItem" slot="DOCUMENT_VIEWS_ITEMS" order="20">
+  <template>
+    <mostly-page-item name="permissions" label="browser.permissions"></mostly-page-item>
+  </template>
+</nuxeo-slot-content>
+<nuxeo-slot-content name="documentPermissionsPage" slot="DOCUMENT_VIEWS_PAGES" order="20">
+  <template>
+    <playing-document-permissions name="permissions" id="permissions" doc-id="[[document.id]]"></playing-document-permissions>
+  </template>
+</nuxeo-slot-content>
+
 <nuxeo-slot-content name="documentHistoryItem" slot="DOCUMENT_VIEWS_ITEMS" order="30">
   <template>
     <mostly-page-item name="activity" label="browser.activity"></mostly-page-item>
