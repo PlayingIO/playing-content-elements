@@ -225,7 +225,7 @@ An element providing document permissions management
         params: {
           type: Object,
           value: {
-            "fetch.acls": "username,creator,extended",
+            "fetch.acls": "user,creator,extended",
             "depth": "children",
             "time": new Date().getTime()
           }
@@ -233,9 +233,9 @@ An element providing document permissions management
       },
 
       listeners: {
-        'acecreated': 'onACECreated',
-        'aceupdated': 'onACEUpdated',
-        'acedeleted': 'onACEDeleted',
+        'aceCreated': 'onACECreated',
+        'aceUpdated': 'onACEUpdated',
+        'aceDeleted': 'onACEDeleted',
         'notification': 'onNotification'
       },
 
@@ -285,11 +285,11 @@ An element providing document permissions management
       },
 
       _excludeExternalUserAces: function (ace) {
-        return ace.granted && (ace.status === 'pending' || ace.status === 'effective') && ace.externalUser === false;
+        return ace.granted && (ace.status === 'pending' || ace.status === 'effective') && !ace.externalUser;
       },
 
       _onlyExternalUserAces: function (ace) {
-        return ace.granted && (ace.status === 'pending' || ace.status === 'effective') && ace.externalUser === true;
+        return ace.granted && (ace.status === 'pending' || ace.status === 'effective') && ace.externalUser;
       },
 
       blockInheritance: function () {

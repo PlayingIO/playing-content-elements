@@ -67,7 +67,7 @@
                 <playing-user-suggestion name="userGroup"
                         search-type="user-group"
                         label="[[i18n('popupPermission.userGroup')]]"
-                        value="{{params.username}}"></playing-user-suggestion>
+                        value="{{params.user}}"></playing-user-suggestion>
             </div>
           </template>
           <template is="dom-if" if="{{shareWithExternal}}">
@@ -219,10 +219,10 @@
       },
 
       _doSend: function (togglePopup) {
-        if (this.shareWithExternal && ((!this.updatingACE && !this.params.email) || (this.updatingACE && !this.params.username))) {
+        if (this.shareWithExternal && ((!this.updatingACE && !this.params.email) || (this.updatingACE && !this.params.user))) {
           return;
         }
-        if (!this.shareWithExternal && !this.params.username) {
+        if (!this.shareWithExternal && !this.params.user) {
           return;
         }
 
@@ -262,11 +262,10 @@
 
       handleResponse: function () {
         if (this.updatingACE) {
-          this.fire('aceupdated');
+          this.fire('aceUpdated');
         } else {
-          this.fire('acecreated');
-
-          this.set('params.username', null);
+          this.fire('aceCreated');
+          this.set('params.user', null);
           this.set('params.email', null);
           this.set('params.permission', 'Read');
           this.set('params.begin', null);
@@ -274,17 +273,16 @@
           this.set('params.notify', true);
           this.set('params.comment', '');
           this.set('selectedTimeFrame', this.shareWithExternal ? 'datebased' : 'permanent');
-
         }
       },
 
       computeParams: function (ace, shareWithExternal) {
         var params = {
-          username: null,
+          user: null,
           email: null,
           permission: 'Read',
-          begin: '',
-          end: '',
+          begin: null,
+          end: null,
           notify: true,
           comment: ''
         };
@@ -296,20 +294,18 @@
 
         if (ace !== null) {
           params.id = ace.id;
-          var username = typeof ace.username === 'object'
-            ? (ace.username['type'] === 'user'? ace.username.id : ace.username.groupname)
-            : ace.username;
-          params.username = username;
+          var user = typeof ace.user === 'object'? ace.user.id : ace.user;
+          params.user = user;
 
           params.permission = ace.permission;
           params.notify = ace.notify;
           params.comment = ace.comment;
           var dateBased = false;
-          if (ace.begin !== null) {
+          if (ace.begin) {
             params.begin = moment(new Date(ace.begin)).format('YYYY-MM-DD');
             dateBased = true;
           }
-          if (ace.end !== null) {
+          if (ace.end) {
             params.end = moment(new Date(ace.end)).format('YYYY-MM-DD');
             dateBased = true;
           }
