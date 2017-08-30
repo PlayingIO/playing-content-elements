@@ -176,12 +176,16 @@ Element displaying a table with document ACLs.
       ],
 
       aclFilterChanged: function(fn) {
-        this._aclFilter = fn && function() { return this.dataHost[fn].apply(this.dataHost, arguments); };
+        this._aclFilter = fn && function() {
+          return this.dataHost[fn].apply(this.dataHost, arguments);
+        };
         this._updateAces();
       },
 
       aceFilterChanged: function(fn) {
-        this._aceFilter = fn && function() { return this.dataHost[fn].apply(this.dataHost, arguments); };
+        this._aceFilter = fn && function() {
+          return this.dataHost[fn].apply(this.dataHost, arguments);
+        };
         this._updateAces();
       },
 
@@ -192,14 +196,14 @@ Element displaying a table with document ACLs.
           acls = acls.filter(this._aclFilter.bind(this));
         }
         var aces = [];
-        acls.forEach(function(acl) {
-          acl.aces.forEach(function(ace) {
+        acls.forEach((acl) => {
+          acl.aces.forEach((ace) => {
             if (this._aceFilter(ace)) {
               ace.aclName = acl.name;
               aces.push(ace);
             }
-          }.bind(this));
-        }.bind(this));
+          });
+        });
 
         this.aces = aces.sort(this._sortAces);
       },
@@ -273,6 +277,8 @@ Element displaying a table with document ACLs.
             return 'tag user';
           } else if (entity['type'] === 'group') {
             return 'tag group';
+          } else if (entity['type'] === 'role') {
+            return 'tag role';
           }
         }
         return '';
@@ -284,12 +290,7 @@ Element displaying a table with document ACLs.
         }
 
         if (typeof entity === 'object') {
-          if (entity['type'] === 'user') {
-            var email = entity.email;
-            return entity.id + (email && email.length > 0 ? ' - ' + email : '');
-          } else if (entity['type'] === 'group') {
-            return entity.groupname;
-          }
+          return entity.displayLabel;
         }
         return entity;
       },
