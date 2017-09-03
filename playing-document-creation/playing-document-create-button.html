@@ -104,7 +104,7 @@
         if (this.parent) {
           if (!this.parent.metadata || !this.parent.metadata.subtypes ||
               !this.parent.metadata.permissions) {
-            console.log('Get changed parent metadata', this.parent.metadata);
+            console.log('Parent has no needed metadata, fetch from server', this.parent.metadata);
             this.$.defaultDoc.get();
           } else {
             var subtypes = [];

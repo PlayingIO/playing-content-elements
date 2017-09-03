@@ -115,7 +115,8 @@
         if (!this._validate()) {
           return;
         }
-        this.$.doc.data = this._dirtyProperties
+        this.$.doc.data = this._dirtyProperties;
+        this.$.doc.data.type = this.document.type;
         this.$.doc.patch().then(this._refresh.bind(this));
       },
 
