@@ -121,12 +121,15 @@
       }
     </style>
 
-    <playing-document id="doc" doc-path="[[docPath]]" document="{{document}}" enrichers="hasFolderishChild"></playing-document>
+    <playing-document id="doc"
+            doc-path="[[docPath]]"
+            document="{{document}}"
+            enrichers="hasFolderishChild"></playing-document>
 
     <mostly-page-provider id="children"
             provider="folders"
-            enrichers="hasFolderishChild">
-    </mostly-page-provider>
+            enrichers="hasFolderishChild"
+            sort="title:1"></mostly-page-provider>
 
     <div class="header" hidden$="[[!label]]">[[i18n(label)]]</div>
 
