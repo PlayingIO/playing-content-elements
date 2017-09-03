@@ -8,11 +8,11 @@
 <link rel="import" href="playing-html-editor.html">
 
 <!--
-`playing-note-editor`
+`playing-content-editor`
 @group Playing UI
-@element playing-note-editor
+@element playing-content-editor
 -->
-<dom-module id="playing-note-editor">
+<dom-module id="playing-content-editor">
   <template>
 
     <style>
@@ -42,7 +42,7 @@
 
     </style>
 
-    <playing-document id="note" doc-id="[[document.id]]"></playing-document>
+    <playing-document id="content" doc-id="[[document.id]]"></playing-document>
 
     <div class="main">
 
@@ -78,12 +78,16 @@
 <script>
   (function() {
     Polymer({
-      is: 'playing-note-editor',
+      is: 'playing-content-editor',
       behaviors: [Mostly.LayoutBehavior],
       properties: {
         document: {
           type: Object,
           observer: '_documentChanged'
+        },
+        type: {
+          type: String,
+          value: 'note'
         },
         _viewMode: {
           type: Boolean,
@@ -96,7 +100,7 @@
       },
 
       _documentChanged: function() {
-        this._value = this.document.note;
+        this._value = this.document.content;
       },
 
       _isXML: function() {
@@ -112,12 +116,12 @@
       },
 
       _editorSave: function() {
-        this.$.note.data = {
-          'type': 'note',
-          'note': this._value
+        this.$.content.data = {
+          'type': this.type,
+          'content': this._value
         };
-        this.$.note.patch().then(() => {
-          this.fire('notify', { message: this.i18n('noteViewLayout.note.saved') });
+        this.$.content.patch().then(() => {
+          this.fire('notify', { message: this.i18n('noteViewLayout.content.saved') });
           this._viewMode = true;
           this.fire('document-updated');
         });
@@ -132,7 +136,7 @@
       },
 
       _edit: function() {
-        this._value = this.document.note;
+        this._value = this.document.content;
         this._viewMode = false;
       },
 

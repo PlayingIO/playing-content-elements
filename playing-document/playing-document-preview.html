@@ -145,10 +145,10 @@ Example:
 
       _updateBlob: function() {
         if (this.document) {
-          // adapt the Note to mimic a Blob
-          if (this.document.type === 'note') {
+          // adapt the content to mimic a Blob
+          if (this.document.content) {
             this._blob = {
-              data: this.document['note'],
+              data: this.document['content'],
               mimetype: this.document['mimetype']
             };
           } else {
