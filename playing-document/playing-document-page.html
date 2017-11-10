@@ -72,7 +72,7 @@
         <!-- metadata / edit -->
         <paper-card>
           <div hidden$="[[edit]]">
-            <paper-icon-button noink id="edit" icon="nuxeo:edit" on-tap="_editMode" hidden$="[[!_canEdit(document)]]"></paper-icon-button>
+            <paper-icon-button noink id="edit" icon="mostly:edit" on-tap="_editMode" hidden$="[[!_canEdit(document)]]"></paper-icon-button>
             <playing-document-metadata document="[[document]]"></playing-document-metadata>
           </div>
           <playing-document-edit document="[[document]]" hidden$="[[!edit]]"></playing-document-edit>

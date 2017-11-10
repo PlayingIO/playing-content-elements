@@ -1,7 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../paper-input/paper-textarea.html">
-<link rel="import" href="../../nuxeo-ui-elements/nuxeo-icons.html">
+<link rel="import" href="../../mostly-elements/mostly-icons.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../playing-document/playing-document.html">
 <link rel="import" href="../playing-document/playing-document-preview.html">
@@ -57,7 +57,7 @@
 
       <template is="dom-if" if="[[!_isHTMLorXML(document)]]">
         <template is="dom-if" if="[[_viewMode]]">
-          <paper-icon-button id="editNote" class="edit" icon="nuxeo:edit" on-tap="_edit" hidden$="[[!_canEdit(document)]]"></paper-icon-button>
+          <paper-icon-button id="editNote" class="edit" icon="mostly:edit" on-tap="_edit" hidden$="[[!_canEdit(document)]]"></paper-icon-button>
           <playing-document-preview document="[[document]]"></playing-document-preview>
         </template>
         <template is="dom-if" if="[[!_viewMode]]">

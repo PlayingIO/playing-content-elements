@@ -1,7 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../../nuxeo-ui-elements/nuxeo-icons.html">
+<link rel="import" href="../../mostly-elements/mostly-icons.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 
@@ -25,7 +25,7 @@
 
     <mostly-operation id="deleteOp" path="documents" op="remove" method="delete"></mostly-operation>
 
-    <paper-icon-button icon="nuxeo:delete" id="deleteAllButtons" disabled="[[!docsHavePermissions]]">
+    <paper-icon-button icon="mostly:delete" id="deleteAllButtons" disabled="[[!docsHavePermissions]]">
     </paper-icon-button>
     <paper-tooltip for="deleteAllButtons" id="deleteAllButtonsTooltip">
       [[i18n('deleteDocumentsButton.tooltip')]]
