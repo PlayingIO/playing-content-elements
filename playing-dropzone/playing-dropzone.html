@@ -4,7 +4,7 @@
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/mostly-icons.html">
-<link rel="import" href="../../nuxeo-ui-elements/nuxeo-slots.html">
+<link rel="import" href="../../mostly-elements/mostly-slots.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../playing-document/playing-document.html">
@@ -93,9 +93,9 @@
       }
 
       .actions > *:first-child,
-      .actions > nuxeo-slot,
+      .actions > mostly-slot,
       .actions::content > *:first-child,
-      .actions::content > nuxeo-slot {
+      .actions::content > mostly-slot {
         margin-left: 0;
       }
     </style>
@@ -112,7 +112,7 @@
       <div id="container">
         <a href="javascript:undefined" on-tap="open">[[message]]</a>
         <div class="actions">
-          <nuxeo-slot slot="FILE_UPLOAD_ACTIONS"></nuxeo-slot>
+          <mostly-slot slot="FILE_UPLOAD_ACTIONS"></mostly-slot>
         </div>
       </div>
     </div>

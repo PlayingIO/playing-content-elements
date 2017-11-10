@@ -4,7 +4,7 @@
 <link rel="import" href="../../paper-dialog/paper-dialog.html">
 <link rel="import" href="../../paper-tabs/paper-tabs.html">
 <link rel="import" href="../../iron-pages/iron-pages.html">
-<link rel="import" href="../../nuxeo-ui-elements/nuxeo-slots.html">
+<link rel="import" href="../../mostly-elements/mostly-slots.html">
 <link rel="import" href="../playing-document/playing-document-create.html">
 <link rel="import" href="../playing-document/playing-document-import.html">
 
@@ -61,11 +61,11 @@
             no-auto-focus>
 
       <paper-tabs hidden$=[[!_showTabs]] selected="{{selectedTab}}" attr-for-selected="name" noink>
-        <nuxeo-slot slot="CREATE_POPUP_ITEMS" model="[[importContext]]"></nuxeo-slot>
+        <mostly-slot slot="CREATE_POPUP_ITEMS" model="[[importContext]]"></mostly-slot>
       </paper-tabs>
       <div id="holder" class="vertical layout flex">
         <iron-pages selected="[[selectedTab]]" attr-for-selected="name" class="vertical layout flex" selected-attribute="visible">
-          <nuxeo-slot slot="CREATE_POPUP_PAGES" model="[[importContext]]"></nuxeo-slot>
+          <mostly-slot slot="CREATE_POPUP_PAGES" model="[[importContext]]"></mostly-slot>
           <playing-document-create id="simpleCreation"
                   name="create"
                   parent="[[parent]]"

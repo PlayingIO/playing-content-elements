@@ -1,7 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../paper-fab/paper-fab.html">
 <link rel="import" href="../../paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../../nuxeo-ui-elements/nuxeo-slots.html">
+<link rel="import" href="../../mostly-elements/mostly-slots.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../playing-document/playing-document.html">
 <link rel="import" href="playing-document-creation-stats.html">
@@ -58,7 +58,7 @@
 
     <div id="tray" on-mouseenter="_onMouseEnter" on-mouseleave="_onMouseLeave">
       <div id="shortcuts" class$="[[_animateOpen(shortcutsVisible)]]">
-        <nuxeo-slot slot="DOCUMENT_CREATE_ACTIONS" model="[[actionContext]]"></nuxeo-slot>
+        <mostly-slot slot="DOCUMENT_CREATE_ACTIONS" model="[[actionContext]]"></mostly-slot>
       </div>
 
       <paper-fab id="createBtn"

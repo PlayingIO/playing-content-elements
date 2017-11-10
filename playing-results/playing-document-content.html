@@ -1,7 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-page-provider.html">
-<link rel="import" href="../../nuxeo-ui-elements/nuxeo-slots.html">
+<link rel="import" href="../../mostly-elements/mostly-slots.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
@@ -73,7 +73,7 @@
 
       <mostly-results name="[[document.id]]" nx-provider="[[nxProvider]]" selected-items="{{selectedItems}}">
         <div class="selectionActions">
-          <nuxeo-slot slot="BROWSE_ACTIONS" model="[[browseActionContext]]"></nuxeo-slot>
+          <mostly-slot slot="BROWSE_ACTIONS" model="[[browseActionContext]]"></mostly-slot>
         </div>
 
         <!-- Grid view -->

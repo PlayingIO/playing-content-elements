@@ -1,173 +1,173 @@
 <!-- DRAWER -->
 
-<nuxeo-slot-content name="browseDrawerItem" slot="DRAWER_ITEMS" order="20">
+<mostly-slot-content name="browseDrawerItem" slot="DRAWER_ITEMS" order="20">
   <template>
     <mostly-menu-icon name="browser" icon="mostly:browse" label="app.browse"></mostly-menu-icon>
   </template>
-</nuxeo-slot-content>
-<nuxeo-slot-content name="browseDrawerPage" slot="DRAWER_PAGES">
+</mostly-slot-content>
+<mostly-slot-content name="browseDrawerPage" slot="DRAWER_PAGES">
   <template>
     <playing-document-tree name="browser" id="navTree" label="app.browse" current-document="[[document]]"></playing-document-tree>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="recentsDrawerItem" slot="DRAWER_ITEMS" order="50">
+<mostly-slot-content name="recentsDrawerItem" slot="DRAWER_ITEMS" order="50">
   <template>
     <mostly-menu-icon name="recents" icon="mostly:recent" label="app.recentlyViewed"></mostly-menu-icon>
   </template>
-</nuxeo-slot-content>
-<nuxeo-slot-content name="recentsDrawerPage" slot="DRAWER_PAGES">
+</mostly-slot-content>
+<mostly-slot-content name="recentsDrawerPage" slot="DRAWER_PAGES">
   <template>
     <playing-recent-documents name="recents" max-size="10" id="recent"></playing-recent-documents>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="clipboardDrawerItem" slot="DRAWER_ITEMS" order="90">
+<mostly-slot-content name="clipboardDrawerItem" slot="DRAWER_ITEMS" order="90">
   <template>
     <mostly-menu-icon name="clipboard" icon="mostly:clipboard" label="app.clipboard" badge="[[clipboardCount]]"></mostly-menu-icon>
   </template>
-</nuxeo-slot-content>
-<nuxeo-slot-content name="clipboardDrawerPage" slot="DRAWER_PAGES">
+</mostly-slot-content>
+<mostly-slot-content name="clipboardDrawerPage" slot="DRAWER_PAGES">
   <template>
     <playing-clipboard name="clipboard" id="clipboard" target-document="[[currentDocument]]"></playing-clipboard>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
 <!-- PAGES -->
 
-<nuxeo-slot-content name="browsePage" slot="PAGES">
+<mostly-slot-content name="browsePage" slot="PAGES">
   <template>
     <playing-browser name="browse" id="browser" document="[[currentDocument]]" clipboard="[[clipboard]]" selected-tab="[[docAction]]"></playing-browser>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
 <!-- DOCUMENT VIEWS -->
 
-<nuxeo-slot-content name="documentViewItem" slot="DOCUMENT_VIEWS_ITEMS" order="10">
+<mostly-slot-content name="documentViewItem" slot="DOCUMENT_VIEWS_ITEMS" order="10">
   <template>
     <mostly-page-item name="view" label="browser.view"></mostly-page-item>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="documentPermissionsItem" slot="DOCUMENT_VIEWS_ITEMS" order="20">
+<mostly-slot-content name="documentPermissionsItem" slot="DOCUMENT_VIEWS_ITEMS" order="20">
   <template>
     <mostly-page-item name="permissions" label="browser.permissions"></mostly-page-item>
   </template>
-</nuxeo-slot-content>
-<nuxeo-slot-content name="documentPermissionsPage" slot="DOCUMENT_VIEWS_PAGES" order="20">
+</mostly-slot-content>
+<mostly-slot-content name="documentPermissionsPage" slot="DOCUMENT_VIEWS_PAGES" order="20">
   <template>
     <playing-document-permissions name="permissions" id="permissions" doc-id="[[document.id]]"></playing-document-permissions>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="documentHistoryItem" slot="DOCUMENT_VIEWS_ITEMS" order="30">
+<mostly-slot-content name="documentHistoryItem" slot="DOCUMENT_VIEWS_ITEMS" order="30">
   <template>
     <mostly-page-item name="activity" label="browser.activity"></mostly-page-item>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
 <!-- DOCUMENT PAGES -->
 
-<nuxeo-slot-content name="documentViewPage" slot="DOCUMENT_VIEWS_PAGES" order="10">
+<mostly-slot-content name="documentViewPage" slot="DOCUMENT_VIEWS_PAGES" order="10">
   <template>
     <playing-document-page name="view" document="[[document]]"></playing-document-page>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="documentActivityPage" slot="DOCUMENT_VIEWS_PAGES" order="30">
+<mostly-slot-content name="documentActivityPage" slot="DOCUMENT_VIEWS_PAGES" order="30">
   <template>
     <playing-document-activity name="activity" document="[[document]]"></playing-document-activity>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
 <!-- DOCUMENT CREATE ACTIONS -->
 
-<nuxeo-slot-content name="defaultDocumentCreateActions" slot="DOCUMENT_CREATE_ACTIONS" order="10">
+<mostly-slot-content name="defaultDocumentCreateActions" slot="DOCUMENT_CREATE_ACTIONS" order="10">
   <template>
     <playing-document-create-shortcuts host-visible$=[[hostVisible]]
             subtypes="[[subtypes]]"></playing-document-create-shortcuts>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
 <!-- DOCUMENT CREATION WIZARD -->
 
-<nuxeo-slot-content name="documentCreateItem" slot="CREATE_POPUP_ITEMS" order="10">
+<mostly-slot-content name="documentCreateItem" slot="CREATE_POPUP_ITEMS" order="10">
   <template>
     <paper-tab name="create">[[i18n('documentCreatePopup.create')]]</paper-tab>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="documentImportItem" slot="CREATE_POPUP_ITEMS" order="20">
+<mostly-slot-content name="documentImportItem" slot="CREATE_POPUP_ITEMS" order="20">
   <template>
     <paper-tab name="import">[[i18n('documentCreatePopup.import')]]</paper-tab>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
 <!-- DOCUMENT ACTIONS -->
 
-<nuxeo-slot-content name="clipboardToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="50">
+<mostly-slot-content name="clipboardToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="50">
   <template>
     <playing-clipboard-toggle-button document="[[document]]" clipboard="[[clipboard]]"></playing-clipboard-toggle-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="lockToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="60">
+<mostly-slot-content name="lockToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="60">
   <template>
     <playing-lock-toggle-button document="[[document]]"></playing-lock-toggle-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="previewDocumentAction" slot="DOCUMENT_ACTIONS" order="70">
+<mostly-slot-content name="previewDocumentAction" slot="DOCUMENT_ACTIONS" order="70">
   <template>
     <playing-preview-button document="[[document]]"></playing-preview-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="exportDocumentAction" slot="DOCUMENT_ACTIONS" order="80">
+<mostly-slot-content name="exportDocumentAction" slot="DOCUMENT_ACTIONS" order="80">
   <template>
     <playing-export-button document="[[document]]"></playing-export-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
 <!-- TODO: -->
-<nuxeo-slot-content name="workflowDocumentAction" slot="DOCUMENT_ACTIONS" order="90">
+<mostly-slot-content name="workflowDocumentAction" slot="DOCUMENT_ACTIONS" order="90">
   <template>
     <playing-workflow-button document="[[document]]"></playing-workflow-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
 <!-- RESULT SELECTION ACTIONS -->
 
-<nuxeo-slot-content name="addToClipboardSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="20">
+<mostly-slot-content name="addToClipboardSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="20">
   <template>
     <playing-clipboard-documents-button documents="[[selectedItems]]">
     </playing-clipboard-documents-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="deleteSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="30">
+<mostly-slot-content name="deleteSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="30">
   <template>
     <playing-delete-documents-button documents="[[selectedItems]]">
     </playing-delete-documents-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
 <!-- BLOB ACTIONS -->
 
-<nuxeo-slot-content name="deleteBlobAction" slot="BLOB_ACTIONS" order="10">
+<mostly-slot-content name="deleteBlobAction" slot="BLOB_ACTIONS" order="10">
   <template>
     <playing-delete-blob-button document="[[document]]" xpath="[[xpath]]"></playing-delete-blob-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="previewBlobAction" slot="BLOB_ACTIONS" order="20">
+<mostly-slot-content name="previewBlobAction" slot="BLOB_ACTIONS" order="20">
   <template>
     <playing-preview-button document="[[document]]" xpath="[[xpath]]"></playing-preview-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>
 
-<nuxeo-slot-content name="downloadBlobAction" slot="BLOB_ACTIONS" order="30">
+<mostly-slot-content name="downloadBlobAction" slot="BLOB_ACTIONS" order="30">
   <template>
     <playing-download-button document="[[document]]" xpath="[[xpath]]"></playing-download-button>
   </template>
-</nuxeo-slot-content>
+</mostly-slot-content>

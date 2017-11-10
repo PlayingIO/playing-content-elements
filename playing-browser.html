@@ -44,19 +44,19 @@
       <div class="header">
         <playing-breadcrumb document="[[document]]"></playing-breadcrumb>
         <paper-listbox id="documentViewsItems" selected="{{selectedTab}}" attr-for-selected="name">
-          <nuxeo-slot slot="DOCUMENT_VIEWS_ITEMS" model="[[viewsContext]]"></nuxeo-slot>
+          <mostly-slot slot="DOCUMENT_VIEWS_ITEMS" model="[[viewsContext]]"></mostly-slot>
         </paper-listbox>
       </div>
 
       <div class="content">
 
         <div class="document-actions">
-          <nuxeo-slot slot="DOCUMENT_ACTIONS" model="[[actionContext]]"></nuxeo-slot>
+          <mostly-slot slot="DOCUMENT_ACTIONS" model="[[actionContext]]"></mostly-slot>
         </div>
 
         <div id="nxContent">
           <iron-pages selected="[[selectedTab]]" attr-for-selected="name" selected-attribute="visible">
-            <nuxeo-slot slot="DOCUMENT_VIEWS_PAGES" model="[[viewsContext]]"></nuxeo-slot>
+            <mostly-slot slot="DOCUMENT_VIEWS_PAGES" model="[[viewsContext]]"></mostly-slot>
           </iron-pages>
         </div>
 

@@ -1,5 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../nuxeo-ui-elements/nuxeo-slots.html">
+<link rel="import" href="../../mostly-elements/mostly-slots.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
 
@@ -45,7 +45,7 @@
           <div class="detail">[[formatSize(blob.size)]]</div>
         </div>
         <div class="actions">
-          <nuxeo-slot slot="BLOB_ACTIONS" model="[[actionContext]]"></nuxeo-slot>
+          <mostly-slot slot="BLOB_ACTIONS" model="[[actionContext]]"></mostly-slot>
         </div>
       </div>
     </template>
