@@ -3,7 +3,7 @@
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-page-provider.html">
 <link rel="import" href="../../mostly-elements/mostly-slots.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
-<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
 <link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
 <link rel="import" href="../../mostly-elements/mostly-aggregation/mostly-dropdown-aggregation.html">
@@ -118,7 +118,7 @@
               </mostly-dropdown-aggregation>
             </template>
             <template>
-              <nuxeo-date datetime="[[item.updatedAt]]"></nuxeo-date>
+              <mostly-date datetime="[[item.updatedAt]]"></mostly-date>
             </template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.lastContributor')]]"
@@ -147,7 +147,7 @@
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.createdAt')]]"
                   field="createdAt" sort-by="createdAt" flex="50" hidden>
             <template>
-              <nuxeo-date datetime="[[item.createdAt]]"></nuxeo-date>
+              <mostly-date datetime="[[item.createdAt]]"></mostly-date>
             </template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.author')]]"

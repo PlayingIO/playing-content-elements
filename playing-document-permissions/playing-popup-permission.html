@@ -12,7 +12,7 @@
 <link rel="import" href="../../paper-radio-group/paper-radio-group.html">
 
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
-<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date-picker.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-date-picker.html">
 <link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-textarea.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-select.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
@@ -100,17 +100,17 @@
             </paper-radio-group>
           </template>
           <div>
-            <nuxeo-date-picker id="begin"
+            <mostly-date-picker id="begin"
                     label="[[i18n('popupPermission.from')]]"
                     value="{{params.begin::change}}"
-                    disabled="[[permissionIsPermanent]]"></nuxeo-date-picker>
+                    disabled="[[permissionIsPermanent]]"></mostly-date-picker>
           </div>
           <div>
-            <nuxeo-date-picker id="end"
+            <mostly-date-picker id="end"
                     label="[[i18n('popupPermission.to')]]"
                     value="{{params.end::change}}"
                     disabled="[[permissionIsPermanent]]"
-                    required="[[shareWithExternal]]"></nuxeo-date-picker>
+                    required="[[shareWithExternal]]"></mostly-date-picker>
 
           </div>
         </div>

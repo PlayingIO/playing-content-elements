@@ -3,8 +3,8 @@
 <link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-data-table/iron-data-table.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
-<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date.html">
-<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date-picker.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-date-picker.html">
 <link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
 <link rel="import" href="../../playing-feed-elements/playing-feed/playing-feed-page-provider.html">
 
@@ -30,12 +30,12 @@
     </playing-feed-page-provider>
 
     <paper-card class="layout horizontal end-justified flex">
-      <nuxeo-date-picker role="widget" label="[[i18n('documentActivity.filter.after')]]"
+      <mostly-date-picker role="widget" label="[[i18n('documentActivity.filter.after')]]"
                    value="{{startDate::change}}">
-      </nuxeo-date-picker>
-      <nuxeo-date-picker role="widget" label="[[i18n('documentActivity.filter.before')]]"
+      </mostly-date-picker>
+      <mostly-date-picker role="widget" label="[[i18n('documentActivity.filter.before')]]"
                    value="{{endDate::change}}">
-      </nuxeo-date-picker>
+      </mostly-date-picker>
     </paper-card>
 
     <mostly-data-table nx-provider="provider" empty-label="[[i18n('documentActivity.empty')]]">
@@ -45,7 +45,7 @@
       </mostly-data-table-column>
       <mostly-data-table-column name="[[i18n('documentActivity.date')]]"
         sort-by="createdAt">
-        <template><nuxeo-date datetime="[[item.createdAt]]"></nuxeo-date></template>
+        <template><mostly-date datetime="[[item.createdAt]]"></mostly-date></template>
       </mostly-data-table-column>
       <mostly-data-table-column name="[[i18n('documentActivity.username')]]"
         sort-by="actor">

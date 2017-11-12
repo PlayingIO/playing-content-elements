@@ -1,5 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-date.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-data-grid/mostly-data-grid.html">
 <link rel="import" href="../../mostly-elements/mostly-data-table/iron-data-table.html">
@@ -74,7 +74,7 @@
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.updatedAt')]]"
                 field="updatedAt" sort-by="updatedAt" flex="50">
           <template>
-            <nuxeo-date datetime="[[item.modified]]"></nuxeo-date>
+            <mostly-date datetime="[[item.modified]]"></mostly-date>
           </template>
         </mostly-data-table-column>
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.lastContributor')]]"
@@ -96,7 +96,7 @@
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.createdAt')]]"
                 field="createdAt" sort-by="createdAt" flex="50" hidden>
           <template>
-            <nuxeo-date datetime="[[item.createdAt]]"></nuxeo-date>
+            <mostly-date datetime="[[item.createdAt]]"></mostly-date>
           </template>
         </mostly-data-table-column>
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.author')]]"
