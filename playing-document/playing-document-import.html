@@ -11,7 +11,7 @@
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
-<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-select.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-select.html">
 <link rel="import" href="../../mostly-elements/mostly-slots.html">
 <link rel="import" href="../playing-path-suggestion/playing-path-suggestion.html">
 <link rel="import" href="../behaviors/playing-uploader-behavior.html">
@@ -449,7 +449,7 @@
             <form is="iron-form" id="form" class="form vertical layout flex">
               <div class="horizontal layout center">
                 <div class="flex">
-                  <nuxeo-select id="docTypeDropdown"
+                  <mostly-select id="docTypeDropdown"
                           selected="{{selectedDocType}}" attr-for-selected="key"
                           label="[[i18n('documentImportForm.type.label')]]"
                           placeholder="[[i18n('documentImportForm.type.placeholder')]]"
@@ -459,7 +459,7 @@
                     <template is="dom-repeat" items="[[_importDocTypes]]" as="type">
                       <paper-item key="[[type]]">[[_getTypeLabel(type)]]</paper-item>
                     </template>
-                  </nuxeo-select>
+                  </mostly-select>
                 </div>
               </div>
               <!--restamp needed to prevent submit with hidden input fields, which will throw an error-->
