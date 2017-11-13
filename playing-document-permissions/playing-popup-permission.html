@@ -13,7 +13,7 @@
 
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-date-picker.html">
-<link rel="import" href="../../nuxeo-ui-elements/widgets/nuxeo-textarea.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-textarea.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-select.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../../playing-user-elements/widgets/playing-user-suggestion.html">
@@ -123,13 +123,13 @@
             </div>
           </template>
           <div layout horizontal>
-            <nuxeo-textarea id="commentText"
+            <mostly-textarea id="commentText"
                     label="[[i18n('popupPermission.notifyLabel')]]"
                     placeholder="[[i18n('popupPermission.notifyPlaceholder')]]"
                     disabled="[[!params.notify]]"
                     name="notifyEmail"
                     value="{{params.comment}}"
-                    max-rows="4"></nuxeo-textarea>
+                    max-rows="4"></mostly-textarea>
           </div>
         </div>
       </paper-dialog-scrollable>
