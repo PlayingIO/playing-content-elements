@@ -1,6 +1,6 @@
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
-<link rel="import" href="../../mostly-elements/widgets/mostly-select2.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-selectivity.html">
 <link rel="import" href="../../paper-toast/paper-toast.html">
 <link rel="import" href="../../iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../../iron-validatable-behavior/iron-validatable-behavior.html">
@@ -23,9 +23,13 @@
       :host {
         display: block;
       }
+
+      :host([hidden]) {
+        display: none;
+      }
     </style>
 
-    <mostly-select2 id="s2"
+    <mostly-selectivity id="s2"
             path="tags"
             operation="find"
             search-field="label"
@@ -36,6 +40,7 @@
             multiple
             params="[[params]]"
             placeholder="[[placeholder]]"
+            error-message="[[errorMessage]]"
             readonly="[[readonly]]"
             value="{{value}}"
             selected-items="{{selectedItems}}"
@@ -45,8 +50,9 @@
             result-formatter="[[resultFormatter]]"
             added-entry-handler="[[addedTagHandler]]"
             removed-entry-handler="[[removedTagHandler]]"
-            init-selection="[[initSelection]]">
-    </mostly-select2>
+            init-selection="[[initSelection]]"
+            stay-open-on-select="[[stayOpenOnSelect]]">
+    </mostly-selectivity>
 
     <mostly-operation id="addTagOp"
             path="documents"
@@ -115,6 +121,19 @@
         placeholder: String,
 
         /**
+         * If true, the dropdown stays open after a selection is made.
+         */
+        stayOpenOnSelect: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * Error message to show when `invalid` is true.
+         */
+        errorMessage: String,
+
+        /**
          * Selected items.
          */
         selectedItems: {
@@ -178,18 +197,11 @@
         return this.$.s2._getValidity();
       },
 
-      /* Override method from Polymer.IronValidatableBehavior. */
-      validate: function(value) {
-        this.invalid = !this.$.s2.validate();
-        return !this.invalid;
-      },
-
       _resultFormatter: function (tag) {
-        var escapeHTML = window.Select2.util.escapeMarkup;
         if (tag.newTag) {
-          return "<span class='s2newTag'>" + "+ " + escapeHTML(tag.label) + "</span>"
+          return "<span class='s2newTag'>" + "+ " + this.$.s2.escapeHTML(tag.label) + "</span>"
         } else {
-          return "<span class='s2existingTag'>" + escapeHTML(tag.label) + "</span>"
+          return "<span class='s2existingTag'>" + this.$.s2.escapeHTML(tag.label) + "</span>"
         }
       },
 

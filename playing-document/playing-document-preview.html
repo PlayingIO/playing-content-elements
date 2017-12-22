@@ -49,7 +49,7 @@ Example:
         min-height: 60vh;
       }
 
-      ::content iframe {
+      iframe {
         height: 100%;
         min-height: 60vh;
         width: 100%;
@@ -73,11 +73,11 @@ Example:
     </template>
 
     <template mime-pattern="video.*">
-      <mostly-video-viewer controls sources="[[_videoSources]]"></mostly-video-viewer>
+      <mostly-video-viewer id="video" controls sources="[[_videoSources]]" storyboard="[[_storyboard]]"></mostly-video-viewer>
     </template>
 
     <template mime-pattern="audio.*">
-      <audio controls><source src="[[_audioSource]]">AUDIO</audio>
+      <audio id="audio" controls><source src="[[_audioSource]]">AUDIO</audio>
     </template>
 
     <template mime-pattern="text/(?:.*-)?markdown">
@@ -130,6 +130,11 @@ Example:
           computed: '_computeVideoSources(document)'
         },
 
+        _storyboard: {
+          type: Array,
+          computed: '_computeStoryboard(document)'
+        },
+
         _audioSource: {
           type: String,
           computed: '_computeAudioSource(document)'
@@ -144,6 +149,18 @@ Example:
       observers: [
         '_updateBlob(document, xpath)'
       ],
+
+      stop: function() {
+        var video = this.$$('#video');
+        if (video) {
+          video.stop();
+        }
+
+        var audio = this.$$('#audio');
+        if (audio) {
+          audio.pause();
+        }
+      },
 
       _updateBlob: function() {
         if (this.document) {
@@ -210,6 +227,12 @@ Example:
               type: conversion.content.mimetype
             };
           });
+        }
+      },
+
+      _computeStoryboard: function() {
+        if (this.document && this.document.metadata && this.document.metadata['storyboard']) {
+          return this.document.metadata['storyboard'];
         }
       },
 
