@@ -26,8 +26,9 @@ Example:
         display: inline-block;
       }
 
-      :host([locked]) ::content iron-icon {
-        fill: var(--icon-toggle-pressed-color, --nuxeo-action-color-activated);
+      :host([locked]) {
+        --iron-icon-stroke-color: var(--icon-toggle-outline-color, var(--mostly-action-color-activated));
+        --iron-icon-fill-color: var(--icon-toggle-pressed-color, var(--mostly-action-color-activated));
       }
     </style>
 
