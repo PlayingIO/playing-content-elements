@@ -21,28 +21,27 @@ Custom property | Description | Default
 @element playing-path-suggestion
 -->
 <dom-module id="playing-path-suggestion">
-  <style>
-    :host {
-      display: block;
-    --paper-typeahead-results: {
-      background-color: white;
-      @apply(--playing-path-suggestion-results);
-     };
-    --paper-typeahead-result: {
-      display: block;
-      overflow: hidden;
-      white-space: nowrap;
-      direction:rtl;
-      text-align: left;
-     @apply(--playing-path-suggestion-result);
-     };
-    }
-    paper-typeahead:focus {
-      outline: none;
-      @apply(--playing-path-suggestion-focus);
-    }
-  </style>
   <template>
+    <style>
+      --paper-typeahead-results: {
+        background-color: white;
+        @apply --playing-path-suggestion-results;
+      };
+
+      --paper-typeahead-result: {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        direction:rtl;
+        text-align: left;
+        @apply --playing-path-suggestion-result;
+      };
+
+      paper-typeahead:focus {
+        outline: none;
+        @apply --playing-path-suggestion-focus;
+      }
+    </style>
     <mostly-page-provider id="provider"
             provider="[[service]]"
             params="[[params]]"
@@ -158,6 +157,10 @@ Custom property | Description | Default
             var newParentPath = (idx == 0 ? '/' : this.value.substring(0, idx));
             this._updateParent(newParentPath).then(() => {
               this._queryChildren(this.parent, this.value.substring(idx+1))
+            }).catch((err) => {
+              if (err.status === 403) {
+                this.children = [];
+              }
             });
           }
         }
