@@ -1,18 +1,18 @@
-<link rel="import" href="../../gold-email-input/gold-email-input.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../iron-autogrow-textarea/iron-autogrow-textarea.html">
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
-<link rel="import" href="../../paper-dialog/paper-dialog.html">
 <link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-item/paper-item.html">
-<link rel="import" href="../../paper-menu/paper-menu.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
 <link rel="import" href="../../paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../../paper-radio-group/paper-radio-group.html">
 
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-date-picker.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-textarea.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-select.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
@@ -21,17 +21,16 @@
 <!-- Part of `playing-document-permissions`-->
 <dom-module id="playing-popup-permission">
   <template>
-    <style>
+    <style include="iron-positioning">
       /* Fix polyfill behavior for inputs disabled at initialization */
-      ::content span.btr-dateinput-value {
+      span.btr-dateinput-value {
          color: #212121 !important;
          line-height: 35px !important;
       }
 
       .buttons {
         background-color: var(--mostly-dialog-buttons-bar, white);
-        @apply(--buttons-bar);
-        @apply(--layout-justified);
+        @apply --buttons-bar;
         margin-top: 2em;
       }
 
@@ -56,29 +55,28 @@
       <paper-icon-button on-tap="togglePopup" icon="mostly:edit"></paper-icon-button>
     </template>
 
-    <paper-dialog id="popupRight" modal no-auto-focus>
+    <mostly-dialog id="popupRight" with-backdrop no-auto-focus>
       <h2>[[_computedTitle]]</h2>
 
       <!-- Give acces to row -->
       <paper-dialog-scrollable>
-        <template is="dom-if" if="{{!updatingACE}}">
-          <template is="dom-if" if="{{!shareWithExternal}}">
+        <div hidden$="{{updatingACE}}">
+          <div hidden$="{{shareWithExternal}}">
             <div>
                 <playing-user-suggestion name="userGroup"
                         search-type="user-group"
                         label="[[i18n('popupPermission.userGroup')]]"
                         value="{{params.user}}"></playing-user-suggestion>
             </div>
-          </template>
-          <template is="dom-if" if="{{shareWithExternal}}">
-              <div>
-                <gold-email-input id="email"
-                        label="[[i18n('popupPermission.email')]]"
-                        placeholder="name@company.com" value="{{params.email}}"
-                        required auto-validate></gold-email-input>
-            </div>
-          </template>
-        </template>
+          </div>
+          <div hidden$="{{!shareWithExternal}}">
+            <paper-input type="email" id="email"
+                    label="[[i18n('popupPermission.email')]]"
+                    placeholder="name@company.com"
+                    value="{{params.email}}"
+                    required auto-validate></paper-input>
+          </div>
+        </div>
 
         <!-- Right row -->
         <div layout horizontal>
@@ -102,13 +100,13 @@
           <div>
             <mostly-date-picker id="begin"
                     label="[[i18n('popupPermission.from')]]"
-                    value="{{params.begin::change}}"
+                    value="{{params.begin}}"
                     disabled="[[permissionIsPermanent]]"></mostly-date-picker>
           </div>
           <div>
             <mostly-date-picker id="end"
                     label="[[i18n('popupPermission.to')]]"
-                    value="{{params.end::change}}"
+                    value="{{params.end}}"
                     disabled="[[permissionIsPermanent]]"
                     required="[[shareWithExternal]]"></mostly-date-picker>
 
@@ -116,13 +114,13 @@
         </div>
         <div id="notification">
           <template is="dom-if" if="{{!shareWithExternal}}">
-            <div layout horizontal>
+            <div>
               <paper-checkbox noink checked="{{params.notify}}" name="notify">
                 [[i18n('popupPermission.notify')]]
               </paper-checkbox>
             </div>
           </template>
-          <div layout horizontal>
+          <div>
             <mostly-textarea id="commentText"
                     label="[[i18n('popupPermission.notifyLabel')]]"
                     placeholder="[[i18n('popupPermission.notifyPlaceholder')]]"
@@ -145,7 +143,7 @@
           <paper-button noink class="primary" on-tap="doUpdate">[[i18n('popupPermission.update')]]</paper-button>
         </template>
       </div>
-    </paper-dialog>
+    </mostly-dialog>
   </template>
 
   <script>
@@ -227,7 +225,7 @@
         }
 
         // not a valid email
-        if (this.params.email && !document.querySelector("#email").validate()) {
+        if (this.params.email && !this.shadowRoot.querySelector('#email').validate()) {
           return;
         }
 
