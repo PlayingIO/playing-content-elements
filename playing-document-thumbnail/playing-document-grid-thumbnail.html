@@ -1,10 +1,11 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-image/iron-image.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
-<link rel="import" href="../actions/playing-download-button.html">
 <link rel="import" href="../../playing-interaction-elements/actions/playing-favorites-toggle-button.html">
+<link rel="import" href="../actions/playing-download-button.html">
 
 <!--
 `playing-document-grid-thumbnail`
@@ -15,10 +16,25 @@
   <template>
 
     <style>
+      :host {
+        outline: none;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      a {
+        @apply --nuxeo-link;
+      }
+
       .bubbleBox {
         display: block;
         margin: 0 .4em .8em;
         position: relative;
+        width: 220px;
+        height: 260px;
         background-color: var(--nuxeo-box);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);;
         padding: 0;
@@ -102,12 +118,12 @@
         min-height: 2.5em;
       }
 
-      .actions ::content paper-icon-button ::content iron-icon {
-        @apply(--nuxeo-action);
+      .actions paper-icon-button iron-icon {
+        @apply --nuxeo-action;
       }
 
-      .actions ::content paper-icon-button:hover ::content iron-icon {
-        @apply(--nuxeo-action-hover);
+      .actions paper-icon-button:hover iron-icon {
+        @apply --nuxeo-action-hover;
       }
 
       .bubbleBox:hover .actions,
@@ -122,19 +138,19 @@
         cursor: pointer;
       }
 
-      :host[selected] .bubbleBox .select,
-      :host[selected] .bubbleBox:hover .select:hover {
+      :host([selected]) .bubbleBox .select,
+      :host([selected]) .bubbleBox:hover .select:hover {
         border: 2px solid var(--nuxeo-grid-selected);
         background-color: var(--nuxeo-grid-selected);
         cursor: pointer;
         display: block;
       }
 
-      :host[selected] .select paper-icon-button {
+      :host([selected]) .select paper-icon-button {
         color: #fff;
       }
 
-      :host[selected] .bubbleBox {
+      :host([selected]) .bubbleBox {
         border: 2px solid var(--nuxeo-grid-selected);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);
       }
@@ -186,6 +202,10 @@
         selectedItems: {
           type: Array,
           value: []
+        },
+
+        index: {
+          type: Number
         }
       },
 
@@ -196,7 +216,7 @@
       _thumbnail: function(doc) {
         if (doc && doc.id) {
           if (doc.metadata && doc.metadata.thumbnail && doc.metadata.thumbnail.url) {
-            return doc.metadata.thumbnail.url;
+            return doc.metadata.thumbnail.url || '';
           }
         }
       },
@@ -207,19 +227,19 @@
 
       handleClick: function(e) {
         if (this.selectionMode){
-          this._toogleSelect();
-        } else if (!(e.ctrlKey||e.shiftKey||e.metaKey||e.button==1)) {
-          this.fire('navigate', {item: this.doc});
+          this._toogleSelect(e);
+        } else if (!(e.ctrlKey || e.shiftKey || e.metaKey || e.button === 1)) {
+          this.fire('navigate', { item: this.doc, index: this.index });
         }
       },
 
-      _onCheckBoxTap: function() {
-        this._toogleSelect();
+      _onCheckBoxTap: function(e) {
+        this._toogleSelect(e);
       },
 
-      _toogleSelect: function() {
+      _toogleSelect: function(e) {
         this.selected = !this.selected;
-        this.fire('selected');
+        this.fire('selected', { index: this.index, shiftKey: e.detail.sourceEvent.shiftKey });
       },
 
       _selectedItemsChanged: function(){
