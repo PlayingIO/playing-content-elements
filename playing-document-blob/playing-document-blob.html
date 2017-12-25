@@ -1,7 +1,9 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../mostly-elements/mostly-slots.html">
-<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+<link rel="import" href="../../mostly-elements/mostly-slots.html">
 
 <!--
 `playing-document-blob`
@@ -11,28 +13,33 @@
 <dom-module id="playing-document-blob">
   <template>
 
-    <style>
+    <style include="nuxeo-styles">
       :host {
         display: block;
       }
 
       .row {
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
+        @apply --layout-horizontal;
+        @apply --layout-center;
       }
 
       .row .info {
-        @apply(--layout-vertical);
-        @apply(--layout-flex);
+        @apply --layout-vertical;
+        @apply --layout-flex;
       }
 
       .row .actions {
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
+        @apply --layout-horizontal;
+        @apply --layout-center;
       }
 
       .detail {
         opacity: .5;
+      }
+
+      .actions ::content paper-icon-button {
+        width: 36px;
+        height: 36px;
       }
     </style>
 
