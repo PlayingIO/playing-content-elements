@@ -1,0 +1,125 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
+<link rel="import" href="../../mostly-elements/mostly-icons.html">
+
+<!--
+`playing-download-documents-button`
+@group Nuxeo UI
+@element playing-download-documents-button
+-->
+<dom-module id="playing-download-documents-button">
+  <template>
+
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      ::content iron-icon:hover {
+        fill: var(--nuxeo-link-hover-color);
+      }
+    </style>
+
+    <mostly-connection id="nx"></mostly-connection>
+
+    <mostly-operation id="bulkDownloadOp" path="blobs" op="bulkDownload"></mostly-operation>
+
+    <paper-icon-button icon="nuxeo:download" id="downloadAllButtons">
+    </paper-icon-button>
+    <paper-tooltip for="downloadAllButtons" id="downloadAllButtonsTooltip" position="[[tooltipPosition]]">
+      [[i18n('bulkDownload.tooltip')]]
+    </paper-tooltip>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-download-documents-button',
+      behaviors: [Nuxeo.I18nBehavior, Nuxeo.FiltersBehavior],
+      properties: {
+        documents: {
+          type: Array,
+          notify: true,
+          value: []
+        },
+
+        document: {
+          type: Object,
+          observer: '_observeDocument'
+        },
+
+        filename: String,
+
+        tooltipPosition: {
+          type: String,
+          value: 'bottom'
+        }
+      },
+
+      listeners: {
+        'tap': 'downloadDocuments'
+      },
+
+      _observeDocument: function() {
+        if (this.document) {
+          this.documents = [];
+          this.documents.push(this.document);
+          if (this.hasFacet(this.document, 'Collection') || this.hasFacet(this.document, 'Folderish')) {
+            this.filename = this.document.title + '_' + new Date().getTime() + '.zip';
+          }
+        }
+      },
+
+      downloadDocuments: function() {
+        if (this.documents && this.documents.length) {
+          var uids = this.documents.map(function(doc) {
+            return doc.uid;
+          }).join(',');
+          this.$.bulkDownloadOp.input = 'docs:' + uids;
+          this.$.bulkDownloadOp.params = {
+            "filename": this.filename ?
+              this.filename : this.i18n('bulkDownload.filename.selection') + "-" + new Date().getTime() + ".zip"
+          }
+          this.$.bulkDownloadOp.execute().then(function(res) {
+            if (res.status === 204) {
+              this.fire('notify', {"message": this.i18n('bulkDownload.empty')});
+              return;
+            }
+            this.fire('notify', {"message": this.i18n('bulkDownload.preparing')});
+            window.setTimeout(this._watchDownload.bind(this), 1000, res.key);
+          }.bind(this)).catch(function(err) {
+            this.fire('notify', {"message": err});
+          }.bind(this));
+        }
+      },
+
+      _watchDownload: function(key) {
+        this.$.nx.http(this.$.nx.url + "/nxblobstatus/" + key).then(function(res) {
+          if (res.completed) {
+            this.fire('notify', {"message": this.i18n('bulkDownload.completed')});
+            var a = document.createElement('a');
+            a.style = 'display: none';
+            a.download = true;
+            a.href = this.$.nx.url + "/nxbigblob/" + key;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+          } else {
+            this.fire('notify', {"message": this.i18n('bulkDownload.preparing')});
+            window.setTimeout(this._watchDownload.bind(this), 1000, key);
+          }
+        }.bind(this)).catch(function() {
+          this.fire('notify', {"message": this.i18n('bulkDownload.error')});
+        }.bind(this));
+      }
+
+    });
+  </script>
+
+</dom-module>

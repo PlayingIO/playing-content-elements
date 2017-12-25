@@ -1,14 +1,15 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 
 <!--
-`playing-clipboard-documents-button`
+`playing-clipboard-bulk-button`
 @group Playing UI
-@element playing-clipboard-documents-button
+@element playing-clipboard-bulk-button
 -->
-<dom-module id="playing-clipboard-documents-button">
+<dom-module id="playing-clipboard-bulk-button">
   <template>
 
     <style>
@@ -31,7 +32,7 @@
 
   <script>
     Polymer({
-      is: 'playing-clipboard-documents-button',
+      is: 'playing-clipboard-bulk-button',
       
       behaviors: [Mostly.I18nBehavior],
 
@@ -40,6 +41,11 @@
           type: Array,
           notify: true,
           value: []
+        },
+
+        tooltipPosition: {
+          type: String,
+          value: 'bottom'
         }
       },
 
