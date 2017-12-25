@@ -1,5 +1,6 @@
 <link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
+
 <script>
   var Playing = Playing || {};
 
@@ -68,6 +69,25 @@
         '_updateDocument(selectedDocType, parent)'
       ],
 
+      newDocument: function(type, properties) {
+        if (!schemaFetcher) {
+          schemaFetcher = document.createElement('mostly-resource');
+          this._attachDom(schemaFetcher);
+        }
+        schemaFetcher.path = 'path/' + this.targetPath + '/@emptyWithDefault';
+        schemaFetcher.params = { type: this.selectedDocType.type };
+        schemaFetcher.headers = { properties: '*' };
+        return schemaFetcher.get().then(function(resp) {
+          var doc = resp.data;
+          if (properties) {
+            for (var prop in properties) {
+              doc[prop] = properties[prop];
+            }
+          }
+          return doc;
+        });
+      },
+
       _parentChanged: function() {
         if (this.parent) {
           if (!this.targetPath || this.targetPath.replace(/(.+)\/$/, "$1") !== this.parent.path) {
@@ -111,6 +131,11 @@
         } else if (this.subtypes && this.subtypes.length === 0) {
           this.set('canCreate', false);
           this.set('errorMessage', this.i18n('documentCreationBehavior.error.noSubtypes'));
+        } else if (typeof this.selectedDocType === 'object' &&
+                   Object.keys(this.selectedDocType).length > 0 &&
+                   !this._isValidType(this.selectedDocType)) {
+          this.set('canCreate', false);
+          this.set('errorMessage', this.i18n('documentCreationBehavior.error.invalidSubtype'));
         } else {
           this.set('canCreate', true);
           this.set('errorMessage', '');
@@ -141,7 +166,7 @@
       },
 
       _sanitizeName: function(name) {
-        return name.replace(/[^a-z0-9.]/gi, '_');
+        return name.replace(/[\\/]/gi, '-');
       },
 
       _isValidType: function(type) {
@@ -161,6 +186,11 @@
       // extension point
       _getDocumentProperties: function() {
         return null;
+      },
+
+      // extension point
+      _updateDocument: function() {
+
       },
 
       // extension point

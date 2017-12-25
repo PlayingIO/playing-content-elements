@@ -1,8 +1,10 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 
 <!--
 `playing-breadcrumb`
@@ -16,11 +18,12 @@
       :host {
         min-width: 30%;
         min-height: 3em;
-        flex: 1;
+        @apply --layout-flex;
       }
 
       .breadcrumb {
         margin: .5em 1em 0 0;
+        @apply --layout-horizontal;
       }
 
       .ancestors {
@@ -50,7 +53,11 @@
         border-radius: 2px;
       }
 
-      a.playing-breadcrumb,
+      a {
+        @apply --nuxeo-link;
+      }
+
+      a,
       .breadcrumb-divider {
         opacity: .5;
         font-weight: 300;
@@ -60,7 +67,7 @@
         vertical-align: middle;
       }
 
-      a.playing-breadcrumb:hover {
+      a:hover {
         color: var(--nuxeo-link-hover-color);
         opacity: 1;
       }
@@ -94,11 +101,11 @@
 
     </style>
 
-    <mostly-connection id="nxcon"></mostly-connection>
+    <mostly-connection id="nxcon" url="{{url}}"></mostly-connection>
 
-    <div class="breadcrumb layout horizontal">
+    <div class="breadcrumb">
       <div class="current-icon">
-        <iron-icon src="[[_icon(document)]]"></iron-icon>
+        <iron-icon src="[[_icon(document, url)]]"></iron-icon>
       </div>
       <div class="doc-path">
         <div class="current breadcrumb-item breadcrumb-item-current">[[_title(document)]]</div>
@@ -158,9 +165,9 @@
         }
       },
 
-      _icon: function(document)  {
+      _icon: function(document, url)  {
         if (document && document['icon']) {
-          return this.$.nxcon.url + document['icon'];
+          return url? url + document['icon'] : '';
         } else {
           return '';
         }

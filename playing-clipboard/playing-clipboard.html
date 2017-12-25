@@ -1,12 +1,14 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/mostly-data-list/mostly-data-list.html">
 <link rel="import" href="../playing-document-thumbnail/playing-document-thumbnail.html">
 <link rel="import" href="../playing-document-storage/playing-document-storage.html">
@@ -18,14 +20,14 @@
 -->
 <dom-module id="playing-clipboard">
   <template>
-    <style>
+    <style include="mostly-styles">
       :host {
         overflow: hidden;
       }
 
       .content {
-        @apply(--layout-vertical);
-        height: calc(100vh - 61px);
+        @apply --layout-vertical;
+        height: calc(100vh - 61px - var(--nuxeo-app-top));
       }
 
       mostly-data-list {
@@ -41,30 +43,57 @@
       }
 
       .list-item:hover {
-        @apply(--nuxeo-block-hover);
+        @apply --nuxeo-block-hover;
       }
 
       .list-item.selected,
       .list-item:focus,
       .list-item.selected:focus {
-        @apply(--nuxeo-block-selected);
+        @apply --nuxeo-block-selected;
       }
 
-      .list-item-property {
-        opacity: .5;
-        margin-right: .2em;
+      .list-item-box {
+        @apply --layout-vertical;
       }
 
-      .ellipsis {
-        vertical-align: middle;
+      .list-item-info {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+      }
+
+      .list-item-thumbnail {
+        @apply --layout-vertical;
+        @apply --layout-center;
+      }
+
+      .list-item-title {
+        @apply --layout-flex;
         text-overflow: ellipsis;
         overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .list-item iron-icon {
+        display: block;
+        @apply --nuxeo-action;
+        color: var(--nuxeo-drawer-text);
+      }
+
+      .list-item iron-icon:hover {
+        @apply --nuxeo-action-hover;
+        color: var(--nuxeo-drawer-text);
+      }
+
+      .remove {
+        padding: 0;
+        width: 1.5em;
+        height: 1.5em;
       }
 
       .toolbar {
-        @apply(--layout-horizontal);
-        @apply(--layout-center-justified);
-        @apply(--nx-actions);
+        @apply --layout-horizontal;
+        @apply --layout-center-justified;
+        @apply --nx-actions;
         padding-bottom: 8px;
       }
 
@@ -75,22 +104,6 @@
         padding: 8px;
         text-align: center;
         font-size: 1rem;
-      }
-
-      .list-item paper-icon-button ::content iron-icon {
-         @apply(--nuxeo-action);
-         color: var(--nuxeo-drawer-text);
-      }
-
-      .list-item paper-icon-button:hover ::content iron-icon {
-        @apply(--nuxeo-action-hover);
-        color: var(--nuxeo-drawer-text);
-      }
-
-      .remove {
-        padding: 0;
-        width: 1.5em;
-        height: 1.5em;
       }
     </style>
 
@@ -104,18 +117,20 @@
     <div class="content">
       <mostly-data-list items="[[documents]]" id="list"
               selected-item="{{selectedDocument}}"
-              selection-enabled as="document"
+              selection-enabled
+              select-on-tap
+              as="document"
               empty-label="[[i18n('clipboard.empty')]]"
               empty-label-when-filtered="[[i18n('clipboard.empty')]]">
         <template>
           <div tabindex$="{{tabIndex}}" class$="[[_computedClass(selected)]]">
-            <div class="list-item-box vertical layout">
-              <div class="list-item-info horizontal layout center">
-                <div class="vertical layout center">
+            <div class="list-item-box">
+              <div class="list-item-info">
+                <div class="list-item-thumbnail">
                   <playing-document-thumbnail document="[[document]]"></playing-document-thumbnail>
                 </div>
-                <span class="list-item-title ellipsis flex">[[document.title]]</span>
-                <paper-icon-button noink class="remove" icon="mostly:remove" alt="Remove" on-tap="_remove"></paper-icon-button>
+                <div class="list-item-title">[[document.title]]</div>
+                <iron-icon class="remove" icon="mostly:remove" alt="Remove" on-tap="_remove"></iron-icon>
               </div>
             </div>
           </div>
