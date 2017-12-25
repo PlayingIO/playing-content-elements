@@ -24,12 +24,12 @@
 
 <mostly-slot-content name="clipboardDrawerItem" slot="DRAWER_ITEMS" order="90">
   <template>
-    <mostly-menu-icon name="clipboard" icon="mostly:clipboard" label="app.clipboard" badge="[[clipboardCount]]"></mostly-menu-icon>
+    <mostly-menu-icon name="clipboard" icon="mostly:clipboard" label="app.clipboard" badge="[[clipboardDocCount]]"></mostly-menu-icon>
   </template>
 </mostly-slot-content>
 <mostly-slot-content name="clipboardDrawerPage" slot="DRAWER_PAGES">
   <template>
-    <playing-clipboard name="clipboard" id="clipboard" target-document="[[currentDocument]]"></playing-clipboard>
+    <playing-clipboard name="clipboard" id="clipboard" target-document="[[document]]"></playing-clipboard>
   </template>
 </mostly-slot-content>
 
@@ -37,7 +37,7 @@
 
 <mostly-slot-content name="browsePage" slot="PAGES">
   <template>
-    <playing-browser name="browse" id="browser" document="[[currentDocument]]" clipboard="[[clipboard]]" selected-tab="[[docAction]]"></playing-browser>
+    <playing-browser name="browse" id="browser" document="[[document]]" clipboard="[[clipboard]]" selected-tab="[[docAction]]"></playing-browser>
   </template>
 </mostly-slot-content>
 
@@ -45,7 +45,11 @@
 
 <mostly-slot-content name="documentViewItem" slot="DOCUMENT_VIEWS_ITEMS" order="10">
   <template>
-    <mostly-page-item name="view" label="browser.view"></mostly-page-item>
+    <mostly-filter document="[[document]]" expression="!document.isVersion">
+      <template>
+        <mostly-page-item name="view" label="browser.view"></mostly-page-item>
+      </template>
+    </mostly-filter>
   </template>
 </mostly-slot-content>
 
@@ -70,7 +74,16 @@
 
 <mostly-slot-content name="documentViewPage" slot="DOCUMENT_VIEWS_PAGES" order="10">
   <template>
-    <playing-document-page name="view" document="[[document]]"></playing-document-page>
+    <mostly-filter document="[[document]]" expression="document.metadata.facets.indexOf('Folderish') === -1 && document.metadata.facets.indexOf('Collection') === -1">
+      <template>
+        <playing-document-page name="view" document="[[document]]"></playing-document-page>
+      </template>
+    </mostly-filter>
+    <mostly-filter document="[[document]]" facet="Folderish,Collection">
+      <template>
+        <playing-collapsible-document-page name="view" document="[[document]]"></playing-collapsible-document-page>
+      </template>
+    </mostly-filter>
   </template>
 </mostly-slot-content>
 
