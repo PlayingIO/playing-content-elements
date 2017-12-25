@@ -1,4 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../playing-document-blob/playing-document-blob.html">
@@ -11,7 +12,7 @@
 -->
 <dom-module id="playing-document-attachments">
   <template>
-    <style>
+    <style include="mostly-styles">
       :host {
         display: block;
       }
@@ -37,7 +38,7 @@
     <playing-dropzone document="{{document}}"
             xpath="files"
             uploaded-message="[[i18n('documentAttachments.upload.uploaded')]]"
-            blob-list update-document>
+            blob-list>
     </playing-dropzone>
 
   </template>
