@@ -1,0 +1,84 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
+<link rel="import" href="../playing-document/playing-document-edit.html">
+
+<!--
+`playing-document-edit-action`
+@group Playing UI
+@element playing-document-edit-button
+-->
+<dom-module id="playing-document-edit-button">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      .container {
+        margin: 0;
+        padding: 24px 0 0 0;
+      }
+
+      mostly-dialog {
+        min-width: 915px;
+      }
+
+      @media (max-width: 1024px) {
+        mostly-dialog {
+          min-width: 0;
+          width: 90%;
+        }
+      }
+    </style>
+
+    <template is="dom-if" if="[[_isAvailable(document)]]">
+      <paper-icon-button noink id="edit" icon="mostly:edit" on-tap="_openDialog"></paper-icon-button>
+      <paper-tooltip>[[i18n('documentEditAction.tooltip')]]</paper-tooltip>
+    </template>
+
+    <mostly-dialog id="edit-dialog" no-auto-focus with-backdrop modal>
+      <div class="container">
+        <playing-document-edit id="dialog" document="[[document]]"
+                             on-document-updated="_closeDialog"></playing-document-edit>
+      </div>
+    </mostly-dialog>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'playing-document-edit-button',
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
+      properties: {
+
+        /**
+         * Input document.
+         */
+        document: {
+          type: Object
+        }
+      },
+
+      _isAvailable: function(doc) {
+        return doc && doc.type !== 'Root' && this.hasPermission(doc, 'Write') && this._isMutable(doc);
+      },
+
+      _isMutable: function(doc) {
+        return doc && !this.hasFacet(doc, 'Immutable') && doc.type !== 'Root' && doc.state !== 'deleted';
+      },
+
+      _openDialog: function() {
+        this.$['edit-dialog'].open();
+      },
+
+      _closeDialog: function() {
+        this.$['edit-dialog'].close();
+      }
+    });
+  </script>
+</dom-module>

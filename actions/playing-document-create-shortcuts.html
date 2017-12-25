@@ -1,4 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../playing-document-creation/playing-document-creation-stats.html">
 
@@ -10,8 +12,10 @@
 <dom-module id="playing-document-create-shortcuts">
   <template>
     <style is="custom-style">
-      :host {
-        display: block;
+      #shortcuts {
+        @apply --layout-vertical;
+        @apply --layout-center;
+        @apply --layout-end-justified;
       }
 
       playing-document-create-shortcut {
@@ -19,8 +23,7 @@
       }
     </style>
 
-    <div id="shortcuts" class="vertical layout center end-justified">
-    </div>
+    <div id="shortcuts"></div>
 
     <playing-document-creation-stats id="creationStats"></playing-document-creation-stats>
 
@@ -58,7 +61,7 @@
 
         var shorcuts = [];
         types.forEach(function(type) {
-          if (this.subtypes.indexOf(type) > -1) {
+          if (this.subtypes && this.subtypes.indexOf(type) > -1) {
             var el = document.createElement('playing-document-create-shortcut');
             el.type = type;
             el.icon =  'bower_components/playing-content-elements/images/doctypes/' + type + '.svg';
