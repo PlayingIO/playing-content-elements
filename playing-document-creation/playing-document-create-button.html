@@ -1,6 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../paper-fab/paper-fab.html">
 <link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+
 <link rel="import" href="../../mostly-elements/mostly-slots.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../playing-document/playing-document.html">
@@ -20,7 +21,7 @@
         color: var(--nuxeo-button-primary-text);
         --paper-fab-background: var(--nuxeo-button-primary);
         --paper-fab-keyboard-focus-background: var(--nuxeo-button-primary-focus);
-        @apply(--playing-document-create-button);
+        @apply --playing-document-create-button;
         transition: color 0.25s ease-in-out;
       }
 
@@ -45,7 +46,7 @@
         opacity: 1;
       }
 
-      ::content playing-document-create-shortcuts {
+      playing-document-create-shortcuts {
         --playing-document-create-shortcut-margin: 0 0 16px 0;
       }
     </style>

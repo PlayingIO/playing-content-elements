@@ -1,10 +1,12 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
-<link rel="import" href="../playing-document/playing-document.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../paper-dialog/paper-dialog.html">
 <link rel="import" href="../../paper-tabs/paper-tabs.html">
 <link rel="import" href="../../iron-pages/iron-pages.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-slots.html">
+<link rel="import" href="../playing-document/playing-document.html">
 <link rel="import" href="../playing-document/playing-document-create.html">
 <link rel="import" href="../playing-document/playing-document-import.html">
 
@@ -22,11 +24,11 @@
         display: block;
       }
 
-      ::content paper-tabs {
+      paper-tabs {
         border-bottom: 1px solid var(--divider-color);
       }
 
-      ::content paper-tab {
+      paper-tab {
         text-transform: uppercase;
       }
 
@@ -47,6 +49,16 @@
         width: 65vw;
       }
 
+      iron-pages {
+        @apply --layout-flex;
+        @apply --layout-horizontal;
+      }
+
+      /* IE11 fix (NXP-23550) */
+      *::-ms-backdrop, iron-pages * {
+        height: 80vh;
+      }
+
     </style>
 
     <playing-document id="defaultDoc"
@@ -64,7 +76,7 @@
         <mostly-slot slot="CREATE_POPUP_ITEMS" model="[[importContext]]"></mostly-slot>
       </paper-tabs>
       <div id="holder" class="vertical layout flex">
-        <iron-pages selected="[[selectedTab]]" attr-for-selected="name" class="vertical layout flex" selected-attribute="visible">
+        <iron-pages selected="[[selectedTab]]" attr-for-selected="name" selected-attribute="visible">
           <mostly-slot slot="CREATE_POPUP_PAGES" model="[[importContext]]"></mostly-slot>
           <playing-document-create id="simpleCreation"
                   name="create"
@@ -151,24 +163,39 @@
       toggleDialogImport: function(files) {
         this.selectedTab = 'import';
         this._fetchParent().then(() => {
-          this.$.bulkCreation.init(files);
-          this.$.createDocDialog.toggle();
+          if (this._noPermission) {
+            this.fire('notify', {message: this.i18n('documentCreationBehavior.error.noPermission')});
+          } else {
+            this.$$('#bulkCreation').init(files);
+            this.$.createDocDialog.toggle();
+          }
         });
       },
 
       toggleDialog: function() {
         this._fetchParent().then(() => {
-          this.$.bulkCreation.init();
-          this.$.createDocDialog.toggle();
+          if (this._noPermission) {
+            this.fire('notify', {message: this.i18n('documentCreationBehavior.error.noPermission')});
+          } else {
+            this.$$('#bulkCreation').init();
+            this.$.createDocDialog.toggle();
+          }
         });
       },
 
       _fetchParent: function() {
+        this._noPermission = false;
         if (!this.parentPath) {
           this.set('parentPath', this.defaultPath);
         }
         if (!this.parent || !this.parent.metadata) {
-          return this.$.defaultDoc.get();
+          return this.$.defaultDoc.get().catch((err) => {
+            if (err && err.status === 403) {
+              this._noPermission = true;
+            } else {
+              throw err;
+            }
+          });
         } else {
           return Promise.resolve();
         }
