@@ -1,9 +1,11 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
-<link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-data-grid/mostly-data-grid.html">
 <link rel="import" href="../../mostly-elements/mostly-data-table/iron-data-table.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-results.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
 <link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
 <link rel="import" href="../playing-document-thumbnail/playing-document-grid-thumbnail.html">
@@ -15,18 +17,18 @@
 -->
 <dom-module id="playing-default-results">
   <template>
-    <style>
+    <style include="mostly-styles">
 
       mostly-data-table {
         min-height: calc(100vh - 9.3em);
       }
 
-      mostly-data-grid {
+      mostly-data-grid, mostly-data-list {
         display: block;
         position: relative;
       }
 
-      mostly-data-grid {
+      mostly-data-grid, mostly-data-list {
         min-height: calc(100vh - 8em);
       }
 
@@ -43,16 +45,21 @@
     </style>
 
     <mostly-results id="results" name="[[name]]" nx-provider="[[nxProvider]]" selected-items="{{selectedItems}}">
-      <content></content>
 
-      <mostly-data-grid class="results" name="grid" icon="mostly:view-thumbnails"
+      <slot name="selectionActions" slot="selectionActions"></slot>
+
+      <mostly-data-grid name="grid" icon="mostly:view-thumbnails"
               empty-label="[[emptyLabel]]"
               empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
               selection-enabled display-quick-filters>
         <template>
-          <playing-document-grid-thumbnail class="grid-box" tabindex$="{{tabIndex}}"
-                  selected$="{{selected}}" selected-items="[[selectedItems]]"
-                  doc="[[item]]" on-navigate="_navigate">
+          <playing-document-grid-thumbnail class="grid-box"
+                  tabindex$="{{tabIndex}}"
+                  selected$="{{selected}}"
+                  selected-items="[[selectedItems]]"
+                  index="[[index]]"
+                  doc="[[item]]"
+                  on-navigate="_navigate">
           </playing-document-grid-thumbnail>
         </template>
       </mostly-data-grid>
@@ -68,7 +75,10 @@
                 field="title" sort-by="title" flex="100">
           <template>
             <playing-document-thumbnail document="[[item]]"></playing-document-thumbnail>
-            <a class="title ellipsis" href$="[[urlFor('browse', item.path)]]" on-tap="_navigate">[[item.title]]</a>
+            <a class="title ellipsis"
+                    href$="[[urlFor('browse', item.path)]"
+                    on-tap="_navigateLink"
+                    data-index="[[index]]">[[item.title]]</a>
           </template>
         </mostly-data-table-column>
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.updatedAt')]]"
@@ -85,7 +95,7 @@
         </mostly-data-table-column>
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.state')]]"
                 field="currentLifeCycleState" hidden>
-          <template><span class="capitalize">[[item.state]]</span></template>
+          <template><span class="capitalize">[[formatLifecycleState(item.state)]]</span></template>
         </mostly-data-table-column>
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.version')]]"
                 field="versionLabel" hidden>
@@ -135,7 +145,9 @@
   <script>
     Polymer({
       is: 'playing-default-results',
-      behaviors: [Mostly.LayoutBehavior],
+
+      behaviors: [Mostly.RoutingBehavior, Mostly.FormatBehavior],
+
       properties: {
         nxProvider: Object,
 
@@ -150,13 +162,25 @@
         emptyLabelWhenFiltered: String
       },
 
+      _refreshAndFetch: function() {
+        this.$.results._refreshAndFetch();
+      },
+
       get items() {
-        return this.$.results.items;
+        if (this.shadowRoot) {
+          return this.shadowRoot.querySelector('#results').items;
+        }
+        return null;
       },
 
       _navigate: function(e) {
         this.fire('navigate', { doc: (e.model || e.detail).item });
         e.stopPropagation();
+      },
+
+      _navigateLink: function(e) {
+        e.detail = {item: this.items[e.target.dataIndex], index: e.target.dataIndex};
+        this._navigate(e);
       }
     });
   </script>

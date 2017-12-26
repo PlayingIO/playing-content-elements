@@ -1,15 +1,16 @@
 <link rel="import" href="../../polymer/polymer.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-page-provider.html">
-<link rel="import" href="../../mostly-elements/mostly-slots.html">
-<link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
-<link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
-<link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
-<link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-results.html">
 <link rel="import" href="../../mostly-elements/mostly-aggregation/mostly-dropdown-aggregation.html">
 <link rel="import" href="../../mostly-elements/mostly-data-grid/mostly-data-grid.html">
 <link rel="import" href="../../mostly-elements/mostly-data-table/iron-data-table.html">
-<link rel="import" href="../../mostly-elements/mostly-common/mostly-results.html">
+<link rel="import" href="../../mostly-elements/mostly-slots.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
+<link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
 <link rel="import" href="../playing-document-thumbnail/playing-document-thumbnail.html">
 <link rel="import" href="../playing-document-thumbnail/playing-document-grid-thumbnail.html">
 
@@ -21,26 +22,28 @@
 <dom-module id="playing-document-content">
   <template>
 
-    <style>
+    <style include="mostly-styles">
+      mostly-data-table,
+      mostly-data-grid,
+      mostly-data-list {
+        display: block;
+        position: relative;
+        min-height: calc(100vh - 130px - var(--mostly-app-top));
+      }
+
+      mostly-tag {
+        margin-right: 2px;
+      }
 
       .results {
-        @apply(--layout-vertical);
-        @apply(--layout-flex);
-        min-height: calc(100vh - 14em);
+        @apply --layout-vertical;
+        @apply --layout-flex;
+        min-height: calc(100vh - 19em - var(--nuxeo-app-top));
         margin-top: 8px;
       }
 
       .results.dragging {
         border: 2px dashed var(--nuxeo-primary-color);
-      }
-
-      mostly-data-grid {
-        display: block;
-        position: relative;
-      }
-
-      mostly-tag {
-        margin-right: 2px;
       }
 
       .ellipsis {
@@ -58,7 +61,7 @@
 
     <mostly-connection id="nxcon"></mostly-connection>
 
-    <mostly-page-provider id="nxProvider" auto
+    <mostly-page-provider id="nxProvider"
             provider="[[provider]]"
             page-size="[[pageSize]]"
             aggregations="{{aggregations}}"
@@ -71,16 +74,21 @@
 
     <div id="dropzone">
 
-      <mostly-results name="[[document.id]]" nx-provider="[[nxProvider]]" selected-items="{{selectedItems}}">
-        <div class="selectionActions">
+      <mostly-results id="results" name="[[document.id]]" nx-provider="[[nxProvider]]" selected-items="{{selectedItems}}">
+        <div slot="selectionActions">
           <mostly-slot slot="BROWSE_ACTIONS" model="[[browseActionContext]]"></mostly-slot>
         </div>
 
         <!-- Grid view -->
-        <mostly-data-grid class="results" name="grid" icon="mostly:view-thumbnails"
+        <mostly-data-grid name="grid" icon="mostly:view-thumbnails"
+                class="results"
                 empty-label="[[emptyLabel]]"
                 empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
-                selection-enabled display-quick-filters>
+                selection-enabled
+                display-quick-filters
+                display-sort
+                sort-label="[[i18n('documentContentView.sort.label')]]"
+                sort-options="[[sortOptions]]">
           <template>
             <playing-document-grid-thumbnail class="grid-box"
                     tabindex$="{{tabIndex}}"
@@ -136,7 +144,7 @@
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.state')]]"
                   field="currentLifeCycleState" hidden>
-            <template><span class="capitalize">[[item.state]]</span></template>
+            <template><span class="capitalize">[[formatLifecycleState(item.state)]]</span></template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.version')]]"
                   field="versionLabel" hidden>
@@ -216,14 +224,15 @@
         browseActionContext: {
           type: Object,
           computed: '_browseActionContext(document, selectedItems)'
+        },
+        sortOptions: {
+          type: Array,
+          value: []
         }
       },
 
       listeners: {
-        'document-created': '_handleDocumentCreated',
-        'dropzone.dragover': '_dragoverImport',
-        'dropzone.dragleave': '_dragleaveImport',
-        'dropzone.drop': '_dropImport'
+        'document-created': '_handleDocumentCreated'
       },
 
       observers: [
@@ -233,7 +242,23 @@
 
       ready: function() {
         this.nxProvider = this.$.nxProvider;
-      },
+
+        this.$.dropzone.addEventListener('dragover', this._dragoverImport.bind(this));
+        this.$.dropzone.addEventListener('dragleave', this._dragleaveImport.bind(this));
+        this.$.dropzone.addEventListener('drop', this._dropImport.bind(this));
+      },,
+
+      attached: function() {
+        this.sortOptions = [
+          {field: 'title', label: this.i18n('searchResults.sort.field.title'), order: 'asc'},
+          {field: 'createdAt', label: this.i18n('searchResults.sort.field.created'), order: 'asc', selected: true},
+          {field: 'modifiedAt', label: this.i18n('searchResults.sort.field.modified'), order: 'desc'},
+          {field: 'lastContributor', label: this.i18n('searchResults.sort.field.lastContributor'), order: 'asc'},
+          {field: 'state', label: this.i18n('searchResults.sort.field.state'), order: 'asc'},
+          {field: 'nature', label: this.i18n('searchResults.sort.field.nature'), order: 'asc'},
+          {field: 'coverage', label: this.i18n('searchResults.sort.field.coverage'), order: 'asc'}
+        ];
+      }
 
       _observeDocument: function() {
         if (this.document) {
@@ -241,18 +266,10 @@
         }
       },
 
-      _refreshAndFetch: function() {
-        var pn = this.nxProvider.page;
-        this._refresh();
-        if (pn === 1) {
-          // normally the page provider is on auto mode
-          // so the fetch should be triggered when changing page
-          this.nxProvider.fetch();
-        }
-      },
-
       _refresh: function() {
-        this.$.nxProvider.page = 1;
+        if (this.document && this.$.results.view) {
+          this.$.results.view.fetch();
+        }
       },
 
       _navigate: function(e) {
