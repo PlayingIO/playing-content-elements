@@ -9,8 +9,8 @@
 <dom-module id="playing-document-layout">
   <template>
     <mostly-layout id="layout"
-            href="[[_href(document, layout)]]"
-            model="[[_model(document)]]"
+            href="[[_href]]"
+            model="[[_model]]"
             error="[[i18n('documentView.layoutNotFound', document.type)]]"
             on-element-changed="_elementChanged">
     </mostly-layout>
@@ -27,8 +27,19 @@
         layout: {
           type: String,
           value: 'view'
+        },
+        _model: {
+          type: Object,
+          notify: true,
+          value: {}
+        },
+        _href: {
+          type: String,
+          notify: true
         }
       },
+
+      observers: ['_loadLayout(document, layout)'],
 
       get element() {
         return this.$.layout.element;
@@ -38,23 +49,24 @@
         return this.$.layout.validate();
       },
 
-      _href: function (document, layout) {
+      _loadLayout: function (document, layout) {
         if (document) {
+          if (!this.previousDocument || (this.previousDocument && document.type === this.previousDocument.type)) {
+            this._model = {document: document};
+          }
           var doctype = document.type.toLowerCase();
           var packages = document.metadata.packages;
           var folder = ['../..', packages, 'playing-' + doctype].join('/');
           var name = ['playing', doctype, layout, 'layout'].join('-');
           var url = folder + '/' + name + '.html';
           console.log('>>> document-layout', url);
-          return this.resolveUrl(url);
+          this._href = this.resolveUrl(url);
         }
-      },
-
-      _model: function (document) {
-        return { document: document };
+        this.previousDocument = document;
       },
 
       _elementChanged: function() {
+        this._model = {document: this.document};
         // forward document path change events
         if (this.element) {
           this.element.addEventListener('document-changed', (e) => {

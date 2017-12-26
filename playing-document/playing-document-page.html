@@ -1,10 +1,12 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../paper-card/paper-card.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../../playing-interaction-elements/playing-collections/playing-document-collections.html">
-<link rel="import" href="../widgets/playing-tag-suggestion.html">
+<link rel="import" href="../playing-document-activity/playing-document-activity.html">
 <link rel="import" href="../playing-document-info/playing-document-info.html">
+<link rel="import" href="../widgets/playing-tag-suggestion.html">
 <link rel="import" href="playing-document-view.html">
 <link rel="import" href="playing-document-metadata.html">
 <link rel="import" href="playing-document-edit.html">
@@ -16,51 +18,81 @@
 -->
 <dom-module id="playing-document-page">
   <template>
-    <style>
+    <style include="mostly-styles">
 
       .page {
-        @apply(--layout-horizontal);
+        @apply --layout-horizontal;
       }
 
       .page .main {
-        @apply(--layout-vertical);
-        @apply(--layout-flex-2);
+        @apply --layout-vertical;
+        @apply --layout-flex-2;
         padding-right: 1.3rem;
         max-width: 65%;
       }
 
       .page .side {
-        @apply(--layout-vertical);
-        @apply(--layout-flex);
+        @apply --layout-vertical;
+        @apply --layout-flex;
+        position: relative;
+        margin-bottom: 16px;
+      }
+
+      .scroller {
+        @apply --nuxeo-card;
+        margin-bottom: 0;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        overflow: auto;
+        position: absolute;
+      }
+
+      .section {
+        margin-bottom: 32px;
       }
 
       @media (max-width: 1024px) {
         .page {
           flex-direction: column;
         }
+
         .page .main {
           padding: 0;
           margin-bottom: 1rem;
           max-width: initial;
         }
+
+        .page .side {
+          padding: 0;
+          margin-bottom: 1rem;
+          max-width: initial;
+          display: block !important;
+        }
+
+        .scroller {
+          position: relative;
+        }
       }
 
-      #edit {
-        position: absolute;
-        z-index: 1;
-        top: 8px;
-        right: 8px;
+      paper-icon-button  {
+        @apply --nuxeo-action;
       }
 
-      ::content paper-icon-button  {
-        @apply(--nuxeo-action);
+      paper-icon-button:hover  {
+        @apply --nuxeo-action-hover;
       }
 
-      ::content paper-icon-button:hover  {
-        @apply(--nuxeo-action-hover);
+      ::content playing-document-attachments {
+        margin-top: 32px;
       }
 
     </style>
+
+    <!--
+    <playing-document-info-bar document="[[document]]"></playing-document-info-bar>
+    -->
 
     <div class="page">
 
@@ -69,34 +101,41 @@
       </div>
 
       <div class="side">
-        <!-- metadata / edit -->
-        <paper-card>
-          <div hidden$="[[edit]]">
-            <paper-icon-button noink id="edit" icon="mostly:edit" on-tap="_editMode" hidden$="[[!_canEdit(document)]]"></paper-icon-button>
-            <playing-document-metadata document="[[document]]"></playing-document-metadata>
+        <div class="scroller">
+          <!-- info -->
+          <div class="section">
+            <playing-document-info document="[[document]]"></playing-document-info>
           </div>
-          <playing-document-edit document="[[document]]" hidden$="[[!edit]]"></playing-document-edit>
-        </paper-card>
 
-        <!-- info -->
-        <paper-card>
-          <playing-document-info document="[[document]]"></playing-document-info>
-        </paper-card>
+          <!-- metadata -->
+          <paper-card>
+            <div class="section">
+              <playing-document-metadata document="[[document]]"></playing-document-metadata>
+            </div>
+          </paper-card>
 
-        <!-- collections -->
-        <paper-card hidden$="[[!_showCollections(document)]]">
-          <h3>[[i18n('documentPage.collections')]]</h3>
-          <playing-document-collections document="[[document]]"></playing-document-collections>
-        </paper-card>
+          <!-- collections -->
+          <div class="section" hidden$="[[!_hasCollections(document)]]">
+            <h3>[[i18n('documentPage.collections')]]</h3>
+            <playing-document-collections document="[[document]]"></playing-document-collections>
+          </div>
 
-        <!-- tags -->
-        <paper-card>
-          <h3>[[i18n('documentPage.tags')]]</h3>
-          <playing-tag-suggestion document="[[document]]" allow-new-tags
-                  placeholder="[[i18n('documentPage.tags.placeholder')]]">
-          </playing-tag-suggestion>
-        </paper-card>
+          <!-- tags -->
+          <template is="dom-if" if="[[hasFacet(document, 'NXTag')]]">
+            <div class="section">
+              <h3>[[i18n('documentPage.tags')]]</h3>
+              <playing-tag-suggestion document="[[document]]" allow-new-tags
+                      placeholder="[[i18n('documentPage.tags.placeholder')]]">
+              </playing-tag-suggestion>
+            </div>
+          </template>
 
+          <!-- activity -->
+          <div class="section">
+            <h3>[[i18n('documentPage.activity')]]</h3>
+            <playing-document-activity document="[[document]]"></playing-document-activity>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -107,19 +146,7 @@
       behaviors: [Mostly.LayoutBehavior],
       properties: {
         document: {
-          type: Object,
-          observer: '_documentChanged'
-        },
-
-        edit: {
-          type: Boolean,
-          value: false
-        }
-      },
-
-      _documentChanged: function(newVal, oldVal) {
-        if (this.document) {
-          this.edit = false;
+          type: Object
         }
       },
 
@@ -127,15 +154,7 @@
         return !this.hasFacet(doc, 'Immutable') && doc.type !== 'Root' && doc.state !== 'deleted';
       },
 
-      _canEdit: function(doc) {
-        return doc && doc.type !== 'Root' && this.hasPermission(doc, 'Write') && this._isMutable(doc);
-      },
-
-      _editMode: function() {
-        this.edit = true;
-      },
-
-      _showCollections: function (doc) {
+      _hasCollections: function (doc) {
         return this.hasCollections(doc);
       }
     });

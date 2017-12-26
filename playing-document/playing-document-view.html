@@ -1,8 +1,9 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="playing-document-preview.html">
+
 <link rel="import" href="../playing-document-blob/playing-document-blob.html">
 <link rel="import" href="../playing-dropzone/playing-dropzone.html">
 <link rel="import" href="playing-document-layout.html">
+<link rel="import" href="playing-document-preview.html">
 
 <!--
 `playing-document-view`
@@ -11,19 +12,6 @@
 -->
 <dom-module id="playing-document-view">
   <template>
-
-    <style>
-      ::content playing-document-viewer,
-      ::content playing-document-attachments,
-      ::content playing-content-editor,
-      ::content playing-picture-info,
-      ::content playing-picture-formats,
-      ::content playing-video-info,
-      ::content playing-video-conversions {
-        @apply(--paper-card);
-      }
-    </style>
-
     <playing-document-layout document="[[document]]" layout="view"></playing-document-layout>
   </template>
   <script>

@@ -1,4 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+
 <link rel="import" href="playing-document-layout.html">
 
 <!--
@@ -8,36 +10,9 @@
 -->
 <dom-module id="playing-document-metadata">
   <template>
-    <style>
+    <style include="mostly-styles">
       :host {
         display: block;
-      }
-
-      ::content div.multiline {
-        white-space: pre-line;
-      }
-
-      ::content div {
-        word-wrap: break-word;  /* legacy property */
-        overflow-wrap: break-word;  /* css3 standard property */
-        word-break: break-word;
-
-        /* Hyphenize words */
-        -webkit-hyphens: auto;
-        -moz-hyphens: auto;
-        -ms-hyphens: auto;
-        -o-hyphens: auto;
-        hyphens: auto;
-      }
-
-      ::content label {
-        margin: 0 !important;
-      }
-
-      ::content *[role=widget] {
-        @apply(--layout-vertical);
-        box-sizing: border-box;
-        margin-bottom: 1rem;
       }
     </style>
 

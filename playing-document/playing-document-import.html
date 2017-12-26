@@ -1,22 +1,25 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-a11y-keys/iron-a11y-keys.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../iron-form/iron-form.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../iron-pages/iron-pages.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
-<link rel="import" href="../../iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-progress/paper-progress.html">
 <link rel="import" href="../../paper-spinner/paper-spinner-lite.html">
 <link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-select.html">
 <link rel="import" href="../../mostly-elements/mostly-slots.html">
-<link rel="import" href="../playing-path-suggestion/playing-path-suggestion.html">
 <link rel="import" href="../behaviors/playing-uploader-behavior.html">
 <link rel="import" href="../behaviors/playing-document-creation-behavior.html">
 <link rel="import" href="../playing-document-creation/playing-document-creation-stats.html">
+<link rel="import" href="../playing-path-suggestion/playing-path-suggestion.html">
 <link rel="import" href="playing-document.html">
 <link rel="import" href="playing-document-layout.html">
 
@@ -28,11 +31,11 @@
 <dom-module id="playing-document-import">
 
   <template>
-    <style>
+    <style include="iron-flex iron-flex-alignment iron-flex-factors mostly-styles">
       :host {
         display: block;
-        @apply(--layout-flex);
-        @apply(--layout-vertical);
+        @apply --layout-flex;
+        @apply --layout-horizontal;
       }
 
       playing-path-suggestion {
@@ -65,15 +68,6 @@
         width: 100%;
       }
 
-      ::content label {
-        @apply(--nuxeo-label);
-        padding-top: 8px;
-      }
-
-      ::content paper-dropdown-menu {
-        width: 100%;
-      }
-
       div[name='customize'] #blobEditor span {
         width: 200px;
       }
@@ -102,6 +96,10 @@
 
       #blobEditor {
         overflow-y: auto;
+      }
+
+      #blobList {
+        height: 100px;
       }
 
       #blobList .file-overview:first-of-type {
@@ -149,11 +147,11 @@
       }
 
       .file-overview:hover {
-        @apply(--nuxeo-block-hover);
+        @apply --nuxeo-block-hover;
       }
 
       .file-overview.selected {
-        @apply(--nuxeo-block-selected);
+        @apply --nuxeo-block-selected;
       }
 
       .file-overview iron-icon {
@@ -243,7 +241,7 @@
       }
 
       .buttons {
-        @apply(--buttons-bar);
+        @apply --buttons-bar;
       }
 
       .add-more .importActions {
@@ -279,7 +277,8 @@
       }
 
       iron-pages,
-      div[name="upload"] {
+      div[name="upload"] ,
+      div[name="customize"] {
         /*Firefox fix (NXP-22349)*/
         min-height: 100%;
       }
@@ -413,10 +412,18 @@
                     hidden$="[[_creating]]">[[i18n('command.cancel')]]</paper-button>
           </div>
           <paper-button noink
+                  id="create"
                   class="primary"
                   on-tap="_toggleCustomize"
                   hidden$="[[!_canAddProperties(_creating,hasFiles,canCreate)]]">
-            [[i18n('documentImportForm.addProperties')]]
+            <template is="dom-if" if="[[!_isUploadingOrImporting(_creating, hasLocalFiles, hasLocalFilesUploaded)]]">
+              [[i18n('command.create')]]
+            </template>
+            <template is="dom-if" if="[[_isUploadingOrImporting(_creating, hasLocalFiles, hasLocalFilesUploaded)]]">
+              <span class="importing-label" hidden$="[[_creating]]">[[i18n('documentImport.uploading')]]</span>
+              <span class="importing-label" hidden$="[[!_creating]]">[[i18n('documentImport.importing')]]</span>
+              <paper-spinner-lite active></paper-spinner-lite>
+            </template>
           </paper-button>
           <paper-button noink class="primary" on-tap="_import"
                   disabled$="[[!_canImport(_creating, hasLocalFilesUploaded,hasRemoteFiles,canCreate)]]">
@@ -446,27 +453,29 @@
                       always-float-label></playing-path-suggestion>
               <span class$="horizontal layout [[_formatErrorMessage(errorMessage)]]">&#8203;[[errorMessage]]</span>
             </div>
-            <form is="iron-form" id="form" class="form vertical layout flex">
-              <div class="horizontal layout center">
-                <div class="flex">
-                  <mostly-select id="docTypeDropdown"
-                          selected="{{selectedDocType}}" attr-for-selected="key"
-                          label="[[i18n('documentImportForm.type.label')]]"
-                          placeholder="[[i18n('documentImportForm.type.placeholder')]]"
-                          error-message="[[i18n('documentImportForm.type.error')]]"
-                          on-value-changed="_validate"
-                          required>
-                    <template is="dom-repeat" items="[[_importDocTypes]]" as="type">
-                      <paper-item key="[[type]]">[[_getTypeLabel(type)]]</paper-item>
-                    </template>
-                  </mostly-select>
+            <iron-form id="form">
+              <form class="form vertical layout flex">
+                <div class="horizontal layout center">
+                  <div class="flex">
+                    <mostly-select id="docTypeDropdown"
+                            selected="{{selectedDocType}}" attr-for-selected="key"
+                            label="[[i18n('documentImportForm.type.label')]]"
+                            placeholder="[[i18n('documentImportForm.type.placeholder')]]"
+                            error-message="[[i18n('documentImportForm.type.error')]]"
+                            on-value-changed="_validate"
+                            required>
+                      <template is="dom-repeat" items="[[_importDocTypes]]" as="type">
+                        <paper-item key="[[type]]">[[_getTypeLabel(type)]]</paper-item>
+                      </template>
+                    </mostly-select>
+                  </div>
                 </div>
-              </div>
-              <!--restamp needed to prevent submit with hidden input fields, which will throw an error-->
-              <template is="dom-if" if=[[document]] restamp>
-                <playing-document-layout id="document-import" layout="import" document="[[document]]"></playing-document-layout>
-              </template>
-            </form>
+                <!--restamp needed to prevent submit with hidden input fields, which will throw an error-->
+                <template is="dom-if" if=[[document]] restamp>
+                  <playing-document-layout id="document-import" layout="import" document="[[document]]"></playing-document-layout>
+                </template>
+              </form>
+            </iron-form>
           </div>
           <div class="sidePanel horizontal layout">
             <div id="blobList" class="flex">
@@ -690,7 +699,7 @@
             var i = this.localFiles.findIndex(function(f) {
               return f.index === this.get(changeRecord.path.replace('.index', '')).index;
             }.bind(this));
-            this.set(['localFiles', i, 'complete'].join('.'), true);
+            this.notifyPath(['localFiles', i, 'complete'].join('.'), true);
           }
         }
       },
@@ -901,17 +910,11 @@
       },
 
       _validate: function() {
-        // run our custom validation function first to allow setting custom native validity
         var layout = this.$$('#document-import');
-        var valid = layout ? layout.validate() : false;
-
-        // fake submit to trigger native validation checks and UI
-        if (valid) {
-          this.$.form._doFakeSubmitForValidation();
-        }
-
-        // XXX: could rely on onsubmit to avoid rechecking for validity
-        return this.$.form.validate() && this.$.form.checkValidity() && valid;
+        // run our custom validation function first to allow setting custom native validity
+        return (!layout || layout.validate())
+          && this._doNativeValidation(this.$.form)
+          && this.$.form.validate();
       },
 
       _tapLocalDoc: function(e) {
@@ -1250,6 +1253,18 @@
             this._importWithProperties();
           }
         }
+      },
+
+      // trigger native browser invalid-form UI
+      _doNativeValidation: function(form) {
+        /*var fakeSubmit = document.createElement('input');
+        fakeSubmit.setAttribute('type', 'submit');
+        fakeSubmit.style.display = 'none';
+        form._form.appendChild(fakeSubmit);
+        fakeSubmit.click();
+        form._form.removeChild(fakeSubmit);
+        return form._form.checkValidity();*/
+        return form._doFakeSubmitForValidation();
       }
     });
   </script>
