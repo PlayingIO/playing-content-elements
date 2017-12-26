@@ -1,0 +1,113 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-card.html">
+<link rel="import" href="../../playing-interaction-elements/playing-collections/playing-document-collections.html">
+<!--
+<link rel="import" href="../playing-document-info/playing-document-info-bar.html">
+-->
+<link rel="import" href="../playing-document-info/playing-document-info.html">
+<link rel="import" href="../playing-document-activity/playing-document-activity.html">
+<link rel="import" href="../widgets/playing-tag-suggestion.html">
+<link rel="import" href="playing-document-view.html">
+<link rel="import" href="playing-document-metadata.html">
+
+<!--
+`playing-collapsible-document-page`
+@group Playing UI
+@element playing-collapsible-document-page
+-->
+<dom-module id="playing-collapsible-document-page">
+  <template>
+    <style include="mostly-styles">
+      .page {
+        @apply --layout-vertical;
+      }
+
+      .details {
+        @apply --layout-horizontal;
+        @apply --layout-wrap;
+        @apply --layout-justified;
+      }
+
+      .details .section {
+        @apply --layout-flex;
+        margin: 16px;
+        min-width: 256px;
+        max-width: 320px;
+      }
+
+      paper-icon-button {
+        @apply --nuxeo-action;
+      }
+
+      paper-icon-button:hover {
+        @apply --nuxeo-action-hover;
+      }
+    </style>
+
+    <!--
+    <playing-document-info-bar document="[[document]]"></playing-document-info-bar>
+    -->
+
+    <div class="page">
+      <mostly-card id="detailsCard" heading="[[i18n('documentPage.details')]]" collapsible>
+        <div class="details">
+          <div class="section">
+            <h3>[[i18n('documentPage.info')]]</h3>
+            <playing-document-info document="[[document]]"></playing-document-info>
+          </div>
+
+          <!-- metadata -->
+          <div class="section">
+            <h3>[[i18n('documentPage.metadata')]]</h3>
+            <playing-document-metadata document="[[document]]"></playing-document-metadata>
+          </div>
+
+          <!-- collections -->
+          <div class="section" hidden$="[[!_hasCollections(document)]]">
+            <h3>[[i18n('documentPage.collections')]]</h3>
+            <playing-document-collections document="[[document]]"></playing-document-collections>
+          </div>
+
+          <!-- tags -->
+          <template is="dom-if" if="[[hasFacet(document, 'NXTag')]]">
+            <div class="section">
+              <h3>[[i18n('documentPage.tags')]]</h3>
+              <playing-tag-suggestion document="[[document]]" allow-new-tags
+                                    placeholder="[[i18n('documentPage.tags.placeholder')]]">
+              </playing-tag-suggestion>
+            </div>
+          </template>
+
+          <!-- activity -->
+          <div class="section">
+            <h3>[[i18n('documentPage.activity')]]</h3>
+            <playing-document-activity document="[[document]]"></playing-document-activity>
+          </div>
+        </div>
+      </mostly-card>
+
+      <div class="main">
+        <playing-document-view document="[[document]]"></playing-document-view>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'playing-collapsible-document-page',
+      behaviors: [Mostly.LayoutBehavior],
+      properties: {
+        document: {
+          type: Object
+        }
+      },
+
+      _hasCollections: function (doc) {
+        return this.hasCollections(doc);
+      }
+    });
+  </script>
+</dom-module>
