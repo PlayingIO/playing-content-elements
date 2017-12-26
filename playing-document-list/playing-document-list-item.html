@@ -6,10 +6,10 @@
 <link rel="import" href="../../paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-result-highlights/mostly-result-highlights.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
 <link rel="import" href="../../playing-interaction-elements/actions/playing-favorites-toggle-button.html">
 <link rel="import" href="../actions/playing-download-button.html">
-<link rel="import" href="../playing-document-highlight/playing-document-highlights.html">
 
 <!--
 `playing-document-list-item`
@@ -159,7 +159,7 @@
         background-color: var(--nuxeo-dialog-buttons-bar);
       }
 
-      playing-document-highlights {
+      mostly-result-highlights {
         font-size: .85rem;
       }
 
@@ -183,7 +183,7 @@
             </a>
             <mostly-tag>[[_docType(doc)]]</mostly-tag>
           </div>
-          <playing-document-highlights highlights="[[doc.contextParameters.highlight]]"></playing-document-highlights>
+          <mostly-result-highlights highlights="[[doc.metadata.highlight]]"></mostly-result-highlights>
         </div>
         <div class="actions">
           <playing-favorites-toggle-button document="[[doc]]"></playing-favorites-toggle-button>
