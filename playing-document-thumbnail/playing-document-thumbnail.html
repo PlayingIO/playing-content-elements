@@ -1,3 +1,6 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+
 <!--
 `playing-document-thumbnail`
 @group Playing UI
@@ -22,13 +25,16 @@
       }
     </style>
 
-    <img src="[[_thumbnail(document)]]">
+    <img id="img" src="[[_thumbnail(document)]]" alt="[[_title(document)]]" on-error="_error">
 
   </template>
 
   <script>
     Polymer({
       is: 'playing-document-thumbnail',
+
+      behaviors: [Nuxeo.I18nBehavior],
+
       properties: {
         document: Object
       },
@@ -42,6 +48,14 @@
             return doc.thumbnail.url;
           }
         }
+      },
+
+      _error: function() {
+        this.$.img.src = 'images/blank.png';
+      },
+
+      _title: function(doc) {
+        return doc && doc.title ? this.i18n('accessibility.thumbnail', doc.title) : '';
       }
     });
   </script>

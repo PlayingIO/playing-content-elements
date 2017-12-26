@@ -1,9 +1,11 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
-<link rel="import" href="../widgets/playing-tags.html">
-<link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
+<link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
+<link rel="import" href="../widgets/playing-tags.html">
 
 <!--
 `playing-document-info`
@@ -15,13 +17,14 @@
 
     <style>
       .item {
-        @apply(--layout-horizontal);
+        @apply --layout-horizontal;
         line-height: 2.2rem;
       }
 
       .item label {
-        width: 100px;
-        min-width: 100px;
+        width: 90px;
+        min-width: 90px;
+        font-size: 12px;
       }
 
     </style>
@@ -32,7 +35,7 @@
     </div>
     <div class="item">
       <label>[[i18n('documentInfo.state')]]</label>
-      <div><mostly-tag uppercase>[[_stateLabel(document.state)]]</mostly-tag></div>
+      <div><mostly-tag uppercase>[[formatLifecycleState(document.state)]]</mostly-tag></div>
     </div>
     <div class="item">
       <label>[[i18n('documentInfo.updatedAt')]]</label>
@@ -73,11 +76,6 @@
     _documentChanged: function() {
       this._showProcess = this.document && this.document.metadata &&
         this.document.metadata.runningWorkflows && this.document.metadata.runningWorkflows.length > 0;
-    },
-
-    _stateLabel: function(state) {
-      var t = this.i18n('label.ui.state.' + state);
-      return t === 'label.ui.state.' + state ? state : t;
     }
   });
 </script>

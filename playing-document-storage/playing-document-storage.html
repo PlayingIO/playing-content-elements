@@ -1,5 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-localstorage/iron-localstorage.html">
+
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/es6-polyfills.html">
 
@@ -18,7 +19,7 @@
 
     <mostly-connection id="nxcon"></mostly-connection>
 
-    <iron-localstorage name="[[name]]" value="{{documents}}" on-iron-localstorage-load-empty="initialize">
+    <iron-localstorage id="storage" name="[[name]]" value="{{documents}}" on-iron-localstorage-load-empty="initialize">
     </iron-localstorage>
   </template>
   <script>
@@ -26,7 +27,10 @@
       is: 'playing-document-storage',
 
       properties: {
-        name: 'playing-document-storage',
+        name: {
+          type: String,
+          value: 'playing-document-storage'
+        },
         documents: {
           type: Array,
           notify: true
@@ -72,6 +76,10 @@
         this.$.nxcon.connect().then((res) => {
           this.name =  res.id + '-' + this.name;
         });
+      },
+
+      reload: function() {
+        this.$.storage.reload();
       }
 
     });

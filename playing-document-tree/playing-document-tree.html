@@ -1,9 +1,11 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../paper-spinner/paper-spinner.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-page-provider.html">
-<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-tree/mostly-tree.html">
 <link rel="import" href="../playing-document/playing-document.html">
 
@@ -15,7 +17,7 @@
 
 <dom-module id="playing-document-tree">
   <template>
-    <style>
+    <style include="iron-flex iron-positioning mostly-styles">
       :host {
         display: block;
         --mostly-tree-theme: {
@@ -40,7 +42,7 @@
       .content {
         padding: 5px 0;
         overflow: auto;
-        height: calc(100vh - 72px);
+        height: calc(100vh - 72px - var(--nuxeo-app-top));
       }
 
       .node-name {
@@ -51,12 +53,16 @@
         word-break: break-word;
       }
 
-      #root a, a:active, a:visited, a:focus {
-        color: var(--nuxeo-drawer-text);
+      a {
+        @apply --nuxeo-link;
       }
 
-      #root a:hover {
-        @apply(--nuxeo-link-hover);
+      a:hover {
+        @apply --nuxeo-link-hover;
+      }
+
+      #root a, a:active, a:visited, a:focus {
+        color: var(--nuxeo-drawer-text);
       }
 
       iron-icon {
@@ -71,7 +77,6 @@
       }
 
       .parents {
-        display: block;
         line-height: 1.5em;
       }
 
@@ -84,13 +89,10 @@
       }
 
       .parents a {
+        @apply --layout-horizontal;
         padding: .35em;
         color: var(--nuxeo-drawer-text);
         border-bottom: 1px solid var(--nuxeo-border);
-      }
-
-      .parents a:hover {
-        @apply(--nuxeo-link-hover);
       }
 
       .parents span {
@@ -113,7 +115,6 @@
 
       .noPermission {
         opacity: .5;
-        display: block;
         font-weight: 300;
         padding: 1.5em .7em;
         text-align: center;
@@ -140,7 +141,7 @@
           <span class="parent">[[i18n('browse.root')]]</span>
         </a>
         <template is="dom-repeat" items="[[parents]]" as="item">
-          <a href$="[[urlFor('browse', item.path)]]" class="layout horizontal">
+          <a href$="[[urlFor('browse', item.path)]]">
             <span><iron-icon icon="icons:chevron-left"></iron-icon></span>
             <span class="parent">[[item.title]]</span>
           </a>
@@ -149,7 +150,7 @@
       <mostly-tree id="tree" data="[[document]]" controller="[[controller]]" node-key="uid">
         <template class="horizontal layout">
           <template class="flex" is="dom-if" if="[[!isLeaf]]">
-            <paper-spinner active hidden$=[[!loading]]></paper-spinner>
+            <paper-spinner active$=[[loading]]></paper-spinner>
             <iron-icon icon="[[_expandIcon(opened)]]" toggle="" hidden$=[[loading]]></iron-icon>
           </template>
           <span class="node-name flex">
@@ -197,6 +198,10 @@
           type: Boolean
         },
         cannotSee: {
+          type: Boolean,
+          value: false
+        },
+        _noPermission: {
           type: Boolean,
           value: false
         }
