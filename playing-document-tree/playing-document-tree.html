@@ -22,7 +22,7 @@
         display: block;
         --mostly-tree-theme: {
           padding: 1em;
-          color: var(--nuxeo-drawer-text);
+          color: var(--mostly-drawer-text);
         };
         --mostly-tree-node-theme: {
           min-height: 24px;
@@ -42,7 +42,7 @@
       .content {
         padding: 5px 0;
         overflow: auto;
-        height: calc(100vh - 72px - var(--nuxeo-app-top));
+        height: calc(100vh - 72px - var(--mostly-app-top));
       }
 
       .node-name {
@@ -54,15 +54,15 @@
       }
 
       a {
-        @apply --nuxeo-link;
+        @apply --mostly-link;
       }
 
       a:hover {
-        @apply --nuxeo-link-hover;
+        @apply --mostly-link-hover;
       }
 
       #root a, a:active, a:visited, a:focus {
-        color: var(--nuxeo-drawer-text);
+        color: var(--mostly-drawer-text);
       }
 
       iron-icon {
@@ -91,8 +91,8 @@
       .parents a {
         @apply --layout-horizontal;
         padding: .35em;
-        color: var(--nuxeo-drawer-text);
-        border-bottom: 1px solid var(--nuxeo-border);
+        color: var(--mostly-drawer-text);
+        border-bottom: 1px solid var(--mostly-border);
       }
 
       .parents span {

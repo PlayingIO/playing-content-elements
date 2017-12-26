@@ -9,7 +9,7 @@
 
 <!--
 `playing-download-documents-button`
-@group Nuxeo UI
+@group Playing UI
 @element playing-download-documents-button
 -->
 <dom-module id="playing-download-documents-button">
@@ -21,7 +21,7 @@
       }
 
       ::content iron-icon:hover {
-        fill: var(--nuxeo-link-hover-color);
+        fill: var(--mostly-link-hover-color);
       }
     </style>
 
@@ -40,7 +40,7 @@
   <script>
     Polymer({
       is: 'playing-download-documents-button',
-      behaviors: [Nuxeo.I18nBehavior, Nuxeo.FiltersBehavior],
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
       properties: {
         documents: {
           type: Array,

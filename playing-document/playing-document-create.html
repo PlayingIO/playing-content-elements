@@ -55,19 +55,19 @@
         border: none;
         text-align: center;
         box-shadow: none;
-        background-color: var(--nuxeo-dialog-buttons-bar);
+        background-color: var(--mostly-dialog-buttons-bar);
       }
 
       .typeSelection paper-button:hover {
-        color: var(--nuxeo-link-hover-color);
+        color: var(--mostly-link-hover-color);
         filter: brightness(102%);
         -webkit-filter: brightness(102%);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3), 0 -3px 0 var(--nuxeo-link-hover-color) inset;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3), 0 -3px 0 var(--mostly-link-hover-color) inset;
       }
 
       .typeSelection iron-icon {
-        width: var(--nuxeo-document-creation-form-icon-width, 42px);
-        height: var(--nuxeo-document-creation-form-icon-height, 42px);
+        width: var(--playing-document-creation-form-icon-width, 42px);
+        height: var(--playing-document-creation-form-icon-height, 42px);
         filter: brightness(1.5);
         -webkit-filter: brightness(1.5);
       }
@@ -111,13 +111,13 @@
       }
 
       .error {
-        border-left: 4px solid var(--nuxeo-warn-text);
-        color: var(--nuxeo-text-default);
+        border-left: 4px solid var(--mostly-warn-text);
+        color: var(--mostly-text-default);
         padding-left: 8px;
       }
 
       .suggester {
-        background-color: var(--nuxeo-dialog-buttons-bar);
+        background-color: var(--mostly-dialog-buttons-bar);
         padding: 8px 16px;
         margin: 1rem 0;
         z-index: 100;
@@ -389,7 +389,7 @@
         var fakeSubmit = document.createElement('input');
         fakeSubmit.setAttribute('type', 'submit');
         fakeSubmit.style.display = 'none';
-        // TODO: this breaks fields bound to multivalued nuxeo-directory-suggestion
+        // TODO: this breaks fields bound to multivalued playing-directory-suggestion
         /* form._form.appendChild(fakeSubmit);
         fakeSubmit.click();
         form._form.removeChild(fakeSubmit);

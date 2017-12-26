@@ -26,7 +26,7 @@
       }
 
       a {
-        @apply --nuxeo-link;
+        @apply --mostly-link;
       }
 
       .bubbleBox {
@@ -35,7 +35,7 @@
         position: relative;
         width: 220px;
         height: 260px;
-        background-color: var(--nuxeo-box);
+        background-color: var(--mostly-box);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);;
         padding: 0;
         filter: 0.1s ease-out, filter 0.1s ease-out;
@@ -47,7 +47,7 @@
       .bubbleBox:focus {
         cursor: pointer;
         z-index: 500;
-        border: 2px solid var(--nuxeo-link-hover-color);
+        border: 2px solid var(--mostly-link-hover-color);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);
       }
 
@@ -56,7 +56,7 @@
       }
 
       .bubbleBox:hover .title {
-        color: var(--nuxeo-link-hover-color);
+        color: var(--mostly-link-hover-color);
       }
 
       .thumbnailContainer {
@@ -80,7 +80,7 @@
         top: 1rem;
         left: 1rem;
         border: 2px solid #ddd;
-        background-color: var(--nuxeo-box);
+        background-color: var(--mostly-box);
         z-index: 2;
         border-radius: 3em;
       }
@@ -110,7 +110,7 @@
 
       .bubbleBox .actions {
         display: none;
-        background-color: var(--nuxeo-box);
+        background-color: var(--mostly-box);
         position: absolute;
         bottom: 0;
         left: 0;
@@ -119,11 +119,11 @@
       }
 
       .actions paper-icon-button iron-icon {
-        @apply --nuxeo-action;
+        @apply --mostly-action;
       }
 
       .actions paper-icon-button:hover iron-icon {
-        @apply --nuxeo-action-hover;
+        @apply --mostly-action-hover;
       }
 
       .bubbleBox:hover .actions,
@@ -133,15 +133,15 @@
       }
 
       .bubbleBox:hover .select:hover {
-        border: 2px solid var(--nuxeo-button-primary);
-        background-color: var(--nuxeo-button-primary);
+        border: 2px solid var(--mostly-button-primary);
+        background-color: var(--mostly-button-primary);
         cursor: pointer;
       }
 
       :host([selected]) .bubbleBox .select,
       :host([selected]) .bubbleBox:hover .select:hover {
-        border: 2px solid var(--nuxeo-grid-selected);
-        background-color: var(--nuxeo-grid-selected);
+        border: 2px solid var(--mostly-grid-selected);
+        background-color: var(--mostly-grid-selected);
         cursor: pointer;
         display: block;
       }
@@ -151,7 +151,7 @@
       }
 
       :host([selected]) .bubbleBox {
-        border: 2px solid var(--nuxeo-grid-selected);
+        border: 2px solid var(--mostly-grid-selected);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);
       }
 

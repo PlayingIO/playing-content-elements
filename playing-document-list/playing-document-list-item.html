@@ -32,7 +32,7 @@
         display: block;
         margin: 0 .4em .8em;
         position: relative;
-        background-color: var(--nuxeo-box);
+        background-color: var(--mostly-box);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);;
         padding: 0;
         filter: 0.1s ease-out, filter 0.1s ease-out;
@@ -43,7 +43,7 @@
       .listBox:hover,
       .listBox:focus {
         cursor: pointer;
-        border: 2px solid var(--nuxeo-link-hover-color);
+        border: 2px solid var(--mostly-link-hover-color);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);
       }
 
@@ -52,7 +52,7 @@
       }
 
       .listBox:hover .title {
-        color: var(--nuxeo-link-hover-color);
+        color: var(--mostly-link-hover-color);
       }
 
       .thumbnailContainer {
@@ -76,7 +76,7 @@
         top: 1rem;
         left: 1rem;
         border: 2px solid #ddd;
-        background-color: var(--nuxeo-box);
+        background-color: var(--mostly-box);
         z-index: 2;
         border-radius: 3em;
       }
@@ -106,7 +106,7 @@
 
       .listBox .actions {
         display: none;
-        background-color: var(--nuxeo-box);
+        background-color: var(--mostly-box);
         position: absolute;
         bottom: 0;
         left: 0;
@@ -116,11 +116,11 @@
       }
 
       .actions ::content paper-icon-button ::content iron-icon {
-        @apply --nuxeo-action;
+        @apply --mostly-action;
       }
 
       .actions ::content paper-icon-button:hover ::content iron-icon {
-        @apply --nuxeo-action-hover;
+        @apply --mostly-action-hover;
       }
 
       .listBox:hover .actions,
@@ -130,15 +130,15 @@
       }
 
       .listBox:hover .select:hover {
-        border: 2px solid var(--nuxeo-button-primary);
-        background-color: var(--nuxeo-button-primary);
+        border: 2px solid var(--mostly-button-primary);
+        background-color: var(--mostly-button-primary);
         cursor: pointer;
       }
 
       :host([selected]) .listBox .select,
       :host([selected]) .listBox:hover .select:hover {
-        border: 2px solid var(--nuxeo-grid-selected);
-        background-color: var(--nuxeo-grid-selected);
+        border: 2px solid var(--mostly-grid-selected);
+        background-color: var(--mostly-grid-selected);
         cursor: pointer;
         display: block;
       }
@@ -148,7 +148,7 @@
       }
 
       :host([selected]) .listBox {
-        border: 2px solid var(--nuxeo-grid-selected);
+        border: 2px solid var(--mostly-grid-selected);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);
       }
 
@@ -156,7 +156,7 @@
         width: var(--playing-document-creation-form-button-width, 128px);
         height: var(--playing-document-creation-form-button-height, 128px);
         box-shadow: none;
-        background-color: var(--nuxeo-dialog-buttons-bar);
+        background-color: var(--mostly-dialog-buttons-bar);
       }
 
       mostly-result-highlights {

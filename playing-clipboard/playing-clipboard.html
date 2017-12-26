@@ -27,7 +27,7 @@
 
       .content {
         @apply --layout-vertical;
-        height: calc(100vh - 61px - var(--nuxeo-app-top));
+        height: calc(100vh - 61px - var(--mostly-app-top));
       }
 
       mostly-data-list {
@@ -39,17 +39,17 @@
       .list-item {
         cursor: pointer;
         padding: 1em;
-        border-bottom: 1px solid var(--nuxeo-border);
+        border-bottom: 1px solid var(--mostly-border);
       }
 
       .list-item:hover {
-        @apply --nuxeo-block-hover;
+        @apply --mostly-block-hover;
       }
 
       .list-item.selected,
       .list-item:focus,
       .list-item.selected:focus {
-        @apply --nuxeo-block-selected;
+        @apply --mostly-block-selected;
       }
 
       .list-item-box {
@@ -75,13 +75,13 @@
 
       .list-item iron-icon {
         display: block;
-        @apply --nuxeo-action;
-        color: var(--nuxeo-drawer-text);
+        @apply --mostly-action;
+        color: var(--mostly-drawer-text);
       }
 
       .list-item iron-icon:hover {
-        @apply --nuxeo-action-hover;
-        color: var(--nuxeo-drawer-text);
+        @apply --mostly-action-hover;
+        color: var(--mostly-drawer-text);
       }
 
       .remove {
