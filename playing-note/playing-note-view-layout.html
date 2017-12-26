@@ -6,8 +6,13 @@
 <dom-module id="playing-note-view-layout">
 
   <template>
+    <style>
+      nuxeo-note-editor {
+        @apply --paper-card;
+      }
+    </style>
+
     <playing-content-editor role="widget" document="[[document]]" type="note"></playing-content-editor>
-    <playing-document-attachments role="widget" document="[[document]]"></playing-document-attachments>
   </template>
 
   <script>

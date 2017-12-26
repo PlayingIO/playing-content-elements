@@ -1,8 +1,13 @@
 <dom-module id="playing-file-view-layout">
 
   <template>
+    <style>
+      nuxeo-document-viewer {
+        @apply --paper-card;
+      }
+    </style>
+
     <playing-document-viewer role="widget" document="[[document]]"></playing-document-viewer>
-    <playing-document-attachments role="widget" document="[[document]]"></playing-document-attachments>
   </template>
 
   <script>

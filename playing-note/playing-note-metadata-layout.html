@@ -6,6 +6,31 @@
 <dom-module id="playing-note-metadata-layout">
 
   <template>
+    <style>
+      *[role=widget] {
+        margin-bottom: 16px;
+      }
+
+      label {
+        @apply --nuxeo-label;
+      }
+
+      div.multiline {
+        white-space: pre-line;
+      }
+
+      div {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        -o-hyphens: auto;
+        hyphens: auto;
+      }
+    </style>
+
     <div role="widget">
       <label>[[i18n('label.dublincore.title')]]</label>
       <div name="title">[[document.title]]</div>
@@ -46,6 +71,9 @@
       <label>[[i18n('noteMetadataLayout.format')]]</label>
       <div>[[formatMimeType(document.mimetype)]]</div>
     </div>
+
+    <playing-document-attachments role="widget" document="[[document]]"></playing-document-attachments>
+
   </template>
 
   <script>

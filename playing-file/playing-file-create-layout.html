@@ -6,6 +6,12 @@
 <dom-module id="playing-file-create-layout">
 
   <template>
+    <style>
+      *[role=widget] {
+        margin-bottom: 8px;
+      }
+    </style>
+
     <mostly-input role="widget"
             label="[[i18n('title')]]"
             name="title"
@@ -19,7 +25,10 @@
             value="{{document.description}}">
     </mostly-textarea>
 
-    <playing-dropzone role="widget" label="[[i18n('file.content')]]" document="[[document]]"></playing-dropzone>
+    <playing-dropzone role="widget"
+            label="[[i18n('file.content')]]"
+            name="content"
+            document="[[document]]"></playing-dropzone>
 
     <playing-vocabulary-suggestion role="widget" label="[[i18n('label.dublincore.nature')]]"
             name="nature"
