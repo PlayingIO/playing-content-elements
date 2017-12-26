@@ -1,7 +1,8 @@
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
-<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+
 <link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-data-list/mostly-data-list.html">
 <link rel="import" href="../playing-document-storage/playing-document-storage.html">
 <link rel="import" href="../playing-document-thumbnail/playing-document-thumbnail.html">
@@ -13,24 +14,16 @@
 -->
 <dom-module id="playing-recent-documents">
   <template>
-    <style>
+    <style include="mostly-styles">
 
       .content {
-        @apply(--layout-vertical);
+        @apply --layout-vertical;
       }
 
       mostly-data-list {
         display: block;
         position: relative;
-        min-height: calc(100vh - 61px)
-      }
-
-      .ellipsis {
-        display: inline-block;
-        width: 80%;
-        vertical-align: middle;
-        text-overflow: ellipsis;
-        overflow: hidden;
+        min-height: calc(100vh - 61px - var(--nuxeo-app-top))
       }
 
       .list-item {
@@ -39,23 +32,25 @@
         border-bottom: 1px solid var(--nuxeo-border);
       }
 
+      .list-item-title {
+        display: inline-block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      .list-item-info {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+      }
+
       .list-item:hover {
-        @apply(--nuxeo-block-hover);
+        @apply --nuxeo-block-hover;
       }
 
       .list-item.selected,
       .list-item:focus,
       .list-item.selected:focus {
-        @apply(--nuxeo-block-selected);
-      }
-
-      .list-item-detail {
-        margin-left: 40px;
-      }
-
-      .list-item-property {
-        opacity: .3;
-        margin-right: .2em;
+        @apply --nuxeo-block-selected;
       }
 
     </style>
@@ -67,15 +62,14 @@
       <mostly-data-list items="[[documents]]" id="recentDocumentsList" as="document"
               selected-item="{{selectedRecent}}" items="{{favorites}}"
               selection-enabled
+              select-on-tap
               empty-label="[[i18n('recentDocuments.empty')]]"
               empty-label-when-filtered="[[i18n('recentDocuments.empty')]]">
         <template>
           <div tabindex$="{{tabIndex}}" class$="[[_computedClass(selected)]]">
-            <div class="list-item-box vertical layout">
-              <div class="list-item-info horizontal layout center" >
-                <playing-document-thumbnail document="[[document]]"></playing-document-thumbnail>
-                <span class="list-item-title ellipsis">[[document.title]]</span>
-              </div>
+            <div class="list-item-info" >
+              <playing-document-thumbnail document="[[document]]"></playing-document-thumbnail>
+              <div class="list-item-title">[[document.title]]</div>
             </div>
           </div>
         </template>

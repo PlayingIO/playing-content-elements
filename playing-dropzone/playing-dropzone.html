@@ -1,12 +1,13 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-progress/paper-progress.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/mostly-icons.html">
 <link rel="import" href="../../mostly-elements/mostly-slots.html">
-<link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
-<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../playing-document/playing-document.html">
 <link rel="import" href="../behaviors/playing-uploader-behavior.html">
 
@@ -17,12 +18,7 @@
 -->
 <dom-module id="playing-dropzone">
   <template>
-    <style>
-      :host {
-        display: block;
-
-      }
-
+    <style include="nuxeo-styles">
       label.dragging {
         color: var(--paper-input-container-focus-color);
       }
@@ -33,10 +29,10 @@
       }
 
       #container {
-        @apply(--layout-vertical);
-        @apply(--layout-center);
-        @apply(--layout-flex);
-        @apply(--layout-center-justified);
+        @apply --layout-vertical;
+        @apply --layout-center;
+        @apply --layout-flex;
+        @apply --layout-center-justified;
         border-radius: 2px;
         border: 1px dashed var(--paper-input-container-color);
         min-height: 64px;
@@ -51,7 +47,7 @@
       #container .actions {
         text-align: center;
         opacity: .5;
-        @apply(--layout-horizontal);
+        @apply --layout-horizontal;
       }
 
       #details {
@@ -60,13 +56,13 @@
       }
 
       .file {
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
+        @apply --layout-horizontal;
+        @apply --layout-center;
       }
 
       .file .info {
-        @apply(--layout-vertical);
-        @apply(--layout-flex);
+        @apply --layout-vertical;
+        @apply --layout-flex;
       }
 
       .file .info .name {
@@ -101,7 +97,7 @@
     </style>
 
     <mostly-connection id="nx"></mostly-connection>
-    <playing-document id="doc" doc-id="[[document.id]]" data="{{document}}" enrichers="preview"></playing-document>
+    <playing-document id="doc" doc-id="[[document.id]]" enrichers="preview"></playing-document>
     <mostly-operation id="bulkAttach" path="documents" op="attachOnCurrentDocument"></mostly-operation>
 
     <label id="label" hidden$="[[!label]]">[[label]]</label>
@@ -183,6 +179,10 @@
         }
       },
 
+      observers: [
+        '_reset(document)'
+      ],
+
       listeners: {
         'batchFinished': 'importBatch',
         'nx-blob-picked': '_blobPicked'
@@ -253,6 +253,7 @@
             this.fire('notify', { message: this.uploadedMessage });
             this.progress = false;
             this._hasFiles = false;
+            this.fire('document-updated');
           });
         } else {
           this.fire('notify', { message: this.uploadedMessage });
@@ -261,19 +262,19 @@
       },
 
       _handleBlobListUploaded: function() {
-        return this.$.doc.get().then(response => {
-          var data = response.data;
-          this.document[this.xpath] = data[this.xpath];
-          this.notifyPath('document.' + this.xpath, this.document[this.xpath]);
-          this.fire('notify', { message: this.uploadedMessage });
-          this.progress = false;
-          this._hasFiles = false;
-        });
+        this.fire('notify', { message: this.uploadedMessage });
+        this.progress = false;
+        this._hasFiles = false;
+        this.fire('document-updated');
       },
 
       _deleteFile: function() {
-        this.$.input.value = '';
         this.document[this.xpath] = '';
+        this._reset();
+      },
+
+      _reset: function() {
+        this.$.input.value = '';
         this._hasFiles = false;
       },
 

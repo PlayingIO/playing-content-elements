@@ -1,7 +1,8 @@
 <link rel="import" href="../../polymer/polymer.html">
+
+<link rel="import" href="../playing-document-blob/playing-document-blob.html">
 <link rel="import" href="../playing-document/playing-document-preview.html">
 <link rel="import" href="../playing-dropzone/playing-dropzone.html">
-<link rel="import" href="../playing-document-blob/playing-document-blob.html">
 
 <!--
 `playing-document-viewer`
@@ -11,17 +12,16 @@
 <dom-module id="playing-document-viewer">
   <template>
 
-    <style>
-      :host {
-        display: block;
-      }
-
+    <style include="mostly-styles">
       playing-dropzone {
-        height: 60vh;
+        height: calc(80vh - 100px);
+        display: block;
       }
 
       playing-document-preview {
         width: 100%;
+        height: calc(80vh - 100px);
+        display: block;
       }
 
       playing-document-blob {
