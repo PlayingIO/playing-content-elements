@@ -246,7 +246,7 @@
         this.$.dropzone.addEventListener('dragover', this._dragoverImport.bind(this));
         this.$.dropzone.addEventListener('dragleave', this._dragleaveImport.bind(this));
         this.$.dropzone.addEventListener('drop', this._dropImport.bind(this));
-      },,
+      },
 
       attached: function() {
         this.sortOptions = [
@@ -258,7 +258,7 @@
           {field: 'nature', label: this.i18n('searchResults.sort.field.nature'), order: 'asc'},
           {field: 'coverage', label: this.i18n('searchResults.sort.field.coverage'), order: 'asc'}
         ];
-      }
+      },
 
       _observeDocument: function() {
         if (this.document) {
