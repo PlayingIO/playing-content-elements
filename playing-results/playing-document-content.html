@@ -68,7 +68,7 @@
             enrichers="thumbnail, permissions"
             page="[[pageNumber]]"
             params="[[params]]"
-            schemas="parent.**,*"
+            schemas="[[schemas]]"
             fetch-aggregates>
     </mostly-page-provider>
 
@@ -216,6 +216,10 @@
         pageSize: {
           type: Number,
           value: 40
+        },,
+        schemas: {
+          type: String,
+          value: 'parent.**,*'
         },
         currentIndex: {
           type: Number,

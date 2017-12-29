@@ -220,13 +220,23 @@ Example:
       },
 
       _computeVideoSources: function() {
-        if (this.document && this.document['vid:transcodedVideos']) {
-          return this.document['vid:transcodedVideos'].map(function(conversion) {
+        if (this.document && this.document['transcodedVideos']) {
+          return this.document['transcodedVideos'].map(function(conversion) {
             return {
               url: conversion.content.url,
               type: conversion.content.mimetype
             };
           });
+        }
+        // fallback to blob data if there are no transcoded videos (e.g. video documents managed by liveconnect)
+        if (this.xpath) {
+          this._updateBlob();
+          if (this._blob && this._blob['mime-type'].match('video.*')) {
+            return [{
+              data: this._blob.data,
+              type: this._blob['mime-type']
+            }];
+          }
         }
       },
 
