@@ -72,14 +72,12 @@
           </div>
 
           <!-- tags -->
-          <template is="dom-if" if="[[hasFacet(document, 'NXTag')]]">
-            <div class="section">
-              <h3>[[i18n('documentPage.tags')]]</h3>
-              <playing-tag-suggestion document="[[document]]" allow-new-tags
-                                    placeholder="[[i18n('documentPage.tags.placeholder')]]">
-              </playing-tag-suggestion>
-            </div>
-          </template>
+          <div class="section">
+            <h3>[[i18n('documentPage.tags')]]</h3>
+            <playing-tag-suggestion document="[[document]]" allow-new-tags
+                    placeholder="[[i18n('documentPage.tags.placeholder')]]">
+            </playing-tag-suggestion>
+          </div>
 
           <!-- activity -->
           <div class="section">
