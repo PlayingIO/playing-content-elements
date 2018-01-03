@@ -231,11 +231,7 @@ An element providing document permissions management
         },
         params: {
           type: Object,
-          value: {
-            "fetch.acls": "user,creator,extended",
-            "depth": "children",
-            "time": new Date().getTime()
-          }
+          value: null
         }
       },
 
@@ -247,7 +243,6 @@ An element providing document permissions management
       },
 
       refresh: function () {
-        this.params.time = new Date().getTime();
         this.$.doc.get();
       },
 
