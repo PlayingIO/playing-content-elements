@@ -100,7 +100,8 @@
         </mostly-data-grid>
 
         <!-- Table view -->
-        <mostly-data-table class="results" name="table" icon="mostly:view-list"
+        <mostly-data-table class="results" name="table"
+                icon="mostly:view-list"
                 settings-enabled
                 empty-label="[[emptyLabel]]"
                 empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
@@ -108,7 +109,7 @@
                 display-quick-filters
                 on-row-clicked="_navigate">
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.title')]]"
-                    field="title" sort-by="title" filter-by="title"  flex="100">
+                  field="title" sort-by="title" filter-by="title" flex="100">
             <template>
               <playing-document-thumbnail document="[[item]]"></playing-document-thumbnail>
               <a class="title ellipsis" href$="[[urlFor('browse', item.path)]]" on-tap="_navigate">[[item.title]]</a>
@@ -219,7 +220,7 @@
         },
         schemas: {
           type: String,
-          value: 'parent.**,*'
+          value: 'parent.**,creator.*,*'
         },
         currentIndex: {
           type: Number,

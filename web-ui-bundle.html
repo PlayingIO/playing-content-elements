@@ -74,7 +74,8 @@
 
 <mostly-slot-content name="documentViewPage" slot="DOCUMENT_VIEWS_PAGES" order="10">
   <template>
-    <mostly-filter document="[[document]]" expression="document.metadata.facets.indexOf('Folderish') === -1 && document.metadata.facets.indexOf('Collection') === -1">
+    <mostly-filter document="[[document]]" expression="document.metadata.facets.indexOf('Folderish') === -1
+                                                    && document.metadata.facets.indexOf('Collection') === -1">
       <template>
         <playing-document-page name="view" document="[[document]]"></playing-document-page>
       </template>

@@ -233,8 +233,14 @@
       ],
 
       _thumbnail: function(doc) {
-        return doc && doc.uid && doc.contextParameters && doc.contextParameters.thumbnail &&
-               doc.contextParameters.thumbnail.url ? doc.contextParameters.thumbnail.url : '';
+        if (doc && doc.id) {
+          if (doc.metadata && doc.metadata.thumbnail && doc.metadata.thumbnail.url) {
+            return doc.metadata.thumbnail.url;
+          }
+          if (doc.thumbnail && doc.thumbnail.url) {
+            return doc.thumbnail.url;
+          }
+        }
       },
 
       _docType: function() {
