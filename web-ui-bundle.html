@@ -119,32 +119,45 @@
 
 <!-- DOCUMENT ACTIONS -->
 
-<mostly-slot-content name="clipboardToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="50">
+<mostly-slot-content name="editDocumentAction" slot="DOCUMENT_ACTIONS" order="10">
+  <template>
+    <playing-document-edit-button document="[[document]]"></playing-document-edit-button>
+  </template>
+</mostly-slot-content>
+
+<mostly-slot-content name="clipboardToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="60">
   <template>
     <playing-clipboard-toggle-button document="[[document]]" clipboard="[[clipboard]]"></playing-clipboard-toggle-button>
   </template>
 </mostly-slot-content>
 
-<mostly-slot-content name="lockToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="60">
+<mostly-slot-content name="lockToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="70">
   <template>
     <playing-lock-toggle-button document="[[document]]"></playing-lock-toggle-button>
   </template>
 </mostly-slot-content>
 
-<mostly-slot-content name="previewDocumentAction" slot="DOCUMENT_ACTIONS" order="70">
+<mostly-slot-content name="previewDocumentAction" slot="DOCUMENT_ACTIONS" order="80">
   <template>
     <playing-preview-button document="[[document]]"></playing-preview-button>
   </template>
 </mostly-slot-content>
 
-<mostly-slot-content name="exportDocumentAction" slot="DOCUMENT_ACTIONS" order="80">
+<mostly-slot-content name="exportDocumentAction" slot="DOCUMENT_ACTIONS" order="90">
   <template>
     <playing-export-button document="[[document]]"></playing-export-button>
   </template>
 </mostly-slot-content>
 
 <!-- TODO: -->
-<mostly-slot-content name="workflowDocumentAction" slot="DOCUMENT_ACTIONS" order="90">
+<nuxeo-slot-content name="exportDocumentAction" slot="DOCUMENT_ACTIONS" order="100">
+  <template>
+    <playing-export-button document="[[document]]"></playing-export-button>
+  </template>
+</nuxeo-slot-content>
+
+<!-- TODO: -->
+<mostly-slot-content name="workflowDocumentAction" slot="DOCUMENT_ACTIONS" order="110">
   <template>
     <playing-workflow-button document="[[document]]"></playing-workflow-button>
   </template>
