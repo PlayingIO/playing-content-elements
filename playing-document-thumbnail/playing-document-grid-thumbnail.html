@@ -218,7 +218,11 @@
           if (doc.metadata && doc.metadata.thumbnail && doc.metadata.thumbnail.url) {
             return doc.metadata.thumbnail.url || '';
           }
+          if (doc.thumbnail && doc.thumbnail.url) {
+            return doc.thumbnail.url;
+          }
         }
+        return '';
       },
 
       _docType: function() {

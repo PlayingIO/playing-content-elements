@@ -53,7 +53,9 @@
           lastViewed: new Date()
         };
         if (doc.metadata && doc.metadata.thumbnail && doc.metadata.thumbnail.url) {
-          document.metadata = { thumbnail: { url: doc.metadata.thumbnail.url } }
+          document.metadata = {
+            thumbnail: { url: doc.metadata.thumbnail.url }
+          };
         }
         return this.unshift('documents', document);
       },
