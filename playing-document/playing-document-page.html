@@ -108,11 +108,9 @@
           </div>
 
           <!-- metadata -->
-          <paper-card>
-            <div class="section">
-              <playing-document-metadata document="[[document]]"></playing-document-metadata>
-            </div>
-          </paper-card>
+          <div class="section">
+            <playing-document-metadata document="[[document]]"></playing-document-metadata>
+          </div>
 
           <!-- collections -->
           <div class="section" hidden$="[[!_hasCollections(document)]]">
@@ -121,7 +119,7 @@
           </div>
 
           <!-- tags -->
-          <template is="dom-if" if="[[hasFacet(document, 'NXTag')]]">
+          <template is="dom-if" if="[[hasFacet(document, 'Tagable')]]">
             <div class="section">
               <h3>[[i18n('documentPage.tags')]]</h3>
               <playing-tag-suggestion document="[[document]]" allow-new-tags
