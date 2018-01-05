@@ -1,8 +1,11 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+
 <link rel="import" href="../../paper-card/paper-card.html">
 
 <link rel="import" href="../../mostly-elements/behaviors/mostly-format-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-data-table/iron-data-table.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-card.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-tag.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-date-picker.html">
@@ -17,64 +20,62 @@
 <dom-module id="playing-document-activity">
   <template>
     <style>
-      paper-input {
-        margin-left: 1em;
+      #heading {
+        @apply --layout-horizontal;
+        @apply --layout-end-justified;
+      }
+
+      #table {
+        height: calc(100vh - 370px);
       }
 
       mostly-data-table {
-        @apply --paper-card;
-        height: calc(100vh - 24em);
+        margin-left: 16px;
       }
     </style>
 
-    <playing-feed-page-provider id="provider" page-size="40" current-page="{{entries}}">
-    </playing-feed-page-provider>
+    <playing-feed-page-provider id="provider" page-size="40"></playing-feed-page-provider>
 
-    <paper-card class="layout horizontal end-justified flex">
-      <mostly-date-picker role="widget" label="[[i18n('documentActivity.filter.after')]]"
-                   value="{{startDate::change}}">
-      </mostly-date-picker>
-      <mostly-date-picker role="widget" label="[[i18n('documentActivity.filter.before')]]"
-                   value="{{endDate::change}}">
-      </mostly-date-picker>
-    </paper-card>
+    <nuxeo-card>
+      <div id="heading">
+        <mostly-date-picker role="widget" label="[[i18n('documentActivity.filter.after')]]" value="{{startDate}}">
+        </mostly-date-picker>
+        <mostly-date-picker role="widget" label="[[i18n('documentActivity.filter.before')]]" value="{{endDate}}">
+        </mostly-date-picker>
+      </div>
+    </nuxeo-card>
 
-    <mostly-data-table nx-provider="provider" empty-label="[[i18n('documentActivity.empty')]]">
-      <mostly-data-table-column name="[[i18n('documentActivity.verb')]]"
-        sort-by="verb">
-        <template>[[_formatActivity(item.verb)]]</template>
-      </mostly-data-table-column>
-      <mostly-data-table-column name="[[i18n('documentActivity.date')]]"
-        sort-by="createdAt">
-        <template><mostly-date datetime="[[item.createdAt]]"></mostly-date></template>
-      </mostly-data-table-column>
-      <mostly-data-table-column name="[[i18n('documentActivity.username')]]"
-        sort-by="actor">
-        <template><playing-user-tag user="[[item.actor.username]]"></playing-user-tag></template>
-      </mostly-data-table-column>
-      <mostly-data-table-column name="[[i18n('documentActivity.category')]]"
-        sort-by="category">
-        <template>[[_formatActivity(item.category)]]</template>
-      </mostly-data-table-column>
-      <mostly-data-table-column name="[[i18n('documentActivity.message')]]">
-        <template>[[item.message]]</template>
-      </mostly-data-table-column>
-      <mostly-data-table-column name="[[i18n('documentActivity.state')]]">
-        <template><mostly-tag uppercase>[[item.state]]</mostly-tag></template>
-      </mostly-data-table-column>
-    </mostly-data-table>
+    <nuxeo-card>
+      <mostly-data-table id="table" paginable nx-provider="provider" empty-label="[[i18n('documentActivity.empty')]]">
+        <mostly-data-table-column name="[[i18n('documentActivity.verb')]]" sort-by="verb">
+          <template>[[_formatActivity(item.verb)]]</template>
+        </mostly-data-table-column>
+        <mostly-data-table-column name="[[i18n('documentActivity.date')]]" sort-by="createdAt">
+          <template><mostly-date datetime="[[item.createdAt]]"></mostly-date></template>
+        </mostly-data-table-column>
+        <mostly-data-table-column name="[[i18n('documentActivity.username')]]" sort-by="actor">
+          <template><playing-user-tag user="[[item.actor.username]]"></playing-user-tag></template>
+        </mostly-data-table-column>
+        <mostly-data-table-column name="[[i18n('documentActivity.category')]]" sort-by="category">
+          <template>[[_formatActivity(item.category)]]</template>
+        </mostly-data-table-column>
+        <mostly-data-table-column name="[[i18n('documentActivity.message')]]">
+          <template>[[item.message]]</template>
+        </mostly-data-table-column>
+        <mostly-data-table-column name="[[i18n('documentActivity.state')]]">
+          <template><mostly-tag uppercase>[[formatLifecycleState(item.state)]]</mostly-tag></template>
+        </mostly-data-table-column>
+      </mostly-data-table>
+    </nuxeo-card>
 
   </template>
-</dom-module>
 
-<script>
-  (function() {
+  <script>
     Polymer({
       is: 'playing-document-activity',
       behaviors: [Mostly.FormatBehavior],
       properties: {
         document: Object,
-        response: Object,
         visible: {
           type: Boolean,
           value: false,
@@ -130,7 +131,7 @@
         if (this.document && this.visible) {
           this.$.provider.page = 1;
           this.$.provider.docId = this.document.id;
-          this.$.provider.fetch();
+          this.$.table.fetch();
         }
       },
 
@@ -139,5 +140,6 @@
       }
 
     });
-  })();
-</script>
+  </script>
+
+</dom-module>
