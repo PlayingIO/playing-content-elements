@@ -1,0 +1,101 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-routing-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-date.html">
+<link rel="import" href="../../playing-user-elements/widgets/playing-user-tag.html">
+
+<!--
+`playing-document-recent-activity`
+@group Playing UI
+@element playing-document-recent-activity
+-->
+<dom-module id="playing-document-recent-activity">
+  <template>
+    <style>
+      .row {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+      }
+
+      .value {
+        margin: 0 4px 7px;
+      }
+
+      .datetime {
+        opacity: .5;
+        margin-left: 3px;
+      }
+    </style>
+
+    <template is="dom-repeat" items="[[activities]]">
+      <div class="row">
+        <playing-user-tag user="[[item.principalName]]"></playing-user-tag>
+        <div class="value">
+          <span>[[_activity(item)]]</span>
+          <mostly-date class="datetime" datetime="[[item.createdAt]]" format="relative"></mostly-date>
+        </div>
+      </div>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-document-recent-activity',
+
+      behaviors: [Mostly.I18nBehavior, Mostly.RoutingBehavior],
+
+      properties: {
+        document: {
+          type: Object,
+          observer: '_documentChanged'
+        },
+
+        activities: {
+          type: Array,
+          value: []
+        }
+      },
+
+      _activity: function(event) {
+        return this.i18n('activity.' + event.verb);
+      },
+
+      _documentChanged: function() {
+        if (this.document && this.document.metadata && this.document.metadata.activities) {
+          this.activities = this._gatherDuplicatedActivities(this.document.metadata.activities);
+        }
+      },
+
+      /**
+       * Returns a copy of the given array with "repeated" gathered
+       */
+      _gatherDuplicatedActivities: function(original) {
+        var activities = original.slice();
+        for (var i = 0; i < activities.length - 1; i++) {
+          for (var j = i + 1;  j < activities.length; j++) {
+            if (this._areGatherableActivities(activities[i], activities[j])) {
+              activities.splice(j,1);
+              j--;  //After remove duplicated element, decrease j to keep same index
+
+            }
+          }
+        }
+        return activities;
+      },
+
+      /**
+       * Checks if two given activities are "gatherable".
+       * Activities are gatharable if they are both "download", have the same author
+       * and have less than 24 hours between them.
+       */
+      _areGatherableActivities: function(a, b){
+        var delta = new Date(a.eventDate) - new Date(b.eventDate);
+        delta = delta / 1000 / 60 / 60 ; //Converts ms to hours
+        return a.eventId === b.eventId
+            && a.eventId === 'download'
+            && a.principalName === b.principalName
+            && delta < 24;
+      }
+    });
+  </script>
+</dom-module>
