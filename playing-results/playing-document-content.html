@@ -130,8 +130,14 @@
               <mostly-date datetime="[[item.updatedAt]]"></mostly-date>
             </template>
           </mostly-data-table-column>
+          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.creator')]]"
+                  field="creator" sort-by="creator">
+            <template>
+              <playing-user-tag user="[[item.creator]]"></playing-user-tag>
+            </template>
+          </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.lastContributor')]]"
-                  filter-by="dc_last_contributor_agg" field="lastContributor" sort-by="lastContributor" flex="50">
+                  filter-by="dc_last_contributor_agg" field="lastContributor" sort-by="lastContributor" flex="50" hidden>
             <template is="header">
               <mostly-dropdown-aggregation
                       placeholder="[[i18n('documentContentView.datatable.header.lastContributor')]]"
@@ -157,12 +163,6 @@
                   field="createdAt" sort-by="createdAt" flex="50" hidden>
             <template>
               <mostly-date datetime="[[item.createdAt]]"></mostly-date>
-            </template>
-          </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.creator')]]"
-                  field="creator" sort-by="creator" hidden>
-            <template>
-              <playing-user-tag user="[[item.creator]]"></playing-user-tag>
             </template>
           </mostly-data-table-column>
           <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.nature')]]"
