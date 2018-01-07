@@ -186,7 +186,6 @@ Example:
         while (this.$.preview.firstChild) {
           this.$.preview.removeChild(this.$.preview.firstChild);
         }
-
         // lookup the preview according to the blob's mimetype
         var previewers = Polymer.dom(this.root).querySelectorAll('template');
         for (var i = 0; i < previewers.length; i++) {
@@ -194,6 +193,7 @@ Example:
           var regex = new RegExp(previewer.getAttribute('mime-pattern'));
           if (this._blob.mimetype && this._blob.mimetype.match(regex)) {
             // Insert our previewer
+            delete previewer.__templatizeOwner;
             this.templatize(previewer);
             var instance = this.stamp();
             this.$.preview.appendChild(instance.root);
@@ -227,16 +227,6 @@ Example:
               type: conversion.content.mimetype
             };
           });
-        }
-        // fallback to blob data if there are no transcoded videos (e.g. video documents managed by liveconnect)
-        if (this.xpath) {
-          this._updateBlob();
-          if (this._blob && this._blob['mime-type'].match('video.*')) {
-            return [{
-              data: this._blob.data,
-              type: this._blob['mime-type']
-            }];
-          }
         }
       },
 
