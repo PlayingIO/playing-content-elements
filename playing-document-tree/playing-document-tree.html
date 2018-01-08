@@ -151,7 +151,7 @@
         <template class="horizontal layout">
           <template class="flex" is="dom-if" if="[[!isLeaf]]">
             <paper-spinner active$=[[loading]]></paper-spinner>
-            <iron-icon icon="[[_expandIcon(opened)]]" toggle="" hidden$=[[loading]]></iron-icon>
+            <iron-icon icon="[[_expandIcon(opened)]]" toggle hidden$=[[loading]]></iron-icon>
           </template>
           <span class="node-name flex">
             <a href$="[[urlFor('browse', item.path)]]">[[_title(item)]]</a>
@@ -282,11 +282,12 @@
 
             for (var i = 0; i < entries.length - 1; i++) {
               var entry = entries[i];
-              if (!this.hasFacet(entry, 'HiddenInNavigation') && entry.path.startsWith(this.rootDocPath)) {
+              if (!this.hasFacet(entry, 'HiddenInNavigation')
+                  && entry.path.startsWith(this.rootDocPath)
+                  && entry.path !== '/') {
                 this.push('parents', entry);
               }
             }
-
           }
         }
       },
