@@ -45,7 +45,7 @@
 
 <mostly-slot-content name="documentViewItem" slot="DOCUMENT_VIEWS_ITEMS" order="10">
   <template>
-    <mostly-filter document="[[document]]" expression="!document.isVersion">
+    <mostly-filter document="[[document]]" expression="document && !document.isVersion">
       <template>
         <mostly-page-item name="view" label="browser.view"></mostly-page-item>
       </template>
@@ -74,7 +74,8 @@
 
 <mostly-slot-content name="documentViewPage" slot="DOCUMENT_VIEWS_PAGES" order="10">
   <template>
-    <mostly-filter document="[[document]]" expression="document.metadata.facets.indexOf('Folderish') === -1
+    <mostly-filter document="[[document]]" expression="document && document.metadata && document.metadata.facets
+                                                    && document.metadata.facets.indexOf('Folderish') === -1
                                                     && document.metadata.facets.indexOf('Collection') === -1">
       <template>
         <playing-document-page name="view" document="[[document]]"></playing-document-page>

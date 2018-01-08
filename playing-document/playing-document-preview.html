@@ -211,9 +211,10 @@ Example:
             return filteredViews[0].content.data;
           }
         }
+        // fallback to blob data if there are no image
         if (this.xpath) {
           this._updateBlob();
-          if (this._blob && this._blob.mimetype.match('image.*')) {
+          if (this._blob && this._blob.mimetype && this._blob.mimetype.match('image.*')) {
             return this._blob.url;
           }
         }
@@ -227,6 +228,16 @@ Example:
               type: conversion.content.mimetype
             };
           });
+        }
+        // fallback to blob data if there are no transcoded videos (e.g. video documents managed by liveconnect)
+        if (this.xpath) {
+          this._updateBlob();
+          if (this._blob && this._blob.mimetype && this._blob.mimetype.match('video.*')) {
+            return [{
+              data: this._blob.data,
+              type: this._blob['mime-type']
+            }];
+          }
         }
       },
 
