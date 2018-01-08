@@ -77,9 +77,7 @@
 
       downloadDocuments: function() {
         if (this.documents && this.documents.length) {
-          var uids = this.documents.map(function(doc) {
-            return doc.uid;
-          }).join(',');
+          var uids = this.documents.map(doc => doc.id).join(',');
           this.$.bulkDownloadOp.input = 'docs:' + uids;
           this.$.bulkDownloadOp.params = {
             "filename": this.filename ?
