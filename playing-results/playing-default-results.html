@@ -84,11 +84,17 @@
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.updatedAt')]]"
                 field="updatedAt" sort-by="updatedAt" flex="50">
           <template>
-            <mostly-date datetime="[[item.modified]]"></mostly-date>
+            <mostly-date datetime="[[item.updatedAt]]"></mostly-date>
+          </template>
+        </mostly-data-table-column>
+        <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.creator')]]"
+                field="creator" sort-by="creator" flex="50">
+          <template>
+            <playing-user-tag user="[[item.creator]]"></playing-user-tag>
           </template>
         </mostly-data-table-column>
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.lastContributor')]]"
-                field="lastContributor" sort-by="lastContributor" flex="50">
+                field="lastContributor" sort-by="lastContributor" hidden>
           <template>
             <playing-user-tag user="[[item.lastContributor]]"></playing-user-tag>
           </template>
@@ -107,12 +113,6 @@
                 field="createdAt" sort-by="createdAt" flex="50" hidden>
           <template>
             <mostly-date datetime="[[item.createdAt]]"></mostly-date>
-          </template>
-        </mostly-data-table-column>
-        <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.creator')]]"
-                field="creator" sort-by="creator" hidden>
-          <template>
-            <playing-user-tag user="[[item.creator]]"></playing-user-tag>
           </template>
         </mostly-data-table-column>
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.nature')]]"
