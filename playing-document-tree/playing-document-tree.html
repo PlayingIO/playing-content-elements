@@ -147,7 +147,7 @@
           </a>
         </template>
       </div>
-      <mostly-tree id="tree" data="[[document]]" controller="[[controller]]" node-key="uid">
+      <mostly-tree id="tree" data="[[document]]" controller="[[controller]]" node-key="id">
         <template class="horizontal layout">
           <template class="flex" is="dom-if" if="[[!isLeaf]]">
             <paper-spinner active$=[[loading]]></paper-spinner>
@@ -270,18 +270,18 @@
               return;
             }
 
-            var entries = doc.metadata.breadcrumbs;
-            if (entries && entries.length > 0) {
-              var lastEntry = entries[entries.length - 1];
-              if (this.hasFacet(lastEntry, 'Folderish') || entries.length === 1) {
-                this.docPath = lastEntry.path;
-              } else {
-                this.docPath = entries[entries.length - 2].path;
-              }
+            // breadcrubms not contains current document
+            var breadcrumbs = doc.metadata && doc.metadata.breadcrumbs;
+
+            // change docPath to _fetchDocument
+            if (this.hasFacet(doc, 'Folderish')) {
+              this.docPath = doc.path;
+            } else if (breadcrumbs && breadcrumbs.length > 0) {
+              this.docPath = breadcrumbs[breadcrumbs.length - 1].path;
             }
 
-            for (var i = 0; i < entries.length - 1; i++) {
-              var entry = entries[i];
+            for (var i = 0; breadcrumbs && i < breadcrumbs.length; i++) {
+              var entry = breadcrumbs[i];
               if (!this.hasFacet(entry, 'HiddenInNavigation')
                   && entry.path.startsWith(this.rootDocPath)
                   && entry.path !== '/') {
