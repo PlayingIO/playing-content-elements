@@ -67,6 +67,8 @@
 
       .file .info .name {
         font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .file .info .size {
@@ -238,9 +240,8 @@
         } else {
           var file = e.detail.blobs[e.detail.blobs.length - 1];
           this.document[this.xpath] = {
-            'providerId': file.providerId,
-            'user': file.user,
-            'fileId': file.fileId
+            'batch': data.detail.batchId,
+            'index': e.detail.blobs.length - 1
           };
           this._handleBlobUploaded();
         }
@@ -248,6 +249,10 @@
 
       _handleBlobUploaded: function() {
         if (this.updateDocument) {
+          this.$.doc.data = {
+            type: this.document.type,
+            [this.xpath]: this.document[this.xpath]
+          };
           this.$.doc.patch().then(response => {
             this.document = response.data;
             this.fire('notify', { message: this.uploadedMessage });

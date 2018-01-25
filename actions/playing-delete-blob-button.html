@@ -92,13 +92,11 @@ Example:
       },
 
       _params: function(doc, xpath) {
-        return {
-          context: {
-            currentDocument: doc.id,
-            documentType: doc.type
-          },
-          xpath: xpath
-        };
+        var context = doc? {
+          currentDocument: doc.id,
+          documentType: doc.type
+        } : null;
+        return { context, xpath };
       },
 
       _remove: function() {
