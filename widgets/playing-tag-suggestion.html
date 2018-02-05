@@ -8,7 +8,7 @@
 <!--
 `playing-tag-suggestion` allows selecting one or more tags.
 
-    <playing-tag-suggestion document="[[document]]"
+    <playing-tag-suggestion target="[[document]]"
       placeholder="Search for Tags"
       value="{{tags}}" allow-new-tags>
     </playing-user-suggestion>
@@ -55,15 +55,15 @@
     </mostly-selectivity>
 
     <mostly-operation id="addTagOp"
-            path="documents"
-            op="tagDocument"
-            input="[[document.id]]">
+            path="[[path]]"
+            op="tag"
+            input="[[target.id]]">
     </mostly-operation>
 
     <mostly-operation id="removeTagOp"
-            path="documents"
-            op="untagDocument"
-            input="[[document.id]]">
+            path="[[path]]"
+            op="untag"
+            input="[[target.id]]">
     </mostly-operation>
 
     <paper-toast id="toast"></paper-toast>
@@ -81,10 +81,15 @@
          */
         label: String,
 
-        document: {
+        target: {
           type: Object,
-          observer: '_observeDocument'
+          observer: '_observeTarget'
         },
+
+        /*
+         * Operation path
+         */
+        path: String,
 
         /*
          * Set to true for allowing to add new tags.
@@ -210,22 +215,22 @@
       },
 
       _addedTagHandler: function(entry) {
-        if (this.document) {
+        if (this.target) {
           this.$.addTagOp.params = { tags: [entry.id] };
           this.$.addTagOp.execute().then(() => {
             this.$.toast.hide();
-            this.$.toast.text = this.i18n('tags.addedToDocument', entry.id);
+            this.$.toast.text = this.i18n('tags.addedTo', entry.id);
             this.$.toast.open();
           });
         }
       },
 
       _removedTagHandler: function(entry) {
-        if (this.document) {
+        if (this.target) {
           this.$.removeTagOp.params = { tags: entry.id };
           this.$.removeTagOp.execute().then(() => {
             this.$.toast.hide();
-            this.$.toast.text = this.i18n('tags.removedFromDocument', entry.id);
+            this.$.toast.text = this.i18n('tags.removedFrom', entry.id);
             this.$.toast.open();
           });
         }
@@ -239,13 +244,13 @@
         );
       },
 
-      _observeDocument: function() {
-        if (this.document) {
-          if (this.document.tags) {
-            this.value = this.document.tags;
+      _observeTarget: function() {
+        if (this.target) {
+          if (this.target.tags) {
+            this.value = this.target.tags;
           } else {
             this.value = [];
-            console.warn("Cannot use playing-tag-element on a document that has no tag in its metadata. Make sure you use the 'tags' enricher to fetch the document");
+            console.warn("Cannot use playing-tag-element on a target that has no tag in its metadata. Make sure you use the 'tags' enricher to fetch the target");
           }
         } else {
           this.value = [];

@@ -121,9 +121,9 @@
           <!-- tags -->
           <template is="dom-if" if="[[hasFacet(document, 'Tagable')]]">
             <div class="section">
-              <h3>[[i18n('documentPage.tags')]]</h3>
-              <playing-tag-suggestion document="[[document]]" allow-new-tags
-                      placeholder="[[i18n('documentPage.tags.placeholder')]]">
+              <h3>[[i18n('playing.tags')]]</h3>
+              <playing-tag-suggestion path="documents" target="[[document]]" allow-new-tags
+                      placeholder="[[i18n('playing.tags.placeholder')]]">
               </playing-tag-suggestion>
             </div>
           </template>
