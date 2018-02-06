@@ -13,6 +13,7 @@
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-date-picker.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-input.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-textarea.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-select.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
@@ -70,11 +71,11 @@
             </div>
           </div>
           <div hidden$="{{!shareWithExternal}}">
-            <paper-input type="email" id="email"
+            <mostly-input type="email" id="email"
                     label="[[i18n('popupPermission.email')]]"
                     placeholder="name@company.com"
                     value="{{params.email}}"
-                    required auto-validate></paper-input>
+                    required auto-validate></mostly-input>
           </div>
         </div>
 
