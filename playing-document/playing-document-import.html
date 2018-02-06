@@ -6,6 +6,7 @@
 <link rel="import" href="../../iron-pages/iron-pages.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-progress/paper-progress.html">
 <link rel="import" href="../../paper-spinner/paper-spinner-lite.html">
@@ -36,6 +37,10 @@
         display: block;
         @apply --layout-flex;
         @apply --layout-horizontal;
+        --paper-dialog-scrollable: {
+          padding: 0;
+          overflow-x: hidden;
+        };
       }
 
       playing-path-suggestion {
@@ -46,6 +51,15 @@
 
       paper-spinner-lite {
         --paper-spinner-color: var(--default-primary-color);
+      }
+
+      paper-dialog-scrollable {
+        display: block;
+        @apply --layout-flex;
+      }
+
+      paper-dialog-scrollable:after {
+        height: 0;
       }
 
       .suggester {
@@ -82,10 +96,6 @@
         margin: 1em 2em 5em;
       }
 
-      .drop-scrollable {
-        overflow: auto;
-      }
-
       #form {
         padding: 0 32px;
       }
@@ -95,7 +105,7 @@
       }
 
       #blobEditor {
-        overflow-y: auto;
+        @apply --layout-flex-3;
       }
 
       #blobList {
@@ -110,10 +120,9 @@
         margin: 8px;
       }
 
-      .sidePanel {
-        overflow-y: scroll;
+      #sidePanel {
+        @apply --layout-flex;
         background: var(--playing-page-background);
-        width: 30%;
         min-width: 200px;
       }
 
@@ -333,7 +342,7 @@
             </div>
           </template>
           <template is="dom-if" if="[[hasFiles]]" restamp>
-            <div class="drop-scrollable">
+            <paper-dialog-scrollable>
               <div class="vertical layout flex">
                 <div class="horizontal layout wrap baseline">
                   <span class="dropzone-heading" hidden$="[[!_showDropzoneFileHeadings(hasLocalFiles,hasRemoteFiles)]]">
@@ -393,7 +402,7 @@
                   </template>
                 </div>
               </div>
-            </div>
+            <paper-dialog-scrollable>
             <div class="horizontal layout center end-justified" hidden$="!hasFiles">
               <div class="add-more horizontal layout center">
                 <a href="javascript:undefined" on-tap="_showUploadDialog">Add more files</a>
@@ -442,7 +451,7 @@
       <!--Stage: allow the user to fill in properties for the uploaded files and create the respective documents-->
       <div name="customize" class="vertical layout flex">
         <div class="horizontal layout flex">
-          <div id="blobEditor" class="vertical layout flex-3">
+          <paper-dialog-scrollable id="blobEditor">
             <div class="suggester">
               <playing-path-suggestion id="pathSuggesterCustomize"
                       label="[[i18n('documentImportForm.location')]]"
@@ -476,8 +485,8 @@
                 </template>
               </form>
             </iron-form>
-          </div>
-          <div class="sidePanel horizontal layout">
+          </paper-dialog-scrollable>
+          <paper-dialog-scrollable id="sidePanel">
             <div id="blobList" class="flex">
               <template is="dom-repeat" items="[[localFiles]]" as="file">
                 <paper-button noink class$="file-overview horizontal layout [[_selectedLocalDocStyle(index,docIdx)]]" on-tap="_tapLocalDoc">
@@ -516,7 +525,7 @@
               </template>
               <span class="horizontal layout error" hidden$="[[!_importWithPropertiesError]]">[[_importWithPropertiesError]]</span>
             </div>
-          </div>
+          </paper-dialog-scrollable>
         </div>
         <div class="buttons horizontal end-justified layout">
           <div class="flex start-justified">
