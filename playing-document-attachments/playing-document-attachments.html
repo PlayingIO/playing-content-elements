@@ -25,6 +25,12 @@
         border-top: 1px solid var(--mostly-border);
         padding: 8px 0;
       }
+
+      .empty {
+        opacity: .5;
+        padding-bottom: 8px;
+        font-size: 1.1em;
+      }
     </style>
 
     <h3><iron-icon icon="editor:attach-file"></iron-icon>[[i18n('documentAttachments.heading')]]</h3>
@@ -33,13 +39,19 @@
       <template is="dom-repeat" items="[[document.files]]">
         <playing-document-blob document="[[document]]" xpath="files/[[index]]"></playing-document-blob>
       </template>
+
+      <template is="dom-if" if="[[!_hasFiles(document)]]">
+        <div class="empty">[[i18n('documentAttachments.empty')]]</div>
+      </template>
     </div>
 
-    <playing-dropzone document="{{document}}"
-            xpath="files"
-            uploaded-message="[[i18n('documentAttachments.upload.uploaded')]]"
-            blob-list>
-    </playing-dropzone>
+    <template is="dom-if" if="[[_hasWritePermission(document)]]">
+      <playing-dropzone document="{{document}}"
+              xpath="files"
+              uploaded-message="[[i18n('documentAttachments.upload.uploaded')]]"
+              blob-list>
+      </playing-dropzone>
+    </template>
 
   </template>
 
@@ -49,6 +61,18 @@
       behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
       properties: {
         document: Object
+      },
+
+      _hasFiles: function(doc) {
+        return doc && doc.files && doc.files.length > 0;
+      },
+
+      _hasWritePermission: function (doc) {
+        return doc
+          && this.hasPermission(doc, 'Write')
+          && !this.isImmutable(doc)
+          && !(doc.type === 'folder' && doc.title == 'Root')
+          && doc.state !== 'deleted';
       }
     });
   </script>
