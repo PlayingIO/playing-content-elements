@@ -1,5 +1,8 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-image/iron-image.html">
 
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 <link rel="import" href="../playing-document-blob/playing-document-blob.html">
 <link rel="import" href="../playing-document/playing-document-preview.html">
 <link rel="import" href="../playing-dropzone/playing-dropzone.html">
@@ -13,25 +16,24 @@
   <template>
 
     <style include="mostly-styles">
-      playing-dropzone {
-        height: calc(80vh - 100px);
+      iron-image, playing-document-preview {
         display: block;
-      }
-
-      playing-document-preview {
         width: 100%;
         height: calc(80vh - 100px);
-        display: block;
       }
 
-      playing-document-blob {
+      playing-document-blob, playing-dropzone {
+        display: block;
         margin-top: 8px;
       }
     </style>
 
-    <playing-dropzone document="{{document}}" hidden$="[[document.file.url]]" update-document></playing-dropzone>
+    <iron-image position="center" sizing="contain" src="[[_thumbnail(document)]]" hidden$="[[document.file.url]]"></iron-image>
     <playing-document-preview document="[[document]]" hidden$="[[!document.file.url]]"></playing-document-preview>
     <playing-document-blob document="[[document]]" hidden$="[[!document.file.url]]"></playing-document-blob>
+    <template is="dom-if" if="[[_hasWritePermission(document)]]">
+      <playing-dropzone document="{{document}}" update-document replace></nuxeo-dropzone>
+    </template>
 
   </template>
 
@@ -40,9 +42,24 @@
 <script>
   Polymer({
     is: 'playing-document-viewer',
-    behaviors: [Mostly.I18nBehavior],
+
+    behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
+
     properties: {
       document: Object
+    },
+
+    _thumbnail: function(doc) {
+      return doc && doc.id
+        && doc.metadata && doc.metadata.thumbnail
+        && doc.metadata.thumbnail.url? doc.metadata.thumbnail.url : '';
+    },
+
+    _hasWritePermission: function (doc) {
+      return doc && this.hasPermission(doc, 'Write')
+        && !this.isImmutable(doc)
+        && !(doc.type === 'folder' && doc.title === 'Root')
+        && doc.state !== 'deleted';
     }
   });
 </script>

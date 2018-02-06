@@ -193,7 +193,7 @@ Example:
         for (var i = 0; i < previewers.length; i++) {
           var previewer = previewers[i];
           var regex = new RegExp(previewer.getAttribute('mime-pattern'));
-          if (regex.test(this._blob.mimetype && this._blob.mimetype)) {
+          if (regex.test(this._blob && this._blob.mimetype)) {
             // Insert our previewer
             delete previewer.__templatizeOwner;
             this.templatize(previewer);
