@@ -81,7 +81,7 @@ Example:
       <audio id="audio" controls><source src="[[_audioSource]]">AUDIO</audio>
     </template>
 
-    <template mime-pattern="text/(?:.*-)?markdown">
+    <template mime-pattern="text/(?:.*-)?(markdown|html)">
       <marked-element markdown="[[_blob.data]]">
         <div class="markdown-html"></div>
       </marked-element>
@@ -181,9 +181,7 @@ Example:
             this._blob = this.document && this._deepFind(this.document, this.xpath);
           }
           // update our previewer
-          if (this._blob) {
-            this._updatePreview();
-          }
+          this._updatePreview();
         }
       },
 
@@ -197,7 +195,7 @@ Example:
         for (var i = 0; i < previewers.length; i++) {
           var previewer = previewers[i];
           var regex = new RegExp(previewer.getAttribute('mime-pattern'));
-          if (this._blob.mimetype && this._blob.mimetype.match(regex)) {
+          if (regex.test(this._blob.mimetype && this._blob.mimetype)) {
             // Insert our previewer
             delete previewer.__templatizeOwner;
             this.templatize(previewer);
