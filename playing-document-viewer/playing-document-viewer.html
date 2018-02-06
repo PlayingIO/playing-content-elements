@@ -32,7 +32,8 @@
     <playing-document-preview document="[[document]]" hidden$="[[!document.file.url]]"></playing-document-preview>
     <playing-document-blob document="[[document]]" hidden$="[[!document.file.url]]"></playing-document-blob>
     <template is="dom-if" if="[[_hasWritePermission(document)]]">
-      <playing-dropzone document="{{document}}" update-document replace></nuxeo-dropzone>
+      <playing-dropzone document="{{document}}" update-document
+              message="[[_dropzoneMessage(document.file)]]"></nuxeo-dropzone>
     </template>
 
   </template>
@@ -60,6 +61,10 @@
         && !this.isImmutable(doc)
         && !(doc.type === 'folder' && doc.title === 'Root')
         && doc.state !== 'deleted';
+    },
+
+    _dropzoneMessage: function(data) {
+      return this.i18n(data ? 'dropzone.replace' : 'dropzone.add');
     }
   });
 </script>
