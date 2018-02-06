@@ -7,6 +7,7 @@
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 
 <!--
 A button element for deleting a file blob from a document.
@@ -52,7 +53,7 @@ Example:
   <script>
     Polymer({
       is: 'playing-delete-blob-button',
-      behaviors: [Mostly.I18nBehavior],
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
       properties: {
 
         /**
@@ -79,7 +80,8 @@ Example:
       },
 
       _isAvailable: function(doc) {
-        return doc;
+        return doc && this.hasPermission(doc, 'Write') && !this.isImmutable(doc) &&
+          doc.type !== 'Root' && doc.state !== 'deleted';
       },
 
       _toggleDialog: function() {
