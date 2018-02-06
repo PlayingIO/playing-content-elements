@@ -51,15 +51,18 @@
 
       _loadLayout: function (document, layout) {
         if (document) {
-          if (!this.previousDocument || (this.previousDocument && document.type === this.previousDocument.type)) {
+          if (!this.previousDocument || (document.type === this.previousDocument.type)) {
             this._model = {document: document};
+          }
+          if (!this.previousDocument || (document.id !== this.previousDocument.id)) {
+            this._href = null; // force layout restamp
           }
           var doctype = document.type.toLowerCase();
           var packages = document.metadata.packages;
           var folder = ['../..', packages, 'playing-' + doctype].join('/');
           var name = ['playing', doctype, layout, 'layout'].join('-');
           var url = folder + '/' + name + '.html';
-          console.log('>>> document-layout', url);
+          console.info('>>> document load layout', url);
           this._href = this.resolveUrl(url);
         }
         this.previousDocument = document;
