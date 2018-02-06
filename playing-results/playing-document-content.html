@@ -74,7 +74,10 @@
 
     <div id="dropzone">
 
-      <mostly-results id="results" name="[[document.id]]" nx-provider="[[nxProvider]]" selected-items="{{selectedItems}}">
+      <mostly-results id="results" name="[[document.id]]"
+              nx-provider="[[nxProvider]]"
+              selected-items="{{selectedItems}}"
+              document="[[document]]">
         <div slot="selectionActions">
           <mostly-slot slot="BROWSE_ACTIONS" model="[[browseActionContext]]"></mostly-slot>
         </div>
