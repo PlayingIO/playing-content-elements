@@ -64,7 +64,7 @@
 
     <div role="widget" hidden$="[[!document.expiredAt]]">
       <label>[[i18n('label.dublincore.expiredAt')]]</label>
-      <div name="expiredAt">[[formatDate(document.expiredAt)]]</div>
+      <mostly-date name="expiredAt" datetime="[[document.expiredAt]]"></mostly-date>
     </div>
 
     <div role="widget">
