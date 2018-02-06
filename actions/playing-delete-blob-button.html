@@ -80,8 +80,10 @@ Example:
       },
 
       _isAvailable: function(doc) {
-        return doc && this.hasPermission(doc, 'Write') && !this.isImmutable(doc) &&
-          doc.type !== 'Root' && doc.state !== 'deleted';
+        return doc && this.hasPermission(doc, 'Write')
+          && !this.isImmutable(doc)
+          && !(doc.type === 'folder' && doc.title === 'Root')
+          && doc.state !== 'deleted';
       },
 
       _toggleDialog: function() {

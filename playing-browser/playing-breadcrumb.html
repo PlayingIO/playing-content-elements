@@ -161,7 +161,8 @@
 
       _title: function(document) {
         if (document) {
-          return (document.type === 'Root') ? this.i18n('browse.root') : document.title;
+          return (document.type === 'folder' && document.title === 'Root')
+            ? this.i18n('browse.root') : document.title;
         }
       },
 

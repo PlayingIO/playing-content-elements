@@ -236,7 +236,8 @@
       },
 
       _hideRoot: function(doc) {
-        return this.rootDocPath !== '/' || (doc && doc.type === 'folder' && doc.title === 'Root');
+        return this.rootDocPath !== '/'
+          || (doc && doc.type === 'folder' && doc.title === 'Root');
       },
 
       _fetchDocument: function() {
@@ -311,7 +312,8 @@
       },
 
       _title: function(item) {
-        return (item.type === 'folder' && item.title === 'Root') ? this.i18n('browse.root') : item.title;
+        return (item.type === 'folder' && item.title === 'Root')
+          ? this.i18n('browse.root') : item.title;
       },
 
       removeDocuments: function(documentIds) {

@@ -65,7 +65,10 @@
       },
 
       _isAvailable: function(doc) {
-        return doc && doc.type !== 'Root' && this.hasPermission(doc, 'Write') && this._isMutable(doc);
+        return doc
+          && !(doc.type === 'folder' && doc.title === 'Root')
+          && this.hasPermission(doc, 'Write')
+          && this._isMutable(doc);
       },
 
       _isMutable: function(doc) {

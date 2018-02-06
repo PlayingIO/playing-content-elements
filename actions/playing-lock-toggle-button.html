@@ -92,7 +92,7 @@ Example:
         return doc && !doc.isVersion
           && this.document.metadata.facets.indexOf('Folderish') === -1
           && this.document.metadata.facets.indexOf('Immutable') === -1
-          && this.document.type !== 'root';
+          && !(document.type === 'folder' && document.title === 'Root');
       },
 
       _toggle: function() {

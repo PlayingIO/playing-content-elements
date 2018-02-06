@@ -149,7 +149,9 @@
       },
 
       _isMutable: function(doc) {
-        return !this.hasFacet(doc, 'Immutable') && doc.type !== 'Root' && doc.state !== 'deleted';
+        return !this.hasFacet(doc, 'Immutable')
+          && !(doc.type !== 'folder' && doc.title !== 'Root')
+          && doc.state !== 'deleted';
       },
 
       _hasCollections: function (doc) {
