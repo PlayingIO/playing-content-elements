@@ -95,17 +95,17 @@ An element providing document permissions management
       <template is="dom-if" if="[[_hasPermission(doc,'Everything')]]">
         <div class="actions">
           <template is="dom-if" if="[[_hasPermission(doc,'Everything')]]">
-            <template is="dom-if" if="[[!_empty(inheritedAces)]]">
+            <template is="dom-if" if="[[inheritedAces.length]]">
               <paper-button id="block" on-tap="blockInheritance">[[i18n('documentPermissions.block')]]</paper-button>
             </template>
-            <template is="dom-if" if="[[_empty(inheritedAces)]]">
+            <template is="dom-if" if="[[!inheritedAces.length]]">
               <paper-button id="unblock" on-tap="unblockInheritance">[[i18n('documentPermissions.unblock')]]</paper-button>
             </template>
           </template>
         </div>
       </template>
       <div class="content">
-        <div class="tips" hidden$="[[_empty(inheritedAces)]]">
+        <div class="tips" hidden$="[[!inheritedAces.length]]">
           [[i18n('documentPermissions.blockDescription')]]
         </div>
         <playing-document-acl-table doc="[[doc]]" aces="{{inheritedAces}}" acl-filter="_onlyInheritedAcls" show-actions="false">
@@ -209,10 +209,6 @@ An element providing document permissions management
       _hasPermission: function (doc, name) {
         var permissions = this.doc && this.doc.metadata && this.doc.metadata.permissions;
         return permissions && permissions.indexOf('Everything') !== -1;
-      },
-
-      _empty: function(arr) {
-        return arr.length === 0;
       },
 
       _excludeInheritedAcls: function (acl) {
