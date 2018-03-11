@@ -82,6 +82,15 @@ Element displaying a table with document ACLs.
       }
     </style>
 
+    <mostly-operation id="rmPermission"
+            path="documents"
+            op="removePermission"
+            input="{{doc.id}}"></mostly-operation>
+    <mostly-operation id="sendNotificationEmailPermissionOp"
+            path="documents"
+            op="sendNotificationEmailForPermission"
+            input="{{doc.id}}"></mostly-operation>
+
     <div hidden$="[[aces.length]]">
       <slot name=".emptyResult"></slot>
     </div>
@@ -163,15 +172,6 @@ Element displaying a table with document ACLs.
         </template>
       </div>
     </template>
-
-    <mostly-operation id="rmPermission"
-            path="documents"
-            op="removePermission"
-            input="{{doc.id}}"></mostly-operation>
-    <mostly-operation id="sendNotificationEmailPermissionOp"
-            path="documents"
-            op="sendNotificationEmailForPermission"
-            input="{{doc.id}}"></mostly-operation>
 
   </template>
 

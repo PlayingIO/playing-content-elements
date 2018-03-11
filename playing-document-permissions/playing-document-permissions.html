@@ -62,13 +62,22 @@ An element providing document permissions management
 
     </style>
 
+    <mostly-operation id="blockOp"
+            path="documents"
+            op="blockPermissionInheritance"
+            input="{{doc.id}}"></mostly-operation>
+    <mostly-operation id="unblockOp"
+            path="documents"
+            op="unblockPermissionInheritance"
+            input="{{doc.id}}"></mostly-operation>
+
     <paper-toast id="toast"></paper-toast>
 
     <playing-document id="doc" auto
             doc-id="{{docId}}"
             doc-path="{{docPath}}"
             document="{{doc}}"
-            enrichers="acls, permissions, userVisiblePermissions"
+            enrichers="acls,permissions,userVisiblePermissions"
             params="{{params}}"></playing-document>
 
     <!-- Local permissions -->
@@ -135,17 +144,6 @@ An element providing document permissions management
         </playing-document-acl-table>
       </div>
     </mostly-card>
-
-    <mostly-operation id="blockOp"
-            path="documents"
-            op="blockPermissionInheritance"
-            input="{{doc.id}}"></mostly-operation>
-    <mostly-operation id="unblockOp"
-            path="documents"
-            op="unblockPermissionInheritance"
-            input="{{doc.id}}"></mostly-operation>
-
-    <paper-toast id="toast"></paper-toast>
 
   </template>
 
