@@ -220,11 +220,11 @@ An element providing document permissions management
       },
 
       _excludeExternalUserAces: function (ace) {
-        return ace.granted && (ace.status === 'pending' || ace.status === 'effective') && !ace.externalUser;
+        return ace && (ace.status === 'pending' || ace.status === 'effective') && !ace.externalUser;
       },
 
       _onlyExternalUserAces: function (ace) {
-        return ace.granted && (ace.status === 'pending' || ace.status === 'effective') && ace.externalUser;
+        return ace && (ace.status === 'pending' || ace.status === 'effective') && ace.externalUser;
       },
 
       blockInheritance: function () {

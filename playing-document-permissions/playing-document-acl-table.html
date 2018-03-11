@@ -54,6 +54,17 @@ Element displaying a table with document ACLs.
         font-weight: bold;
       }
 
+      .ace-action-tag {
+        background-color: var(--mostly-secondary-color, #7e90a5);
+        border-radius: 3px;
+        color: #fff;
+        margin: 0 .2em .2em 0;
+        padding: .06em .3em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        @apply --mostly-tag;
+      }
+
       .buttons {
         @apply --buttons-bar;
       }
@@ -82,31 +93,41 @@ Element displaying a table with document ACLs.
           <div class="flex-2 tmp-tab">[[i18n('documentAclTable.right')]]</div>
           <div class="flex-2 tmp-tab">[[i18n('documentAclTable.timeFrame')]]</div>
           <div class="flex-2 tmp-tab">[[i18n('documentAclTable.grantedBy')]]</div>
-          <template is="dom-if" if="[[showActions]]">
-            <div class="flex-2 tmp-tab">[[i18n('documentAclTable.actions')]]</div>
-          </template>
+          <div class="flex-2 tmp-tab">[[i18n('documentAclTable.actions')]]</div>
         </div>
         <template is="dom-repeat" items="[[aces]]" as="ace" sort="_sortAces" strip-whitespace>
           <div class$="acl-table-row [[ace.status]]">
-            <div class="flex-2"><span class$="[[entityClass(ace.user)]]" title="[[entityTooltip(ace.user)]]">[[entityDisplay(ace.user)]]</span>
+            <div class="flex-2">
+                <span class$="[[entityClass(ace.user)]]" title="[[entityTooltip(ace.user)]]">[[entityDisplay(ace.user)]]</span>
             </div>
-            <div class="flex-2"><span class="label">[[i18n(ace.permission)]]</span></div>
-            <div class="flex-2"><span>{{formatTimeFrame(ace)}}</span></div>
-            <div class="flex-2"><span class$="[[entityClass(ace.creator)]]" title="[[entityTooltip(ace.creator)]]">[[entityDisplay(ace.creator)]]</span>
+            <div class="flex-2">
+              <template is="dom-repeat" items="[[ace.actions]]" as="action" sort="_sort" strip-whitespace>
+                <span class="ace-action-tag">[[action]]</span>
+              </template>
             </div>
-            <template is="dom-if" if="[[showActions]]">
-              <div class="flex-2">
+            <div class="flex-2">
+              <span>{{formatTimeFrame(ace)}}</span>
+            </div>
+            <div class="flex-2">
+              <span class$="[[entityClass(ace.creator)]]" title="[[entityTooltip(ace.creator)]]">[[entityDisplay(ace.creator)]]</span>
+            </div>
+            <div class="flex-2">
+
+              <template is="dom-if" if="[[showActions]]">
                 <playing-popup-permission
                         doc-id="{{doc.id}}"
                         ace="{{ace}}"
                         user-visible-permissions="{{doc.metadata.userVisiblePermissions}}"
                         share-with-external="[[shareWithExternal]]"></playing-popup-permission>
+
                 <template is="dom-if" if="[[shareWithExternal]]">
                   <paper-icon-button icon="mostly:send" on-tap="sendEmailExternalSharing"></paper-icon-button>
                 </template>
                 <paper-icon-button icon="mostly:delete" on-tap="_deleteAce"></paper-icon-button>
-                <playing-popup-confirm id="confirmation" delete-label="[[i18n('command.delete')]]"
-                  cancel-label="[[i18n('documentAclTable.cancel')]]">
+
+                <playing-popup-confirm id="confirmation"
+                        delete-label="[[i18n('command.delete')]]"
+                        cancel-label="[[i18n('documentAclTable.cancel')]]">
                   <div>
                     <h2>[[i18n('documentAclTable.deleteConfirmation')]]</h2>
                     <div class="acl-table">
@@ -117,18 +138,27 @@ Element displaying a table with document ACLs.
                         <div class="flex-2 tmp-tab">[[i18n('documentAclTable.grantedBy')]]</div>
                       </div>
                       <div class$="acl-table-row [[ace.status]]">
-                        <div class="flex-2"><span class$="[[entityClass(ace.user)]]" title="[[entityTooltip(ace.user)]]">[[entityDisplay(ace.user)]]</span>
+                        <div class="flex-2">
+                          <span class$="[[entityClass(ace.user)]]" title="[[entityTooltip(ace.user)]]">[[entityDisplay(ace.user)]]</span>
                         </div>
-                        <div class="flex-2"><span class="label">[[i18n(ace.permission)]]</span></div>
-                        <div class="flex-2"><span>{{formatTimeFrame(ace)}}</span></div>
-                        <div class="flex-2"><span class$="[[entityClass(ace.creator)]]" title="[[entityTooltip(ace.creator)]]">[[entityDisplay(ace.creator)]]</span>
+                        <div class="flex-2">
+                          <template is="dom-repeat" items="[[ace.actions]]" as="action" sort="_sort" strip-whitespace>
+                            <span class="ace-action-tag">[[action]]</span>
+                          </template>
+                        </div>
+                        <div class="flex-2">
+                          <span>{{formatTimeFrame(ace)}}</span>
+                        </div>
+                        <div class="flex-2">
+                          <span class$="[[entityClass(ace.creator)]]" title="[[entityTooltip(ace.creator)]]">[[entityDisplay(ace.creator)]]</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </playing-popup-confirm>
-              </div>
-            </template>
+              </template>
+
+            </div>
           </div>
         </template>
       </div>
@@ -218,7 +248,7 @@ Element displaying a table with document ACLs.
       },
 
       _aceFilter: function(ace) {
-        return ace.granted && (ace.status === 'pending' || ace.status === 'effective');
+        return ace && (ace.status === 'pending' || ace.status === 'effective');
       },
 
       _sortAces: function (a, b) {
@@ -231,6 +261,10 @@ Element displaying a table with document ACLs.
           var bBegin = moment(b.begin);
           return aBegin.isBefore(bBegin) ? -1 : 1;
         }
+      },
+
+      _sort: function(a, b) {
+        return a < b? -1 : 1;
       },
 
       _deleteAce: function (e, i) {

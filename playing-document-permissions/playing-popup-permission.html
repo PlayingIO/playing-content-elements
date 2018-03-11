@@ -83,7 +83,7 @@
         <div layout horizontal>
           <mostly-select name="right"
                   label="[[i18n('popupPermission.right')]]"
-                  selected="{{params.permission}}"
+                  selected="{{params.action}}"
                   options="[[userVisiblePermissions]]"></mostly-select>
         </div>
         <div>
@@ -266,7 +266,7 @@
           this.fire('aceCreated');
           this.set('params.user', null);
           this.set('params.email', null);
-          this.set('params.permission', 'Read');
+          this.set('params.actions', 'Read');
           this.set('params.begin', null);
           this.set('params.end', null);
           this.set('params.notify', true);
@@ -296,7 +296,7 @@
           var user = typeof ace.user === 'object'? ace.user.id : ace.user;
           params.user = user;
 
-          params.permission = ace.permission;
+          params.actions = ace.actions;
           params.notify = ace.notify;
           params.comment = ace.comment;
           var dateBased = false;
