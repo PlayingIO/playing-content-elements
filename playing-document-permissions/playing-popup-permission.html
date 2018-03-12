@@ -96,7 +96,7 @@
         <div layout horizontal>
           <mostly-select name="right"
                   label="[[i18n('popupPermission.right')]]"
-                  selected="{{params.action}}"
+                  selected="{{params.actions}}"
                   options="[[userVisiblePermissions]]"></mostly-select>
         </div>
         <div>
@@ -159,6 +159,7 @@
       </div>
     </mostly-dialog>
   </template>
+
 
   <script>
     Polymer({
@@ -293,9 +294,9 @@
 
       computeParams: function (ace, shareWithExternal) {
         var params = {
+          actions: 'Read',
           user: null,
           email: null,
-          permission: 'Read',
           begin: null,
           end: null,
           notify: true,
@@ -308,7 +309,7 @@
         }
 
         if (ace !== null) {
-          params.id = ace.id;
+          params.ace = ace.id;
           var user = typeof ace.user === 'object'? ace.user.id : ace.user;
           params.user = user;
 
