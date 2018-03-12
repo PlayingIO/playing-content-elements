@@ -271,8 +271,7 @@ Element displaying a table with document ACLs.
         var popup = e.currentTarget.parentElement.querySelector("playing-popup-confirm");
         popup.toggle(() => {
           this.$.rmPermission.params = {
-            permission: e.model.ace.permission,
-            user: e.model.ace.user.id
+            ace: e.model.ace.id
           };
           this.$.rmPermission.execute().then(() => {
             this.fire('aceDeleted');
