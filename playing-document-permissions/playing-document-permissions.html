@@ -73,7 +73,7 @@ An element providing document permissions management
 
     <paper-toast id="toast"></paper-toast>
 
-    <playing-document id="doc" auto
+    <playing-document id="doc"
             doc-id="{{docId}}"
             doc-path="{{docPath}}"
             document="{{doc}}"
@@ -170,6 +170,10 @@ An element providing document permissions management
         }
       },
 
+      observers: [
+        'refresh(docId, docPath)'
+      ],
+
       listeners: {
         'aceCreated': 'onACECreated',
         'aceUpdated': 'onACEUpdated',
@@ -177,8 +181,11 @@ An element providing document permissions management
         'notification': 'onNotification'
       },
 
-      refresh: function () {
-        this.$.doc.get();
+      refresh: function() {
+        if (this.docId || this.docPath) {
+          // this.params.time = new Date().getTime();
+          this.$.doc.get();
+        }
       },
 
       onACECreated: function() {

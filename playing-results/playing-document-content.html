@@ -65,7 +65,7 @@
             provider="[[provider]]"
             page-size="[[pageSize]]"
             aggregations="{{aggregations}}"
-            enrichers="thumbnail, permissions"
+            enrichers="thumbnail,permissions"
             page="[[pageNumber]]"
             params="[[params]]"
             schemas="[[schemas]]"
@@ -224,7 +224,7 @@
         },
         schemas: {
           type: String,
-          value: 'parent.**,creator.*,*'
+          value: 'creator,*'
         },
         currentIndex: {
           type: Number,
