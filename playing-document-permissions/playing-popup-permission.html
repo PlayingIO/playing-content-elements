@@ -10,13 +10,14 @@
 <link rel="import" href="../../paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../../paper-radio-group/paper-radio-group.html">
 
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-func-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-date-picker.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-input.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-textarea.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-select.html">
-<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../../playing-user-elements/widgets/playing-user-suggestion.html">
 
 <!-- Part of `playing-document-permissions`-->
@@ -34,8 +35,8 @@
         @apply --buttons-bar;
         margin-top: 2em;
       }
-
     </style>
+
     <mostly-operation id="createOp"
             path="documents"
             op="addPermission"
@@ -50,10 +51,10 @@
             on-response="handleResponse"></mostly-operation>
 
     <template is="dom-if" if="{{!updatingACE}}">
-      <paper-button on-tap="togglePopup" id="newPermissionButton">[[i18n('popupPermission.newPermission')]]</paper-button>
+      <paper-button id="newPermissionButton" on-tap="togglePopup">[[i18n('popupPermission.newPermission')]]</paper-button>
     </template>
     <template is="dom-if" if="{{updatingACE}}">
-      <paper-icon-button on-tap="togglePopup" icon="mostly:edit"></paper-icon-button>
+      <paper-icon-button icon="mostly:edit" on-tap="togglePopup"></paper-icon-button>
     </template>
 
     <mostly-dialog id="popupRight" with-backdrop no-auto-focus>
@@ -67,7 +68,19 @@
                 <playing-user-suggestion name="userGroup"
                         search-type="user-group"
                         label="[[i18n('popupPermission.userGroup')]]"
-                        value="{{params.user}}"></playing-user-suggestion>
+                        selected-item="{{selectedUserGroup}}"
+                        value="{{params.user}}">
+                </playing-user-suggestion>
+            </div>
+            <div hidden$="[[isEqual(selectedUserGroup.type, 'user')]]">
+                <mostly-select name="groupRole"
+                        label="[[i18n('popupPermission.role')]]"
+                        selected="{{params.role}}"
+                        attr-for-selected="name">
+                  <template is="dom-repeat" items="[[selectedUserGroup.roles]]" as="item">
+                    <paper-item name="[[item]]">[[item]]</paper-item>
+                  </template>
+                </mostly-select>
             </div>
           </div>
           <div hidden$="{{!shareWithExternal}}">
@@ -150,7 +163,7 @@
   <script>
     Polymer({
       is: 'playing-popup-permission',
-      behaviors: [Mostly.I18nBehavior],
+      behaviors: [Mostly.I18nBehavior, Mostly.FuncBehavior],
       properties: {
         docId: {
           type: String,
@@ -167,6 +180,9 @@
         params: {
           type: Object,
           computed: 'computeParams(ace, shareWithExternal)'
+        },
+        selectedUserGroup: {
+          type: Object
         },
         updatingACE: {
           type: Boolean,
