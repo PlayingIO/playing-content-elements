@@ -13,7 +13,7 @@ Element displaying a table with document ACLs.
 @element playing-popup-confirm
 -->
 <dom-module id="playing-document-acl-table">
-  <template>
+  <template include="mostly-styles">
     <style>
       .acl-table-headers {
         @apply --layout-horizontal;
@@ -77,8 +77,8 @@ Element displaying a table with document ACLs.
         text-align: center;
       }
 
-      .flex-2 {
-        @apply  --layout-flex-2;
+      .flex {
+        @apply  --layout-flex;
       }
     </style>
 
