@@ -98,29 +98,33 @@ Element displaying a table with document ACLs.
     <template is="dom-if" if="[[aces.length]]">
       <div class="acl-table">
         <div class="acl-table-headers">
-          <div class="flex-2 tmp-tab">[[i18n('documentAclTable.userGroup')]]</div>
-          <div class="flex-2 tmp-tab">[[i18n('documentAclTable.right')]]</div>
-          <div class="flex-2 tmp-tab">[[i18n('documentAclTable.timeFrame')]]</div>
-          <div class="flex-2 tmp-tab">[[i18n('documentAclTable.grantedBy')]]</div>
-          <div class="flex-2 tmp-tab">[[i18n('documentAclTable.actions')]]</div>
+          <div class="flex tmp-tab">[[i18n('documentAclTable.userGroup')]]</div>
+          <div class="flex tmp-tab">[[i18n('documentAclTable.role')]]</div>
+          <div class="flex tmp-tab">[[i18n('documentAclTable.right')]]</div>
+          <div class="flex tmp-tab">[[i18n('documentAclTable.timeFrame')]]</div>
+          <div class="flex tmp-tab">[[i18n('documentAclTable.grantedBy')]]</div>
+          <div class="flex tmp-tab">[[i18n('documentAclTable.actions')]]</div>
         </div>
         <template is="dom-repeat" items="[[aces]]" as="ace" sort="_sortAces" strip-whitespace>
           <div class$="acl-table-row [[ace.status]]">
-            <div class="flex-2">
+            <div class="flex">
                 <span class$="[[entityClass(ace.user)]]" title="[[entityTooltip(ace.user)]]">[[entityDisplay(ace.user)]]</span>
             </div>
-            <div class="flex-2">
+            <div class="flex">
+              <span>[[ace.role]]</span>
+            </div>
+            <div class="flex">
               <template is="dom-repeat" items="[[ace.actions]]" as="action" sort="_sort" strip-whitespace>
                 <span class="ace-action-tag">[[action]]</span>
               </template>
             </div>
-            <div class="flex-2">
-              <span>{{formatTimeFrame(ace)}}</span>
+            <div class="flex">
+              <span>[[formatTimeFrame(ace)]]</span>
             </div>
-            <div class="flex-2">
+            <div class="flex">
               <span class$="[[entityClass(ace.creator)]]" title="[[entityTooltip(ace.creator)]]">[[entityDisplay(ace.creator)]]</span>
             </div>
-            <div class="flex-2">
+            <div class="flex">
 
               <template is="dom-if" if="[[showActions]]">
                 <playing-popup-permission
