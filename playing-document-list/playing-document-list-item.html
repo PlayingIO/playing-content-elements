@@ -252,7 +252,7 @@
         if (this.selectionMode) {
           this._toogleSelect(e);
         } else if (!(e.ctrlKey || e.shiftKey || e.metaKey || e.button === 1)) {
-          this.fire('navigate', {item: this.doc, index: this.index});
+          this.fire('navigate', { item: this.doc, index: this.index });
         }
       },
 
