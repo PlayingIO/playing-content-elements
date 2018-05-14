@@ -92,7 +92,7 @@ Element displaying a table with document ACLs.
             input="{{doc.id}}"></mostly-operation>
 
     <div hidden$="[[aces.length]]">
-      <slot name=".emptyResult"></slot>
+      <slot name="emptyResult"></slot>
     </div>
 
     <template is="dom-if" if="[[aces.length]]">
