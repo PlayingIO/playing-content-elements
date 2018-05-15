@@ -109,7 +109,8 @@
 
     <playing-document-storage id="storage" name="playing-clipboard" documents="{{documents}}"></playing-document-storage>
 
-    <mostly-operation id="op" path="documents" input="[[targetDocument.id]]"
+    <mostly-operation id="op" path="documents"
+            input="[[targetDocument.id]]"
             params="[[_opParams(targetDocument)]]"></mostly-operation>
 
     <div class="header">[[i18n('app.clipboard')]]</div>
@@ -143,13 +144,13 @@
 
       <div class="toolbar">
         <div class="actions">
-          <paper-button id="paste" on-tap="execute" data-op="copyDocument"
+          <paper-button id="paste" on-tap="execute" data-op="clipboards/copyDocument"
                   disabled="[[!canPaste(documents, targetDocument)]]" noink class="primary clear">
             <iron-icon icon="mostly:copy"></iron-icon>
             [[i18n('clipboard.copy')]]
           </paper-button>
           <paper-tooltip for="paste">[[i18n('clipboard.copy')]]</paper-tooltip>
-          <paper-button id="move" on-tap="execute" data-op="moveDocument"
+          <paper-button id="move" on-tap="execute" data-op="clipboards/moveDocument"
                   disabled="[[!canPaste(documents, targetDocument)]]" noink class="primary clear">
             <iron-icon icon="mostly:move"></iron-icon>
             [[i18n('clipboard.move')]]
