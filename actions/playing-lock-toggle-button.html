@@ -35,12 +35,14 @@ Example:
     <mostly-connection id="nxcon"></mostly-connection>
 
     <mostly-operation id="opLock"
-            op="lockDocument"
             path="documents"
+            op="locks"
+            method="post"
             input="[[document.id]]"></mostly-operation>
     <mostly-operation id="opUnlock"
-            op="unlockDocument"
             path="documents"
+            op="locks/remove"
+            method="delete"
             input="[[document.id]]"></mostly-operation>
 
     <template is="dom-if" if="[[_isAvailable(document)]]">
