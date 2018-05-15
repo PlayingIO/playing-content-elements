@@ -56,14 +56,16 @@
 
     <mostly-operation id="addTagOp"
             path="[[path]]"
-            op="tag"
-            input="[[target.id]]">
+            op="tags"
+            input="[[target.id]]"
+            method="post">
     </mostly-operation>
 
     <mostly-operation id="removeTagOp"
             path="[[path]]"
-            op="untag"
-            input="[[target.id]]">
+            op="tags/null"
+            input="[[target.id]]"
+            method="delete">
     </mostly-operation>
 
     <paper-toast id="toast"></paper-toast>
