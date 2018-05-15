@@ -84,8 +84,9 @@ Element displaying a table with document ACLs.
 
     <mostly-operation id="rmPermission"
             path="documents"
-            op="removePermission"
-            input="{{doc.id}}"></mostly-operation>
+            op="permissions/remove"
+            input="{{doc.id}}"
+            method="delete"></mostly-operation>
     <mostly-operation id="sendNotificationEmailPermissionOp"
             path="documents"
             op="sendNotificationEmailForPermission"

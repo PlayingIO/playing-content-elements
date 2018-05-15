@@ -39,14 +39,16 @@
 
     <mostly-operation id="createOp"
             path="documents"
-            op="addPermission"
+            op="permissions"
             input={{docId}}
+            method="post"
             params={{params}}
             on-response="handleResponse"></mostly-operation>
     <mostly-operation id="replaceOp"
             path="documents"
-            op="replacePermission"
+            op="permissions/replace"
             input={{docId}}
+            method="patch"
             params={{params}}
             on-response="handleResponse"></mostly-operation>
 
