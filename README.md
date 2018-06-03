@@ -1,7 +1,7 @@
 Playing Content Web Components
 ==============================
 
-Content management web components for playful applications.
+Content management web components for building playful applications.
 
 # Usage
 
