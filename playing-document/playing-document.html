@@ -32,7 +32,8 @@ element.
             headers="{{headers}}"
             type="{{type}}"
             response="{{response}}"
-            schemas="[[schemas]]"></mostly-resource>
+            schemas="[[schemas]]"
+            sync-indexing$="[[syncIndexing]]"></mostly-resource>
   </template>
 </dom-module>
 
@@ -95,6 +96,11 @@ element.
        * All document schemas are returned by default.
        */
       schemas: {type: String, value: ''},
+
+      /**
+       * If true, documents changed by the call will be reindexed synchronously server side.
+       */
+      syncIndexing: Boolean,
 
       /**
        * True while requests are in flight.
