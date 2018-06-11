@@ -92,7 +92,7 @@ Example:
 
       _isAvailable: function(doc) {
         return doc && !doc.isVersion
-          && this.document.metadata.facets.indexOf('Folderish') === -1
+          && this.hasPermission(doc, 'Write')
           && this.document.metadata.facets.indexOf('Immutable') === -1
           && !(document.type === 'folder' && document.title === 'Root');
       },
