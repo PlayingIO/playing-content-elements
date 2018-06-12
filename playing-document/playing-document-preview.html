@@ -218,7 +218,7 @@ Example:
       },
 
       _computeImageSource: function() {
-        if (this.document && this.document['picture:views']) {
+        if (this.document && this.document['picture:views'] && this.xpath === 'file') {
           var filteredViews = this.document['picture:views'].filter(function(view) {
             return view.title === 'FullHD';
           });
