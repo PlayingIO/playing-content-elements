@@ -237,16 +237,20 @@ Example:
 
       _computeVideoSources: function() {
         if (this.document && this.document['transcodedVideos']) {
-          return this.document['transcodedVideos'].filter((conversion) => {
+          var conversions = [];
+          this.document['transcodedVideos'].forEach((conversion) => {
             if (conversion && conversion.content && conversion.content.data && conversion.content['mime-type']) {
-              return {
+              conversions.push({
                 url: conversion.content.url,
                 type: conversion.content.mimetype
-              };
+              });
             }
           });
+          return conversions;
         }
-        // fallback to blob data if there are no transcoded videos (e.g. video documents managed by liveconnect)
+
+        // fallback to blob data if there are no transcoded videos
+        // (e.g. video documents managed by liveconnect)
         if (this.xpath) {
           this._updateBlob();
           if (this._blob && this._blob.mimetype && this._blob.mimetype.match('video.*')) {
