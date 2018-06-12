@@ -237,11 +237,13 @@ Example:
 
       _computeVideoSources: function() {
         if (this.document && this.document['transcodedVideos']) {
-          return this.document['transcodedVideos'].map(function(conversion) {
-            return {
-              url: conversion.content.url,
-              type: conversion.content.mimetype
-            };
+          return this.document['transcodedVideos'].filter((conversion) => {
+            if (conversion && conversion.content && conversion.content.data && conversion.content['mime-type']) {
+              return {
+                url: conversion.content.url,
+                type: conversion.content.mimetype
+              };
+            }
           });
         }
         // fallback to blob data if there are no transcoded videos (e.g. video documents managed by liveconnect)
