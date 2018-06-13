@@ -36,6 +36,7 @@
             display-field="label"
             label="[[label]]"
             min-chars="[[minChars]]"
+            frequency="[[frequency]]"
             tagging$="[[allowNewTags]]"
             multiple
             params="[[params]]"
@@ -137,6 +138,11 @@
           type: Number,
           value: 1
         },
+
+        /**
+         * Time in ms used to debounce requests.
+         */
+        frequency: Number,
 
         /**
          * Placeholder.
