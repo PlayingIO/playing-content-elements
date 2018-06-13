@@ -31,7 +31,7 @@
 
     <mostly-selectivity id="s2"
             path="tags"
-            operation="find"
+            operation="[[operation]]"
             search-field="label"
             display-field="label"
             label="[[label]]"
@@ -83,6 +83,22 @@
          */
         label: String,
 
+        /**
+         * Operation to call for suggestions.
+         */
+        operation: {
+          type: String,
+          value: 'find'
+        },
+
+        /**
+         * Parameters for the operation.
+         */
+        params: Object,
+
+        /**
+         * The document to add / remove tags from.
+         */
         target: {
           type: Object,
           observer: '_observeTarget'
