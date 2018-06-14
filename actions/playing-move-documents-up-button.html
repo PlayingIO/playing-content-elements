@@ -120,7 +120,7 @@ A button element for moving documents up within an OrderedFolder.
           var sequenceBreakIdx;
           var isSequence = this._sortedDocuments.every((doc, idx) => {
             if (idx > 0) {
-              if (this._sortedDocuments[idx - 1].uid === this.documents[this.documents.indexOf(doc) - 1].uid) {
+              if (this._sortedDocuments[idx - 1].id === this.documents[this.documents.indexOf(doc) - 1].id) {
                 return true;
               } else {
                 sequenceBreakIdx = idx;
@@ -129,14 +129,14 @@ A button element for moving documents up within an OrderedFolder.
             }
             return true;
           });
-          if (this._sortedDocuments[0].uid === this.documents[0].uid) {
+          if (this._sortedDocuments[0].id === this.documents[0].id) {
             if (isSequence) return;
             this._focusIndex = this.documents.indexOf(this._sortedDocuments[0]) + 1;
             this._sortedDocuments.splice(0, sequenceBreakIdx);
           } else {
             this._focusIndex = this.documents.indexOf(this._sortedDocuments[0]) - 1;
           }
-          this._beforeUid = this.documents[this._focusIndex].uid;
+          this._beforeUid = this.documents[this._focusIndex].id;
           this._available = true;
         }
       }

@@ -33,8 +33,8 @@ Example:
       }
     </style>
 
-    <playing-operation id="deleteOp" op="Document.Delete" input="[[document.uid]]" sync-indexing></playing-operation>
-    <playing-operation id="trashOp" op="Document.Trash" input="[[document.uid]]" sync-indexing></playing-operation>
+    <playing-operation id="deleteOp" op="Document.Delete" input="[[document.id]]" sync-indexing></playing-operation>
+    <playing-operation id="trashOp" op="Document.Trash" input="[[document.id]]" sync-indexing></playing-operation>
 
     <template is="dom-if" if="[[_isAvailable(document)]]">
       <paper-icon-button icon="[[icon]]" on-tap="_delete" noink id="deleteButton"></paper-icon-button>
