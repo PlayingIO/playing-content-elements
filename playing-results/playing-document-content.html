@@ -90,7 +90,7 @@
                 empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
                 selection-enabled
                 display-quick-filters
-                display-sort
+                display-sort$="[[_canSort(document)]]"
                 sort-label="[[i18n('documentContentView.sort.label')]]"
                 sort-options="[[sortOptions]]">
           <template>
@@ -104,7 +104,8 @@
         </mostly-data-grid>
 
         <!-- Table view -->
-        <mostly-data-table class="results" name="table"
+        <mostly-data-table name="table"
+                class="results"
                 icon="mostly:view-list"
                 settings-enabled
                 empty-label="[[emptyLabel]]"
@@ -112,15 +113,21 @@
                 selection-enabled
                 display-quick-filters
                 on-row-clicked="_navigate">
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.title')]]"
-                  field="title" sort-by="title" filter-by="title" flex="100">
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.title')]]"
+                  field="title"
+                  sort-by="[[_displaySort(document, 'title')]]"
+                  filter-by="title"
+                  flex="100">
             <template>
               <playing-document-thumbnail document="[[item]]"></playing-document-thumbnail>
               <a class="title ellipsis" href$="[[urlFor('browse', item.path)]]" on-tap="_navigate">[[item.title]]</a>
             </template>
           </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.updatedAt')]]"
-                  field="updatedAt" sort-by="updatedAt"
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.updatedAt')]]"
+                  field="updatedAt"
+                  sort-by="[[_displaySort(document, 'updatedAt')]]"
                   filter-by="dc_modified_agg"
                   flex="50">
             <template is="header">
@@ -134,18 +141,25 @@
               <mostly-date datetime="[[item.updatedAt]]"></mostly-date>
             </template>
           </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.creator')]]"
-                  field="creator" sort-by="creator" flex="50">
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.creator')]]"
+                  field="creator"
+                  sort-by="[[_displaySort(document, 'creator')]]"
+                  flex="50">
             <template>
               <playing-user-tag user="[[item.creator]]"></playing-user-tag>
             </template>
           </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.lastContributor')]]"
-                  filter-by="dc_last_contributor_agg" field="lastContributor" sort-by="lastContributor" flex="50" hidden>
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.lastContributor')]]"
+                  filter-by="lastContributorAgg"
+                  field="lastContributor"
+                  sort-by="[[_displaySort(document, 'lastContributor')]]"
+                  flex="50" hidden>
             <template is="header">
               <mostly-dropdown-aggregation
                       placeholder="[[i18n('documentContentView.datatable.header.lastContributor')]]"
-                      data="[[aggregations.dc_last_contributor_agg]]"
+                      data="[[aggregations.lastContributorAgg]]"
                       value="{{column.filterValue}}" multiple>
               </mostly-dropdown-aggregation>
             </template>
@@ -153,23 +167,29 @@
               <playing-user-tag user="[[item.lastContributor]]"></playing-user-tag>
             </template>
           </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.state')]]"
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.state')]]"
                   field="currentLifeCycleState" hidden>
             <template><span class="capitalize">[[formatLifecycleState(item.state)]]</span></template>
           </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.version')]]"
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.version')]]"
                   field="versionLabel" hidden>
             <template>
               [[formatVersion(item)]]
             </template>
           </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.createdAt')]]"
-                  field="createdAt" sort-by="createdAt" flex="50" hidden>
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.createdAt')]]"
+                  field="createdAt"
+                  sort-by="[[_displaySort(document, 'createdAt')]]"
+                  flex="50" hidden>
             <template>
               <mostly-date datetime="[[item.createdAt]]"></mostly-date>
             </template>
           </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.nature')]]"
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.nature')]]"
                   field="nature" hidden>
             <template>
               <mostly-tag hidden$="[[!item.nature]]">
@@ -177,7 +197,8 @@
               </mostly-tag>
             </template>
           </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.coverage')]]"
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.coverage')]]"
                   field="coverage" hidden>
             <template>
               <mostly-tag hidden$="[[!item.coverage]]">
@@ -185,7 +206,8 @@
               </mostly-tag>
             </template>
           </mostly-data-table-column>
-          <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.subjects')]]"
+          <mostly-data-table-column
+                  name="[[i18n('documentContentView.datatable.header.subjects')]]"
                   field="subjects" hidden flex="60">
             <template>
               <template is="dom-repeat" items="[[item.subjects]]" as="subject">
@@ -271,7 +293,12 @@
 
       _observeDocument: function() {
         if (this.document) {
-          this.params = {'parent': this.document.id};
+          this.params = { 'parent': this.document.id };
+          if (this.hasType(this.document, 'orderedFolder')) {
+            this.$.nxProvider.set('sort', { 'position': 'ASC' });
+          } else {
+            this.$.nxProvider.set('sort', {});
+          }
         }
       },
 
@@ -292,6 +319,14 @@
           classes += ' selected';
         }
         return classes;
+      },
+
+      _canSort: function(document) {
+        return !(document && this.hasType(document, 'orderedFolder'));
+      },
+
+      _displaySort: function(document, field) {
+        return this._canSort(document) ? field : undefined;
       },
 
       _dragoverImport: function(e) {
