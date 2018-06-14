@@ -25,11 +25,12 @@
 
     <mostly-operation id="deleteOp" path="documents" op="remove" method="delete"></mostly-operation>
 
-    <paper-icon-button icon="mostly:delete" id="deleteAllButtons" disabled="[[!docsHavePermissions]]">
-    </paper-icon-button>
-    <paper-tooltip for="deleteAllButtons" id="deleteAllButtonsTooltip" position="[[tooltipPosition]]">
-      [[i18n('deleteDocumentsButton.tooltip')]]
-    </paper-tooltip>
+    <template is="dom-if" if="[[docsHavePermissions]]">
+      <paper-icon-button icon="mostly:delete" id="deleteAllButtons"></paper-icon-button>
+      <paper-tooltip for="deleteAllButtons" id="deleteAllButtonsTooltip" position="[[tooltipPosition]]">
+        [[i18n('deleteDocumentsButton.tooltip')]]
+      </paper-tooltip>
+    </template>
 
   </template>
 
