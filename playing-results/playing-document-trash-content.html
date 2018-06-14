@@ -15,7 +15,7 @@
 
 <!--
 `playing-document-trash-content`
-@group Nuxeo UI
+@group Playing UI
 @element playing-document-trash-content
 -->
 <dom-module id="playing-document-trash-content">
@@ -215,7 +215,7 @@
     Polymer({
       is: 'playing-document-trash-content',
 
-      behaviors: [Nuxeo.LayoutBehavior],
+      behaviors: [Mostly.LayoutBehavior],
 
       properties: {
         document: {
@@ -230,7 +230,7 @@
 
         provider: {
           type: String,
-          value: 'advanced_document_trash_content'
+          value: 'documents/trashes'
         },
 
         pageSize: {

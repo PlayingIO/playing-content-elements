@@ -128,12 +128,12 @@
                   name="[[i18n('documentContentView.datatable.header.updatedAt')]]"
                   field="updatedAt"
                   sort-by="[[_displaySort(document, 'updatedAt')]]"
-                  filter-by="dc_modified_agg"
+                  filter-by="updatedAtAgg"
                   flex="50">
             <template is="header">
               <mostly-dropdown-aggregation
                       placeholder="[[i18n('documentContentView.datatable.header.updatedAt')]]"
-                      data="[[aggregations.dc_modified_agg]]"
+                      data="[[aggregations.updatedAtAgg]]"
                       value="{{column.filterValue}}" multiple>
               </mostly-dropdown-aggregation>
             </template>
@@ -231,31 +231,38 @@
         document: {
           type: Object
         },
+
         params: {
           type: Object,
           value: {},
           notify: true
         },
+
         provider: {
           type: String,
           value: 'documents'
         },
+
         pageSize: {
           type: Number,
           value: 40
         },
+
         schemas: {
           type: String,
           value: 'creator,*'
         },
+
         currentIndex: {
           type: Number,
           notify: true
         },
+
         browseActionContext: {
           type: Object,
           computed: '_browseActionContext(document, selectedItems)'
         },
+
         sortOptions: {
           type: Array,
           value: []
@@ -281,13 +288,13 @@
 
       attached: function() {
         this.sortOptions = [
-          {field: 'title', label: this.i18n('searchResults.sort.field.title'), order: 'asc'},
-          {field: 'createdAt', label: this.i18n('searchResults.sort.field.createdAt'), order: 'asc', selected: true},
-          {field: 'updatedAt', label: this.i18n('searchResults.sort.field.updatedAt'), order: 'desc'},
-          {field: 'lastContributor', label: this.i18n('searchResults.sort.field.lastContributor'), order: 'asc'},
-          {field: 'state', label: this.i18n('searchResults.sort.field.state'), order: 'asc'},
-          {field: 'nature', label: this.i18n('searchResults.sort.field.nature'), order: 'asc'},
-          {field: 'coverage', label: this.i18n('searchResults.sort.field.coverage'), order: 'asc'}
+          { field: 'title', label: this.i18n('searchResults.sort.field.title'), order: 'asc' },
+          { field: 'createdAt', label: this.i18n('searchResults.sort.field.createdAt'), order: 'asc', selected: true },
+          { field: 'updatedAt', label: this.i18n('searchResults.sort.field.updatedAt'), order: 'desc' },
+          { field: 'lastContributor', label: this.i18n('searchResults.sort.field.lastContributor'), order: 'asc' },
+          { field: 'state', label: this.i18n('searchResults.sort.field.state'), order: 'asc' },
+          { field: 'nature', label: this.i18n('searchResults.sort.field.nature'), order: 'asc' },
+          { field: 'coverage', label: this.i18n('searchResults.sort.field.coverage'), order: 'asc' }
         ];
       },
 
