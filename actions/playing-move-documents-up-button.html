@@ -86,14 +86,14 @@ A button element for moving documents up within an OrderedFolder.
       ],
 
       move: function() {
-        this.$.moveUpOp.execute().then(function() {
+        this.$.moveUpOp.execute().then(() => {
           for (var i = this._sortedDocuments.length - 1; i >= 0; i--) {
             this.documents.splice(this.documents.indexOf(this._sortedDocuments[i]), 1);
             this.documents.splice(this._focusIndex, 0, this._sortedDocuments[i]);
           }
           this._sortedDocuments = [];
           this.fire('refresh-display', {'focusIndex': this._focusIndex});
-        }.bind(this)).catch(function() {
+        }).catch(function() {
           this.fire('notify', {'message': this.i18n('moveDocumentButton.error')});
         });
       },
@@ -104,20 +104,20 @@ A button element for moving documents up within an OrderedFolder.
           // Let's sort
           this._sortedDocuments = this.selectedDocuments.slice(0);
           try {
-            this._sortedDocuments.sort(function(a, b) {
+            this._sortedDocuments.sort((a, b) => {
               var idxa = this.documents.indexOf(a);
               var idxb = this.documents.indexOf(b);
               if (idxa < 0 || idxb < 0) {
                 throw new Error("Document is not in the list.");
               }
               return idxa - idxb;
-            }.bind(this));
+            });
           } catch(e) {
             this.fire('clear-selected-items');
             return;
           }
           var sequenceBreakIdx;
-          var isSequence = this._sortedDocuments.every(function(doc, idx) {
+          var isSequence = this._sortedDocuments.every((doc, idx) => {
             if (idx > 0) {
               if (this._sortedDocuments[idx - 1].uid === this.documents[this.documents.indexOf(doc) - 1].uid) {
                 return true;
@@ -127,11 +127,9 @@ A button element for moving documents up within an OrderedFolder.
               }
             }
             return true;
-          }.bind(this));
-          if (this._sortedDocuments[0].uid === this.documents[0].uid && isSequence) {
-            return;
-          }
-          if (!isSequence) {
+          });
+          if (this._sortedDocuments[0].uid === this.documents[0].uid) {
+            if (isSequence) return;
             this._focusIndex = this.documents.indexOf(this._sortedDocuments[0]) + 1;
             this._sortedDocuments.splice(0, sequenceBreakIdx);
           } else {
