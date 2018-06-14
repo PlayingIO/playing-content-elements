@@ -148,7 +148,11 @@
 
 <mostly-slot-content name="lockToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="70">
   <template>
-    <playing-lock-toggle-button document="[[document]]"></playing-lock-toggle-button>
+    <mostly-filter document="[[document]]" expression="document.metadata.facets.indexOf('Folderish') === -1">
+      <template>
+        <playing-lock-toggle-button document="[[document]]"></playing-lock-toggle-button>
+      </template>
+    </mostly-filter>
   </template>
 </mostly-slot-content>
 
