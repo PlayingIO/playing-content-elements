@@ -300,10 +300,11 @@
 
     <mostly-connection id="nx"></mostly-connection>
     <mostly-resource id="blobRemover"></mostly-resource>
-    <mostly-operation id="fileManagerImport" path="documents" op="importFiles"></mostly-operation>
+    <mostly-operation id="fileManagerImport" path="documents" op="importFiles" sync-indexing></mostly-operation>
     <playing-document id="docRequest"
             doc-path="[[targetPath]]"
             data="[[document]]"
+            sync-indexing
             headers='{"X-Batch-No-Drop": "true"}'
             response="{{createResponse}}"></playing-document>
     <playing-document id="parentFetcher"
@@ -1063,7 +1064,6 @@
           + this.remoteFiles.map(file => file.key).join();
         this.$.fileManagerImport.params = params;
         this.$.fileManagerImport.params.noMimeTypeCheck = true;
-        this.$.fileManagerImport.headers = {};
         return this.$.fileManagerImport.execute();
       },
 

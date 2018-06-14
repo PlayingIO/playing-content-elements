@@ -99,8 +99,13 @@
     </style>
 
     <mostly-connection id="nx"></mostly-connection>
-    <playing-document id="doc" doc-id="[[document.id]]" enrichers="preview"></playing-document>
-    <mostly-operation id="bulkAttach" path="documents" op="attachOnCurrentDocument"></mostly-operation>
+    <playing-document id="doc"
+            doc-id="[[document.id]]"
+            enrichers="preview"></playing-document>
+    <mostly-operation id="bulkAttach"
+            path="documents"
+            op="attachOnCurrentDocument"
+            sync-indexing></mostly-operation>
 
     <label id="label" hidden$="[[!label]]">[[label]]</label>
 

@@ -23,7 +23,11 @@
       }
     </style>
 
-    <mostly-operation id="deleteOp" path="documents" op="remove" method="delete"></mostly-operation>
+    <mostly-operation id="deleteOp"
+            path="documents"
+            op="remove"
+            method="delete"
+            sync-indexing></mostly-operation>
 
     <template is="dom-if" if="[[docsHavePermissions]]">
       <paper-icon-button icon="mostly:delete" id="deleteAllButtons"></paper-icon-button>
