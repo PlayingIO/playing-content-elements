@@ -180,6 +180,19 @@
 
 <!-- RESULT SELECTION ACTIONS -->
 
+<mostly-slot-content name="orderSelectionActions" slot="RESULTS_SELECTION_ACTIONS" order="-50">
+  <template>
+    <mostly-filter document="[[document]]" type="OrderedFolder">
+      <template>
+        <playing-move-documents-up-button selected-documents="[[selectedItems]]" documents="[[items]]">
+        </playing-move-documents-up-button>
+        <playing-move-documents-down-button selected-documents="[[selectedItems]]" documents="[[items]]">
+        </playing-move-documents-down-button>
+      </template>
+    </mostly-filter>
+  </template>
+</mostly-slot-content>
+
 <mostly-slot-content name="addToClipboardSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="20">
   <template>
     <playing-clipboard-bulk-button documents="[[selectedItems]]">
