@@ -104,7 +104,7 @@
             enrichers="preview"></playing-document>
     <mostly-operation id="bulkAttach"
             path="documents"
-            op="attachOnCurrentDocument"
+            op="attachOnDocument"
             sync-indexing></mostly-operation>
 
     <label id="label" hidden$="[[!label]]">[[label]]</label>
@@ -212,11 +212,9 @@
         data.stopPropagation();
         if (this.blobList) {
           this.batchExecute('blobs', 'attachOnDocument', {
-            useMainBlob: false,
-            context: {
-              currentDocument: this.document.id,
-              documentType: this.document.type
-            }
+            document: this.document.id,
+            documentType: this.document.type,
+            xpath: this.xpath
           }).then(this._handleBlobListUploaded.bind(this));
         } else {
           this.document[this.xpath] = {
