@@ -68,7 +68,12 @@
             fetch-aggregates>
     </mostly-page-provider>
 
-    <mostly-results id="results" display-mode="table" name="[[document.id]]-trashed" nx-provider="[[nxProvider]]" selected-items="{{selectedItems}}" document="[[document]]">
+    <mostly-results id="results"
+            display-mode="table"
+            name="[[document.id]]-trashed"
+            nx-provider="[[nxProvider]]"
+            selected-items="{{selectedItems}}"
+            document="[[document]]">
 
       <!-- Grid view -->
       <mostly-data-grid name="grid"
@@ -224,7 +229,7 @@
 
         params: {
           type: Object,
-          value: {},
+          value: { destroyedAt: null },
           notify: true
         },
 

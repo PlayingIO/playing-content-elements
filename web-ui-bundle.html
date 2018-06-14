@@ -78,9 +78,19 @@
   </template>
 </mostly-slot-content>
 
-<mostly-slot-content name="documentHistoryItem" slot="DOCUMENT_VIEWS_ITEMS" order="30">
+<mostly-slot-content name="documentActivityItem" slot="DOCUMENT_VIEWS_ITEMS" order="30">
   <template>
     <mostly-page-item name="activity" label="browser.activity"></mostly-page-item>
+  </template>
+</mostly-slot-content>
+
+<mostly-slot-content name="documentTrashItem" slot="DOCUMENT_VIEWS_ITEMS" order="40">
+  <template>
+    <mostly-filter document="[[document]]" facet="Folderish">
+      <template>
+        <mostly-page-item name="trash" label="browser.trash"></nuxeo-page-item>
+      </template>
+    </mostly-filter>
   </template>
 </mostly-slot-content>
 
@@ -106,6 +116,17 @@
 <mostly-slot-content name="documentActivityPage" slot="DOCUMENT_VIEWS_PAGES" order="30">
   <template>
     <playing-document-activity name="activity" document="[[document]]"></playing-document-activity>
+  </template>
+</mostly-slot-content>
+
+<mostly-slot-content name="documentTrashPage" slot="DOCUMENT_VIEWS_PAGES" order="40">
+  <template>
+    <mostly-filter document="[[document]]" facet="Folderish">
+      <template>
+        <playing-document-trash-content name="trash" document="[[document]]">
+        </playing-document-trash-content>
+      </template>
+    </mostly-filter>
   </template>
 </mostly-slot-content>
 
