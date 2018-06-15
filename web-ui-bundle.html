@@ -161,6 +161,12 @@
   </template>
 </mostly-slot-content>
 
+<mostly-slot-content name="deleteDocumentAction" slot="DOCUMENT_ACTIONS" order="15">
+  <template>
+    <playing-delete-document-button document="[[document]]"></playing-delete-document-button>
+  </template>
+</mostly-slot-content>
+
 <mostly-slot-content name="clipboardToggleDocumentAction" slot="DOCUMENT_ACTIONS" order="60">
   <template>
     <playing-clipboard-toggle-button document="[[document]]" clipboard="[[clipboard]]"></playing-clipboard-toggle-button>
