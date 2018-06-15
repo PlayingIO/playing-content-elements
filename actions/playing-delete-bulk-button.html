@@ -64,7 +64,7 @@
       },
 
       deleteDocuments: function() {
-        if (this.docsHavePermissions && confirm(this.i18n('deleteDocumentsButton.confirm.moveToTrash'))) {
+        if (this.docsHavePermissions && confirm(this.i18n('deleteDocumentsButton.confirm.deleteDocuments'))) {
           if (this.documents && this.documents.length) {
             var [id, ...more] = this.documents.map((doc) => doc.id);
             this.$.deleteOp.input = id;
