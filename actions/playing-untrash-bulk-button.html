@@ -1,0 +1,113 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-operation.html">
+<link rel="import" href="../../mostly-elements/mostly-icons.html">
+
+<!--
+`playing-untrash-bulk-actions`
+@group Playing UI
+@element playing-untrash-bulk-actions
+-->
+<dom-module id="playing-untrash-bulk-button">
+  <template>
+
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      iron-icon:hover {
+        fill: var(--mostly-link-hover-color);
+      }
+    </style>
+
+    <mostly-operation id="operation" path="documents" op="restore" sync-indexing></mostly-operation>
+
+    <template is="dom-if" if="[[_isAvailable(documents.splices)]]">
+      <paper-icon-button icon="mostly:restore-deleted" id="untrashAllButton"></paper-icon-button>
+      <paper-tooltip position="[[tooltipPosition]]">
+        [[i18n('untrashDocumentsButton.tooltip')]]
+      </paper-tooltip>
+    </template>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-untrash-bulk-button',
+
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
+
+      properties: {
+        documents: {
+          type: Array,
+          notify: true,
+          value: []
+        },
+
+        tooltipPosition: {
+          type: String,
+          value: 'bottom'
+        }
+      },
+
+      listeners: {
+        'tap': 'untrashDocuments'
+      },
+
+      untrashDocuments: function() {
+        if (this.docsHavePermissions && confirm(this.i18n('untrashDocumentsButton.confirm.untrashDocuments'))) {
+          if (this.documents && this.documents.length) {
+            var ids = this.documents.map(doc => doc.id).join(',');
+            this.$.operation.input = 'null';
+            this.$.operation.params = { more: ids };
+            var idsArray = this.documents.map(doc => doc.id);
+            this.$.operation.execute().then(() => {
+              this.fire('playing-documents-untrashed', { documentIds: idsArray });
+              this.documents = [];
+              this.fire('refresh');
+            }, (error) => {
+              this.fire('playing-documents-untrashed', { error: error,  documents: idsArray });
+            });
+          }
+        }
+      },
+
+      _isAvailable: function() {
+        return this.documents && this.documents.length > 0 && this._checkDocsPermissions()
+            && this._checkDocsAreTrashed();
+      },
+
+      _checkDocsAreTrashed: function() {
+        return this.documents.every((document) => {
+          return this.isTrashed(document);
+        });
+      },
+
+      /*
+       * Checks if all files in the selected documents have write permission.
+       */
+      _checkDocsPermissions: function() {
+        this.docsHavePermissions = !(this.documents.some((document) => {
+          return !this._docHasPermissions(document);
+        }));
+        return this.docsHavePermissions;
+      },
+
+      /*
+       * Checks if a single given document has write permissions
+       */
+      _docHasPermissions: function(document) {
+        return document && document.metadata && document.metadata.permissions
+          ? (document.metadata.permissions.indexOf('Write') > -1 ||
+             document.metadata.permissions.indexOf('Everything') > -1)
+          : false;
+      }
+    });
+  </script>
+
+</dom-module>
