@@ -1,4 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
@@ -23,6 +24,10 @@
   <template>
 
     <style include="mostly-styles">
+      :host {
+        display: block;
+      }
+
       mostly-data-table,
       mostly-data-grid,
       mostly-data-list {
@@ -69,7 +74,6 @@
             page="[[pageNumber]]"
             params="[[params]]"
             schemas="[[schemas]]"
-            auto$="[[visible]]"
             fetch-aggregates>
     </mostly-page-provider>
 
@@ -229,7 +233,9 @@
   <script>
     Polymer({
       is: 'playing-document-content',
-      behaviors: [Mostly.LayoutBehavior],
+
+      behaviors: [Mostly.LayoutBehavior, Mostly.IronResizableBehavior],
+
       properties: {
         document: {
           type: Object
@@ -269,15 +275,21 @@
         sortOptions: {
           type: Array,
           value: []
+        },
+
+        visible: {
+          type: Boolean,
+          value: false
         }
       },
 
       listeners: {
-        'document-created': '_handleDocumentCreated'
+        'document-created': '_handleDocumentCreated',
+        'iron-resize': '_computeVisible'
       },
 
       observers: [
-        '_refresh(params)',
+        '_refresh(params, visible)',
         '_observeDocument(document)'
       ],
 
@@ -313,7 +325,7 @@
       },
 
       _refresh: function() {
-        if (this.document && this.$.results.view) {
+        if (this.document && this.$.results.view && this.visible) {
           this.$.results.view.fetch();
         }
       },
@@ -371,6 +383,10 @@
 
       _browseActionContext: function() {
         return {document: this.document, selectedItems: this.selectedItems};
+      },
+
+      _computeVisible: function() {
+        this.visible = Boolean(this.offsetWidth || this.offsetHeight);
       }
 
     });
