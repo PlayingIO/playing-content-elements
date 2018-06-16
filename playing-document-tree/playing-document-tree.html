@@ -212,7 +212,7 @@
       ],
 
       ready: function() {
-        window.addEventListener('playing-documents-deleted', e => {
+        window.addEventListener('bulk-documents-deleted', e => {
           this.removeDocuments(e.detail.documentIds);
         });
 
