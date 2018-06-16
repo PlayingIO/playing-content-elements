@@ -1,9 +1,11 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../../mostly-elements/mostly-icons.html">
-<link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
+<link rel="import" href="../../mostly-elements/mostly-icons.html">
 
 <!--
 `playing-delete-bulk-button`
@@ -29,10 +31,10 @@
             method="delete"
             sync-indexing></mostly-operation>
 
-    <template is="dom-if" if="[[docsHavePermissions]]">
-      <paper-icon-button icon="mostly:delete" id="deleteAllButtons"></paper-icon-button>
-      <paper-tooltip for="deleteAllButtons" id="deleteAllButtonsTooltip" position="[[tooltipPosition]]">
-        [[i18n('deleteDocumentsButton.tooltip')]]
+    <template is="dom-if" if="[[_isAvailable(documents.splices)]]">
+      <paper-icon-button icon="[[_icon]]" id="deleteAllButton"></paper-icon-button>
+      <paper-tooltip for="deleteAllButton" id="deleteAllButtonsTooltip" position="[[tooltipPosition]]">
+        [[_tooltip]]
       </paper-tooltip>
     </template>
 
@@ -42,7 +44,7 @@
     Polymer({
       is: 'playing-delete-bulk-button',
 
-      behaviors: [Mostly.I18nBehavior],
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
 
       properties: {
         documents: {
@@ -51,13 +53,29 @@
           value: []
         },
 
+        /**
+         * Permanently delete the documents.
+         */
+        hard: {
+          type: Boolean,
+          value: false
+        },
+
         tooltipPosition: {
           type: String,
           value: 'bottom'
+        },
+
+        _icon: {
+          type: 'String',
+          computed: '_computeIcon(hard)'
+        },
+
+        _tooltip: {
+          type: 'String',
+          computed: '_computeTooltip(hard)'
         }
       },
-
-      observers : ['_checkDocsPermissions(documents.splices)'],
 
       listeners: {
         'tap': 'deleteDocuments'
@@ -69,32 +87,42 @@
             var [id, ...more] = this.documents.map((doc) => doc.id);
             this.$.deleteOp.input = id;
             if (more.length > 0) {
-              this.$.deleteOp.params = {
-                more: more.join(','),
-              };
+              this.$.deleteOp.params.more = more.join(',');
             }
-            this.$.deleteOp.params.$soft = true;
+            this.$.deleteOp.params.$soft = this.hard;
             this.$.deleteOp.execute().then(() => {
-              this.fire('playing-documents-deleted', { documentIds: [id, ...more] });
+              this.fire('bulk-documents-deleted', { documentIds: [id, ...more] });
               this.documents = [];
               this.fire('refresh');
-            }).catch((err) => {
-              this.fire('playing-documents-deleted-error', {
-                response: err.response,
-                documents: [id, ...more]
-              });
+            }).catch(error => {
+              this.fire('bulk-documents-deleted', { error: error, documentIds: [id, ...more] });
             });
           }
         }
+      },
+
+      /**
+       * Action is available if all selected items are not trashed and `hard` is not active OR if all selected items
+       * are trashed and `hard` is active.
+       */
+      _isAvailable: function() {
+        return this.documents && this.documents.length > 0 && this._checkDocsPermissions() &&
+          ((!this.hard && !this._checkDocsAreTrashed() || this.hard && this._checkDocsAreTrashed()));
+      },
+
+      /**
+       * Checks if all selected documents are trashed.
+       */
+      _checkDocsAreTrashed: function() {
+        return this.documents.every(document => this.isTrashed(document));
       },
 
       /*
        * Checks if all files in the selected documents have write permission.
        */
       _checkDocsPermissions: function() {
-        this.docsHavePermissions = !(this.documents.some((document) => {
-            return !this._docHasPermissions(document);
-          }));
+        this.docsHavePermissions = !this.documents.some(document => !this._docHasPermissions(document));
+        return this.docsHavePermissions;
       },
 
       /*
@@ -103,7 +131,16 @@
       _docHasPermissions: function(document) {
         return document && document.metadata && document.metadata.permissions
           ? (document.metadata.permissions.indexOf('Write') > -1 ||
-             document.metadata.permissions.indexOf('Everything') > -1) : false;
+             document.metadata.permissions.indexOf('Everything') > -1)
+          : false;
+      },
+
+      _computeIcon: function(hard) {
+        return hard? 'mostly:delete-permanently' : 'mostly:delete';
+      },
+
+      _computeTooltip: function(hard) {
+        return this.i18n(hard? 'deleteDocumentsButton.tooltip.permanently' : 'deleteDocumentsButton.tooltip');
       }
     });
   </script>
