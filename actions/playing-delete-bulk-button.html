@@ -129,10 +129,7 @@
        * Checks if a single given document has write permissions
        */
       _docHasPermissions: function(document) {
-        return document && document.metadata && document.metadata.permissions
-          ? (document.metadata.permissions.indexOf('Write') > -1 ||
-             document.metadata.permissions.indexOf('Everything') > -1)
-          : false;
+        return this.hasPermission(document, 'Write') || this.hasPermission(document, 'Everything');
       },
 
       _computeIcon: function(hard) {
