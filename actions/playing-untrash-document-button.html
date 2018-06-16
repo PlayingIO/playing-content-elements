@@ -30,7 +30,7 @@ Example:
       }
     </style>
 
-    <playing-operation id="operation" op="Document.Untrash" input="[[document.id]]" sync-indexing>
+    <playing-operation id="operation" path="documents" op="restore" input="[[document.id]]" sync-indexing>
     </playing-operation>
 
     <template is="dom-if" if="[[_isAvailable(document)]]">
