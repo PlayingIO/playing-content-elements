@@ -238,6 +238,18 @@
   </template>
 </mostly-slot-content>
 
+<mostly-slot-content name="hardDeleteSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="40">
+  <template>
+    <playing-delete-bulk-button documents="[[selectedItems]]" hard></playing-delete-bulk-button>
+  </template>
+</mostly-slot-content>
+
+<mostly-slot-content name="untrashSelectionAction" slot="RESULTS_SELECTION_ACTIONS" order="50">
+  <template>
+    <playing-untrash-bulk-button documents="[[selectedItems]]"></playing-untrash-bulk-button>
+  </template>
+</mostly-slot-content>
+
 <!-- BLOB ACTIONS -->
 
 <mostly-slot-content name="deleteBlobAction" slot="BLOB_ACTIONS" order="10">
