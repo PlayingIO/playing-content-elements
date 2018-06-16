@@ -4,7 +4,7 @@
 
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
-<link rel="import" href="../../mostly-elements/mostly-operation.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/mostly-icons.html">
 
 <!--
@@ -62,39 +62,35 @@
       untrashDocuments: function() {
         if (this.docsHavePermissions && confirm(this.i18n('untrashDocumentsButton.confirm.untrashDocuments'))) {
           if (this.documents && this.documents.length) {
-            var ids = this.documents.map(doc => doc.id).join(',');
-            this.$.operation.input = 'null';
-            this.$.operation.params = { more: ids };
-            var idsArray = this.documents.map(doc => doc.id);
+            var [id, ...more] = this.documents.map((doc) => doc.id);
+            this.$.operation.input = id;
+            if (more.length > 0) {
+              this.$.operation.params.more = more.join(',');
+            }
             this.$.operation.execute().then(() => {
-              this.fire('playing-documents-untrashed', { documentIds: idsArray });
+              this.fire('bulk-documents-untrashed', { documentIds: [id, ...more] });
               this.documents = [];
               this.fire('refresh');
             }, (error) => {
-              this.fire('playing-documents-untrashed', { error: error,  documents: idsArray });
+              this.fire('bulk-documents-untrashed', { error: error,  documents: [id, ...more] });
             });
           }
         }
       },
 
       _isAvailable: function() {
-        return this.documents && this.documents.length > 0 && this._checkDocsPermissions()
-            && this._checkDocsAreTrashed();
+        return this.documents && this.documents.length > 0 && this._checkDocsPermissions() && this._checkDocsAreTrashed();
       },
 
       _checkDocsAreTrashed: function() {
-        return this.documents.every((document) => {
-          return this.isTrashed(document);
-        });
+        return this.documents.every(document => this.isTrashed(document));
       },
 
       /*
        * Checks if all files in the selected documents have write permission.
        */
       _checkDocsPermissions: function() {
-        this.docsHavePermissions = !(this.documents.some((document) => {
-          return !this._docHasPermissions(document);
-        }));
+        this.docsHavePermissions = !this.documents.some(document => !this._docHasPermissions(document));
         return this.docsHavePermissions;
       },
 
