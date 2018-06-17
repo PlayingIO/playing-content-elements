@@ -694,15 +694,19 @@
             }, this);
             this.hasLocalFiles = this.localFiles && this.localFiles.length > 0;
             this.hasLocalFilesUploaded = false;
-          } else if (changeRecord.path.match(/files\.#\d+\.index/gi)) {
-            this.hasLocalFilesUploaded = this.hasLocalFiles && this.files && this.files.every(function(file) {
-              return !file || file.complete;
-            });
-            // hack: refresh complete on the dom repeat
-            var i = this.localFiles.findIndex(function(f) {
-              return f.index === this.get(changeRecord.path.replace('.index', '')).index;
-            }.bind(this));
-            this.notifyPath(['localFiles', i, 'complete'].join('.'), true);
+          } else {
+            var match = changeRecord.path.match(/(files\.\d+)\.(\w+)/);
+            if (match) {
+              // this is needed because the client doesn't account for removed blobs
+              var localFilesIdx = this.localFiles.indexOf(this.get(match[1]));
+              // hack: refresh on the dom repeat
+              this.notifyPath(['localFiles', localFilesIdx, match[2]].join('.'));
+              if (match[2] === 'complete') {
+                this.hasLocalFilesUploaded = this.hasLocalFiles && this.localFiles.every(file => {
+                  return !file || file.complete;
+                });
+              }
+            }
           }
         }
       },
@@ -1119,7 +1123,7 @@
           'fileId': file.fileId
         } : {
           'batch': this.batchId,
-          'index': file.index
+          'index': String(file.index)
         };
         return this.$.docRequest.post();
       },
