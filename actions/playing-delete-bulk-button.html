@@ -118,7 +118,7 @@
       },
 
       /*
-       * Checks if all files in the selected documents have write permission.
+       * Checks if all files in the selected documents have right permission.
        */
       _checkDocsPermissions: function() {
         this.docsHavePermissions = this.documents && !this.documents.some(document => !this._docHasPermissions(document));
@@ -126,10 +126,10 @@
       },
 
       /*
-       * Checks if a single given document has write permissions
+       * Checks if a single given document has 'Everything' permission to delete or 'Write' to trash
        */
       _docHasPermissions: function(document) {
-        return this.hasPermission(document, 'Write') || this.hasPermission(document, 'Everything');
+        return this.hasPermission(document, 'Everything') || (!this.hard && this.hasPermission(document, 'Write'));
       },
 
       _computeIcon: function(hard) {
