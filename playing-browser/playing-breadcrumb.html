@@ -57,7 +57,7 @@
         @apply --mostly-link;
       }
 
-      a,
+      .ancestors a,
       .breadcrumb-divider {
         opacity: .5;
         font-weight: 300;
@@ -67,7 +67,7 @@
         vertical-align: middle;
       }
 
-      a:hover {
+      .ancestors a:hover {
         color: var(--mostly-link-hover-color);
         opacity: 1;
       }
@@ -108,7 +108,9 @@
         <iron-icon src="[[_icon(document, url)]]"></iron-icon>
       </div>
       <div class="doc-path">
-        <div class="current breadcrumb-item breadcrumb-item-current">[[_title(document)]]</div>
+        <a href$="[[urlFor('browse', document.path)]]" class="current breadcrumb-item breadcrumb-item-current">
+          [[_title(document)]]
+        </a>
         <div class="ancestors">
           <template is="dom-repeat" items="[[_breadcrumb(document)]]">
             <span class$="breadcrumb-item [[_computeCssClass(index, document)]]">
