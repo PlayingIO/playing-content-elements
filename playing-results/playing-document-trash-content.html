@@ -1,8 +1,10 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../../paper-button/paper-button.html">
 
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-operation.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-page-provider.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-results.html">
 <link rel="import" href="../../mostly-elements/mostly-aggregation/mostly-dropdown-aggregation.html">
@@ -61,6 +63,12 @@
 
     <mostly-connection id="nxcon"></mostly-connection>
 
+    <mostly-operation id="opEmptyTrash"
+            path="documents"
+            op="emptyTrash"
+            params='{"parent": "[[document.id]]"}'
+            sync-indexing></mostly-operation>
+
     <mostly-page-provider id="nxProvider"
             provider="[[provider]]"
             page-size="[[pageSize]]"
@@ -78,6 +86,10 @@
             nx-provider="[[nxProvider]]"
             selected-items="{{selectedItems}}"
             document="[[document]]">
+
+      <div slot="actions">
+        <paper-button noink on-tap="_emptyTrash">[[i18n('documentTrashContent.emptyTrash')]]</paper-button>
+      </div>
 
       <!-- Grid view -->
       <mostly-data-grid name="grid"
@@ -284,6 +296,14 @@
           { field: 'updatedAt', label: this.i18n('searchResults.sort.field.updatedAt'), order: 'desc' },
           { field: 'lastContributor', label: this.i18n('searchResults.sort.field.lastContributor'), order: 'asc' }
         ];
+      },
+
+      _emptyTrash: function() {
+        this.$.opEmptyTrash.execute().then(() => {
+          this.fire('notify', {message: this.i18n('documentTrashContent.emptyTrash.success')});
+        }).catch(() => {
+          this.fire('notify', {message: this.i18n('documentTrashContent.emptyTrash.error')});
+        });
       },
 
       _observeDocument: function() {
