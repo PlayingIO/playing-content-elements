@@ -75,6 +75,7 @@
               selection-enabled
               display-quick-filters
               on-row-clicked="_navigate">
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.title')]]"
                 field="title" sort-by="title" flex="100">
           <template>
@@ -85,40 +86,53 @@
                     data-index="[[index]]">[[item.title]]</a>
           </template>
         </mostly-data-table-column>
+
+        <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.type')]]" field="type" hidden>
+          <template>
+            <mostly-tag>[[item.type]]</mostly-tag>
+          </template>
+        </mostly-data-table-column>
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.updatedAt')]]"
                 field="updatedAt" sort-by="updatedAt" flex="50">
           <template>
             <mostly-date datetime="[[item.updatedAt]]"></mostly-date>
           </template>
         </mostly-data-table-column>
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.creator')]]"
                 field="creator" sort-by="creator" flex="50">
           <template>
             <playing-user-tag user="[[item.creator]]"></playing-user-tag>
           </template>
         </mostly-data-table-column>
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.lastContributor')]]"
                 field="lastContributor" sort-by="lastContributor" hidden>
           <template>
             <playing-user-tag user="[[item.lastContributor]]"></playing-user-tag>
           </template>
         </mostly-data-table-column>
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.state')]]"
                 field="currentLifeCycleState" hidden>
           <template><span class="capitalize">[[formatLifecycleState(item.state)]]</span></template>
         </mostly-data-table-column>
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.version')]]"
                 field="versionLabel" hidden>
           <template>
             [[formatVersion(item)]]
           </template>
         </mostly-data-table-column>
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.createdAt')]]"
                 field="createdAt" sort-by="createdAt" flex="50" hidden>
           <template>
             <mostly-date datetime="[[item.createdAt]]"></mostly-date>
           </template>
         </mostly-data-table-column>
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.nature')]]"
                 field="nature" hidden>
           <template>
@@ -127,6 +141,7 @@
             </mostly-tag>
           </template>
         </mostly-data-table-column>
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.coverage')]]"
                 field="coverage" hidden>
           <template>
@@ -135,6 +150,7 @@
             </mostly-tag>
           </template>
         </mostly-data-table-column>
+
         <mostly-data-table-column name="[[i18n('documentContentView.datatable.header.subjects')]]"
                 field="subjects" hidden flex="60">
           <template>
@@ -143,8 +159,11 @@
             </template>
           </template>
         </mostly-data-table-column>
+
       </mostly-data-table>
+
     </mostly-results>
+
   </template>
   <script>
     Polymer({
