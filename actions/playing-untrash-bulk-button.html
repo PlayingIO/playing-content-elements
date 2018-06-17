@@ -90,7 +90,7 @@
        * Checks if all files in the selected documents have write permission.
        */
       _checkDocsPermissions: function() {
-        this.docsHavePermissions = !this.documents.some(document => !this._docHasPermissions(document));
+        this.docsHavePermissions = this.documents && !this.documents.some(document => !this._docHasPermissions(document));
         return this.docsHavePermissions;
       },
 
