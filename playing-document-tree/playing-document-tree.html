@@ -165,42 +165,54 @@
   <script>
     Polymer({
       is: 'playing-document-tree',
+
       behaviors: [Mostly.RoutingBehavior, Mostly.I18nBehavior, Mostly.FiltersBehavior],
+
       properties: {
         controller: Object,
+
         auto: {
           type: Boolean,
           value: false
         },
+
         rootDocPath: {
           type: String,
           value: '/',
           observer: '_rootDocPathChanged'
         },
+
         docPath: {
           type: String,
           value: '/'
         },
+
         document: {
           type: Object,
           observer: '_documentChanged'
         },
+
         currentDocument: {
           type: Object,
           observer: '_currentDocumentChanged'
         },
+
         parents: {
           type: Array,
           value: []
         },
+
         label: String,
+
         visible: {
           type: Boolean
         },
+
         cannotSee: {
           type: Boolean,
           value: false
         },
+
         _noPermission: {
           type: Boolean,
           value: false
@@ -214,6 +226,10 @@
       ready: function() {
         window.addEventListener('bulk-documents-deleted', e => {
           this.removeDocuments(e.detail.documentIds);
+        });
+
+        window.addEventListener('refresh-display', () => {
+          this._fetchDocument();
         });
 
         this.controller = {
