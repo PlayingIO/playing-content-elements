@@ -74,8 +74,11 @@
           <!-- tags -->
           <div class="section">
             <h3>[[i18n('playing.tags')]]</h3>
-            <playing-tag-suggestion path="documents" target="[[document]]" allow-new-tags
-                    placeholder="[[i18n('playing.tags.placeholder')]]">
+            <playing-tag-suggestion path="documents"
+                    target="[[document]]"
+                    allow-new-tags
+                    placeholder="[[i18n('playing.tags.placeholder')]]"
+                    readonly="[[!hasPermission(document, 'Write')]]">
             </playing-tag-suggestion>
           </div>
 
