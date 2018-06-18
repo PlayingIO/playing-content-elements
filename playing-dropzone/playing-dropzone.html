@@ -233,10 +233,8 @@
             + this.files.map(file => file.key).join();
           this.$.bulkAttach.params = {
             useMainBlob: false,
-            context: {
-              currentDocument: this.document.id,
-              documentType: this.document.type
-            },
+            document: this.document.id,
+            documentType: this.document.type,
             noMimeTypeCheck: true
           };
           this.$.bulkAttach.headers = {};

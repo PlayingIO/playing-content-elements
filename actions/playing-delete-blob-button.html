@@ -99,10 +99,10 @@ Example:
 
       _params: function(doc, xpath) {
         var context = doc? {
-          currentDocument: doc.id,
+          document: doc.id,
           documentType: doc.type
         } : null;
-        return { context, xpath };
+        return { ...context, xpath };
       },
 
       _remove: function() {
