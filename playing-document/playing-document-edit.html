@@ -92,7 +92,8 @@
         this.$.doc.patch().then(() => {
           this._refresh();
         }, () => {
-          this.fire('notify', {message: this.i18n('documentEdit.saveError')});
+          this.fire('notify', { message: this.i18n('documentEdit.saveError') });
+          console.error('Invalid _save response', response);
         });
       },
 

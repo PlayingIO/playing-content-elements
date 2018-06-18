@@ -336,8 +336,9 @@
             this._notify(response);
             this.set('creating', false);
           } else {
-            console.error('Invalid _create response', response);
             this.set('creating', false);
+            this.fire('notify', { message: this.i18n('documentCreationForm.createError') });
+            console.error('Invalid _create response', response);
           }
         });
       },
