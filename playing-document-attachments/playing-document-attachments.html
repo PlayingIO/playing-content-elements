@@ -36,8 +36,8 @@
     <h3><iron-icon icon="editor:attach-file"></iron-icon>[[i18n('documentAttachments.heading')]]</h3>
 
     <div class="vertical layout">
-      <template is="dom-repeat" items="[[document.files]]">
-        <playing-document-blob document="[[document]]" xpath="files/[[index]]"></playing-document-blob>
+      <template is="dom-repeat" items="[[_computeFiles(document, xpath)]]">
+        <playing-document-blob document="[[document]]" xpath="[[_computeBlobXpath(xpath, index)]]"></playing-document-blob>
       </template>
 
       <template is="dom-if" if="[[!_hasFiles(document)]]">
@@ -47,7 +47,7 @@
 
     <template is="dom-if" if="[[_hasWritePermission(document)]]">
       <playing-dropzone document="{{document}}"
-              xpath="files"
+              xpath="[[xpath]]"
               uploaded-message="[[i18n('documentAttachments.upload.uploaded')]]"
               blob-list>
       </playing-dropzone>
@@ -58,13 +58,20 @@
   <script>
     Polymer({
       is: 'playing-document-attachments',
+
       behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
+
       properties: {
-        document: Object
+        document: Object,
+
+        xpath: {
+          type: String,
+          value: 'files'
+        }
       },
 
       _hasFiles: function(doc) {
-        return doc && doc.files && doc.files.length > 0;
+        return doc && doc[this.xpath] && doc[this.xpath].length > 0;
       },
 
       _hasWritePermission: function (doc) {
@@ -73,6 +80,17 @@
           && !this.isImmutable(doc)
           && !(doc.type === 'folder' && doc.title == 'Root')
           && doc.state !== 'deleted';
+      },
+
+      _computeFiles: function() {
+        if (this._hasFiles(this.document)) {
+          return this.document[this.xpath];
+        }
+        return [];
+      },
+
+      _computeBlobXpath: function(xpath, index) {
+        return xpath + '/' + index;
       }
     });
   </script>
