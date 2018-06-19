@@ -28,9 +28,13 @@
       }
     </style>
 
-    <iron-image position="center" sizing="contain" src="[[_thumbnail(document)]]" hidden$="[[document.file.url]]"></iron-image>
-    <playing-document-preview document="[[document]]" hidden$="[[!document.file.url]]"></playing-document-preview>
-    <playing-document-blob document="[[document]]" hidden$="[[!document.file.url]]"></playing-document-blob>
+    <template is="dom-if" if="[[!document.file.url]]">
+      <iron-image position="center" sizing="contain" src="[[_thumbnail(document)]]"></iron-image>
+    </template>
+    <template is="dom-if" if="[[document.file.url]]">
+      <playing-document-preview document="[[document]]"></playing-document-preview>
+      <playing-document-blob document="[[document]]"></playing-document-blob>
+    </template>
     <template is="dom-if" if="[[_hasWritePermission(document)]]">
       <playing-dropzone document="{{document}}" update-document
               message="[[_dropzoneMessage(document.file)]]"></nuxeo-dropzone>
