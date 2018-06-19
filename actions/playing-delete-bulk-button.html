@@ -91,11 +91,11 @@
             }
             this.$.deleteOp.params.$soft = this.hard;
             this.$.deleteOp.execute().then(() => {
-              this.fire('bulk-documents-deleted', { documentIds: [id, ...more] });
+              this.fire('bulk-documents-deleted', { documents: this.documents });
               this.documents = [];
               this.fire('refresh');
             }).catch(error => {
-              this.fire('bulk-documents-deleted', { error: error, documentIds: [id, ...more] });
+              this.fire('bulk-documents-deleted', { error: error, documents: this.documents });
             });
           }
         }

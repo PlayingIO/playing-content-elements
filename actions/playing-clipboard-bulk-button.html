@@ -2,6 +2,7 @@
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-tooltip/paper-tooltip.html">
 
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 
 <!--
@@ -22,11 +23,13 @@
       }
     </style>
 
-    <paper-icon-button noink
-            id="clipboardButton"
-            icon="icons:content-paste">
-    </paper-icon-button>
-    <paper-tooltip for="clipboardButton" position="[[tooltipPosition]]">[[i18n('clipboardDocumentsButton.addToClipboard')]]</paper-tooltip>
+    <template is="dom-if" if="[[_isAvailable(documents.splices)]]">
+      <paper-icon-button noink
+              id="clipboardButton"
+              icon="icons:content-paste">
+      </paper-icon-button>
+      <paper-tooltip for="clipboardButton" position="[[tooltipPosition]]">[[i18n('clipboardDocumentsButton.addToClipboard')]]</paper-tooltip>
+    </template>
 
   </template>
 
@@ -34,7 +37,7 @@
     Polymer({
       is: 'playing-clipboard-bulk-button',
       
-      behaviors: [Mostly.I18nBehavior],
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
 
       properties: {
         documents: {
@@ -56,6 +59,12 @@
       addToClipBoard: function() {
         this.fire('add-to-clipboard', {documents: this.documents});
         this.fire ('clear-selected-items');
+      },
+
+      _isAvailable: function() {
+        return this.documents.every((doc) => {
+          return this.isCollectionMember(doc) && !this.isTrashed(doc);
+        });
       }
 
     });

@@ -225,7 +225,7 @@
 
       ready: function() {
         window.addEventListener('bulk-documents-deleted', e => {
-          this.removeDocuments(e.detail.documentIds);
+          this.removeDocuments(e.detail.documents);
         });
 
         window.addEventListener('refresh-display', () => {
@@ -332,8 +332,8 @@
           ? this.i18n('browse.root') : item.title;
       },
 
-      removeDocuments: function(documentIds) {
-        this.$.tree.removeNodes(documentIds);
+      removeDocuments: function(documents) {
+        this.$.tree.removeNodes(documents.map(doc => doc.id));
       }
     });
   </script>

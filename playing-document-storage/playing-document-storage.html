@@ -31,6 +31,7 @@
           type: String,
           value: 'playing-document-storage'
         },
+
         documents: {
           type: Array,
           notify: true
@@ -65,7 +66,10 @@
       },
 
       remove: function(doc) {
-        this.splice('documents', this._indexOf(doc), 1);
+        var index = this._indexOf(doc);
+        if (index !== -1) {
+          this.splice('documents', index, 1);
+        }
       },
 
       _indexOf: function(doc) {
