@@ -348,7 +348,7 @@
       _observeDocument: function() {
         if (this.document) {
           this.params = { 'parent': this.document.id };
-          if (this.hasType(this.document, 'orderedFolder')) {
+          if (this.hasFacet(this.document, 'Orderable')) {
             this.$.nxProvider.set('sort', { 'position': 'ASC' });
           } else {
             this.$.nxProvider.set('sort', {});
@@ -385,7 +385,7 @@
 
       _dragoverImport: function(e) {
         e.preventDefault();
-        this.fire('notify', {message: this.i18n('documentContentView.drag.import'), duration: 0});
+        this.fire('notify', { message: this.i18n('documentContentView.drag.import'), duration: 0 });
         this._toggleDragging(true);
       },
 
