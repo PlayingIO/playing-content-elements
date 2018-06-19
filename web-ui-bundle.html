@@ -105,6 +105,11 @@
         <playing-document-page name="view" document="[[document]]"></playing-document-page>
       </template>
     </mostly-filter>
+  </template>
+</mostly-slot-content>
+
+<mostly-slot-content name="documentCollapsiblePage" slot="DOCUMENT_VIEWS_PAGES" order="10">
+  <template>
     <mostly-filter document="[[document]]" facet="Folderish,Collection">
       <template>
         <playing-collapsible-document-page name="view" document="[[document]]"></playing-collapsible-document-page>
