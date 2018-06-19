@@ -251,16 +251,8 @@
         margin-left: 8px;
       }
 
-      .importActions > *,
-      .importActions::content > * {
+      .importActions > * {
         margin-left: 8px;
-      }
-
-      .importActions > *:first-child,
-      .importActions > mostly-slot,
-      .importActions::content > *:first-child,
-      .importActions::content > mostly-slot {
-        margin-left: 0;
       }
 
       @media (max-width: 1024px) {
@@ -331,7 +323,7 @@
                   [[i18n('documentImportForm.clickOrDrop')]]</a>
               </div>
               <span hidden$="[[!_hasVisibleContributions]]">[[i18n('documentImportForm.linkFilesFrom')]]</span>
-              <div class="importActions horizontal layout">
+              <div class="importActions horizontal layout wrap">
                 <mostly-slot slot="FILE_UPLOAD_ACTIONS" empty={{!hasContributions}}></mostly-slot>
               </div>
             </div>
