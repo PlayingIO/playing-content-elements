@@ -23,6 +23,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        cursor: pointer;
       }
 
       a {
@@ -45,7 +46,6 @@
 
       .bubbleBox:hover,
       .bubbleBox:focus {
-        cursor: pointer;
         z-index: 500;
         border: 2px solid var(--mostly-link-hover-color);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);
@@ -135,14 +135,12 @@
       .bubbleBox:hover .select:hover {
         border: 2px solid var(--mostly-button-primary);
         background-color: var(--mostly-button-primary);
-        cursor: pointer;
       }
 
       :host([selected]) .bubbleBox .select,
       :host([selected]) .bubbleBox:hover .select:hover {
         border: 2px solid var(--mostly-grid-selected);
         background-color: var(--mostly-grid-selected);
-        cursor: pointer;
         display: block;
       }
 
@@ -153,6 +151,10 @@
       :host([selected]) .bubbleBox {
         border: 2px solid var(--mostly-grid-selected);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);
+      }
+
+      :host(.droptarget-hover) .bubbleBox {
+        border: 2px dashed var(--mostly-grid-selected);
       }
 
     </style>

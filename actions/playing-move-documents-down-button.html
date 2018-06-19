@@ -93,9 +93,9 @@ A button element for moving documents down within an OrderedFolder.
             this.documents.splice(this._focusIndex, 0, this._sortedDocuments[i]);
           }
           this._sortedDocuments = [];
-          this.fire('refresh-display', {'focusIndex': this._focusIndex + 1});
+          this.fire('refresh-display', { 'focusIndex': this._focusIndex + 1 });
         }).catch(() => {
-          this.fire('notify', {'message': this.i18n('moveDocumentButton.error')});
+          this.fire('notify', { 'message': this.i18n('moveDocumentButton.error') });
         });
       },
 

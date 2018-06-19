@@ -1,6 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-layout-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-page-provider.html">
@@ -99,7 +100,9 @@
                 display-quick-filters
                 display-sort$="[[_canSort(document)]]"
                 sort-label="[[i18n('documentContentView.sort.label')]]"
-                sort-options="[[sortOptions]]">
+                sort-options="[[sortOptions]]"
+                draggable$="[[_hasWritePermission(document)]]"
+                drop-target-filter="[[_dropTargetFilter]]">
           <template>
             <playing-document-grid-thumbnail class="grid-box"
                     tabindex$="{{tabIndex}}"
@@ -119,7 +122,9 @@
                 empty-label-when-filtered="[[emptyLabelWhenFiltered]]"
                 selection-enabled
                 display-quick-filters
-                on-row-clicked="_navigate">
+                on-row-clicked="_navigate"
+                draggable$="[[_hasWritePermission(document)]]"
+                drop-target-filter="[[_dropTargetFilter]]">
 
           <mostly-data-table-column
                   name="[[i18n('documentContentView.datatable.header.title')]]"
@@ -250,7 +255,11 @@
     Polymer({
       is: 'playing-document-content',
 
-      behaviors: [Mostly.LayoutBehavior, Mostly.IronResizableBehavior],
+      behaviors: [
+        Mostly.LayoutBehavior,
+        Mostly.FiltersBehavior,
+        Mostly.IronResizableBehavior
+      ],
 
       properties: {
         document: {
@@ -296,6 +305,13 @@
         visible: {
           type: Boolean,
           value: false
+        },
+
+        _dropTargetFilter: {
+          type: Function,
+          value: function() {
+            return this._dropTargetFilter.bind(this);
+          }
         }
       },
 
@@ -403,6 +419,15 @@
 
       _computeVisible: function() {
         this.visible = Boolean(this.offsetWidth || this.offsetHeight);
+      },
+
+      // function used by nuxeo-data-grid and nuxeo-data-table to check if a list item is a drop target
+      _dropTargetFilter: function(el, model) {
+        return model && this.hasFacet(model.item, 'Folderish');
+      },
+
+      _hasWritePermission: function (doc) {
+        return doc && this.hasPermission(doc, 'Write');
       }
 
     });

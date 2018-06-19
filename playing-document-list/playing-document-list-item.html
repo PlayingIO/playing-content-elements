@@ -26,6 +26,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        cursor: pointer;
       }
 
       .listBox {
@@ -42,7 +43,6 @@
 
       .listBox:hover,
       .listBox:focus {
-        cursor: pointer;
         border: 2px solid var(--mostly-link-hover-color);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);
       }
@@ -132,14 +132,12 @@
       .listBox:hover .select:hover {
         border: 2px solid var(--mostly-button-primary);
         background-color: var(--mostly-button-primary);
-        cursor: pointer;
       }
 
       :host([selected]) .listBox .select,
       :host([selected]) .listBox:hover .select:hover {
         border: 2px solid var(--mostly-grid-selected);
         background-color: var(--mostly-grid-selected);
-        cursor: pointer;
         display: block;
       }
 
@@ -150,6 +148,10 @@
       :host([selected]) .listBox {
         border: 2px solid var(--mostly-grid-selected);
         box-shadow: 0 3px 5px rgba(0,0,0,0.04);
+      }
+
+      :host(.droptarget-hover) .listBox {
+        border: 2px dashed var(--mostly-grid-selected);
       }
 
       .typeSelection paper-button {
