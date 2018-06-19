@@ -19,6 +19,10 @@
 <dom-module id="playing-dropzone">
   <template>
     <style include="mostly-styles">
+      label {
+        margin-bottom: 8px;
+      }
+
       label.dragging {
         color: var(--paper-input-container-focus-color);
       }
@@ -53,6 +57,7 @@
       #details {
         border: 1px solid var(--mostly-border);
         padding: 16px;
+        margin-bottom: 8px;
       }
 
       .file {
@@ -107,18 +112,11 @@
             op="attachOnDocument"
             sync-indexing></mostly-operation>
 
-    <label id="label" hidden$="[[!label]]">[[label]]</label>
+    <template is="dom-if" if="[[label]]">
+      <label id="label">[[label]]</label>
+    </template>
 
     <input hidden id="input" type="file" on-change="_filesChanged">
-
-    <div id="dropzone" hidden$="[[_hasFiles]]">
-      <div id="container">
-        <a href="javascript:undefined" on-tap="open">[[message]]</a>
-        <div class="actions">
-          <mostly-slot slot="FILE_UPLOAD_ACTIONS"></mostly-slot>
-        </div>
-      </div>
-    </div>
 
     <div id="details" hidden$="[[!_hasFiles]]">
       <template is="dom-repeat" items="[[files]]" as="file">
@@ -137,48 +135,69 @@
       </template>
     </div>
 
+    <div id="dropzone" hidden$="[[!_isDropzoneVisible(_hasFiles, document, blobList)]]">
+      <div id="container">
+        <a href="javascript:undefined" on-tap="open">[[message]]</a>
+        <div class="actions">
+          <mostly-slot slot="FILE_UPLOAD_ACTIONS"></mostly-slot>
+        </div>
+      </div>
+    </div>
+
   </template>
 
   <script>
     Polymer({
       is: 'playing-dropzone',
+
       behaviors: [Playing.UploaderBehavior, Mostly.I18nBehavior, Mostly.FormatBehavior],
+
       properties: {
         document: {
           type: Object,
-          notify: true
+          notify: true,
+          observer: '_documentChanged'
         },
+
         label: {
           type: String
         },
+
         message: {
           type: String
         },
+
         blobList: {
           type: Boolean,
           value: false
         },
+
         xpath: {
           type: String,
           value: 'file'
         },
+
         updateDocument: {
           type: Boolean,
           value: false,
           reflectToAttribute: true
         },
+
         uploadedMessage: {
           type: String,
           value: 'File uploaded'
         },
+
         progressMessage: {
           type: String,
           value: 'Uploading...'
         },
+
         progress: {
           type: Boolean,
           value: false
         },
+
         _hasFiles: {
           type: Boolean,
           value: false
@@ -211,11 +230,22 @@
       importBatch: function(data) {
         data.stopPropagation();
         if (this.blobList) {
-          this.batchExecute('blobs', 'attachOnDocument', {
-            document: this.document.id,
-            documentType: this.document.type,
-            xpath: this.xpath
-          }).then(this._handleBlobListUploaded.bind(this));
+          if (this.immediate) {
+            this.batchExecute('blobs', 'attachOnDocument', {
+              document: this.document.id,
+              documentType: this.document.type,
+              xpath: this.xpath
+            }).then(this._handleBlobListUploaded.bind(this));
+          } else {
+            this.document[this.xpath] = [];
+            this.files.forEach((file, index) => {
+              this.push('document.' + [this.xpath], {
+                'batch': data.detail.batchId,
+                'index': index.toString()
+              });
+            });
+            this._handleBlobListUploaded();
+          }
         } else {
           this.document[this.xpath] = {
             'batch': data.detail.batchId,
@@ -271,18 +301,27 @@
       _handleBlobListUploaded: function() {
         this.fire('notify', { message: this.uploadedMessage });
         this.progress = false;
-        this._hasFiles = false;
-        this.fire('document-updated');
+        if (this.immediate) {
+          this._hasFiles = false;
+          this.fire('document-updated');
+        }
       },
 
       _deleteFile: function() {
-        this.document[this.xpath] = '';
-        this._reset();
+        if (!this.immediate && this.blobList && Array.isArray(this.document[this.xpath])) {
+          this.splice('document.' + [this.xpath], e.model.itemsIndex, 1);
+          this.splice('files', e.model.itemsIndex, 1);
+          this._hasFiles = this.files.length > 0;
+        } else {
+          this.document[this.xpath] = '';
+          this._reset();
+        }
       },
 
       _reset: function() {
         this.$.input.value = '';
         this._hasFiles = false;
+        this.files = [];
       },
 
       _filesChanged: function(e) {
@@ -314,8 +353,20 @@
         this.toggleClass('dragging', false, this.$.label);
         this.toggleClass('dragging', false, this.$.container);
         this._upload(e.dataTransfer.files);
-      }
+      },
 
+      _documentChanged: function() {
+        // `immediate` is false during document creation, meaning the user can manage
+        // the list of files when dropzone is bound to a blob list property.
+        this.immediate = !!(this.document && this.document.id);
+      },
+
+      _isDropzoneVisible: function() {
+        // Area to drop files should stay visible when the element is attached to a blob list
+        // property and `immediate` is false (e.g during the creation of a new document).
+        // This will allow the user to manage the list of files.
+        return (!this.immediate && this.blobList) || !this._hasFiles;
+      }
     });
   </script>
 
