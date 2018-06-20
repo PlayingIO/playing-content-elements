@@ -270,7 +270,7 @@
 
       init: function(typeId) {
         if (typeId) {
-          var typeObj = this.subtypes.find(function(type) {
+          var typeObj = this.subtypes.find(type => {
             return type.id === typeId;
           });
           if (typeObj) {
@@ -368,7 +368,7 @@
       },
 
       _layoutUpdated: function(e) {
-        this.async(function() {
+        this.async(() => {
           var input = e.detail.value.querySelector('[autofocus]');
           if (input) {
             input.focus();

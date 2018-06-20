@@ -678,12 +678,12 @@
       _observeFiles: function(changeRecord) {
         if (changeRecord) {
           if (changeRecord.path === 'files.splices' && changeRecord.value && changeRecord.value.indexSplices) {
-            changeRecord.value.indexSplices.forEach(function(s) {
+            changeRecord.value.indexSplices.forEach(s => {
               for (var i = 0; i < s.addedCount; i++) {
                 var index = s.index + i;
                 this.push('localFiles', this.files[index]);
               }
-            }, this);
+            });
             this.hasLocalFiles = this.localFiles && this.localFiles.length > 0;
             this.hasLocalFilesUploaded = false;
           } else {
@@ -721,7 +721,7 @@
       },
 
       _canImportWithMetadata: function() {
-        return this._getAllFiles().every(function(file) {
+        return this._getAllFiles().every(file => {
           return 'checked' in file
         }) && this._canImport();
       },
@@ -853,7 +853,7 @@
         var properties = {};
         if (docData && Object.keys(docData).length > 0) {
           this.targetPath = docData.parent;
-          this.selectedDocType = this._importDocTypes.find(function(type) {
+          this.selectedDocType = this._importDocTypes.find(type => {
             return type.id === docData.type.id;
           });
           properties = JSON.parse(JSON.stringify(docData.document));
@@ -986,17 +986,17 @@
         var doRemote = this.remoteFiles && this.remoteFiles.length > 0;
         if (doLocal && doRemote) {
           this._smartImportLocalFiles(params)
-              .then(function(response1) {
-                this._smartImportRemoteFiles(params).then(function(response2) {
-                  this._handleSuccess(this._mergeResponses(response1, response2));
-                }.bind(this), this._handleError.bind(this));
-              }.bind(this), this._handleError.bind(this));
+            .then(response1 => {
+              this._smartImportRemoteFiles(params).then(response2 => {
+                this._handleSuccess(this._mergeResponses(response1, response2));
+              }, this._handleError.bind(this));
+            }, this._handleError.bind(this));
         } else if (doLocal) {
           this._smartImportLocalFiles(params)
-              .then(this._handleSuccess.bind(this), this._handleError.bind(this));
+            .then(this._handleSuccess.bind(this), this._handleError.bind(this));
         } else {
           this._smartImportRemoteFiles(params)
-              .then(this._handleSuccess.bind(this), this._handleError.bind(this));
+            .then(this._handleSuccess.bind(this), this._handleError.bind(this));
         }
       },
 
@@ -1236,7 +1236,7 @@
       },
 
       _layoutUpdated: function(e) {
-        this.async(function() {
+        this.async(() => {
           var input = e.detail.value.querySelector('[autofocus]');
           if (input) {
             input.focus();

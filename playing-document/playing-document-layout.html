@@ -73,7 +73,7 @@
         this._model = {document: this.document};
         // forward document path change events
         if (this.element) {
-          this.element.addEventListener('document-changed', (e) => {
+          this.element.addEventListener('document-changed', e => {
             this.notifyPath(e.detail.path, e.detail.value);
           });
         } else {
