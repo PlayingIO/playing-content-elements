@@ -65,11 +65,11 @@ Example:
       },
 
       _untrash: function() {
-        this.$.operation.execute().then(function(res) {
+        this.$.operation.execute().then(res => {
           this.fire('document-untrashed', {doc: res});
-        }.bind(this)).catch(function(error) {
+        }).catch((error) => {
           this.fire('document-untrashed', {error: error});
-        }.bind(this));
+        });
       }
 
     });

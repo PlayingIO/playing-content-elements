@@ -100,12 +100,12 @@ Example:
 
       _toggle: function() {
         if (!this.locked && this._canLock()) {
-          this.$.opLock.execute().then((doc) => {
+          this.$.opLock.execute().then(doc => {
             this.locked = true;
             this.fire('document-locked', {doc: doc});
           });
         } else if (this._canUnlock()) {
-          this.$.opUnlock.execute().then((doc) => {
+          this.$.opUnlock.execute().then(doc => {
             this.locked = false;
             this.fire('document-unlocked', {doc: doc});
           });
@@ -130,7 +130,7 @@ Example:
       },
 
       _canLock: function() {
-        return this.$.nxcon.connect().then((currentUser) => {
+        return this.$.nxcon.connect().then(currentUser => {
           if (this.document.isProxy || this.document.isVersion) {
             return false;
           } else {
@@ -142,7 +142,7 @@ Example:
       },
 
       _canUnlock: function() {
-        return this.$.nxcon.connect().then((currentUser) => {
+        return this.$.nxcon.connect().then(currentUser => {
           if (this.document.isProxy) {
             return false;
           } else {

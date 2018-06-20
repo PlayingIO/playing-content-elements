@@ -94,7 +94,7 @@ A button element for moving documents up within an OrderedFolder.
           }
           this._sortedDocuments = [];
           this.fire('refresh-display', { 'focusIndex': this._focusIndex });
-        }).catch(function() {
+        }).catch(() => {
           this.fire('notify', { 'message': this.i18n('moveDocumentButton.error') });
         });
       },

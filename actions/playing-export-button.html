@@ -90,10 +90,10 @@ Example:
 
       _filterRenditions: function(document) {
         if (document && document.metadata && document.metadata.renditions) {
-          return document.metadata.renditions.filter(function(rendition) {
+          return document.metadata.renditions.filter(rendition => {
             return rendition.kind !== 'playing:video:conversion'
                 && rendition.kind !== 'playing:picture:conversion';
-          }).map(function(item) {
+          }).map(item => {
             item.name = 'exportButton.' + item.name;
             return item;
           });
