@@ -404,9 +404,9 @@
       },
 
       _toggleDragging: function(flag) {
-        Polymer.dom(this.root).querySelectorAll('.results').forEach(function(e) {
+        Polymer.dom(this.root).querySelectorAll('.results').forEach(e => {
           this.toggleClass('dragging', flag, e);
-        }.bind(this));
+        });
       },
 
       _handleDocumentCreated: function() {

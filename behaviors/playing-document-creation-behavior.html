@@ -77,7 +77,7 @@
         schemaFetcher.path = 'path/' + this.targetPath + '/@emptyWithDefault';
         schemaFetcher.params = { type: this.selectedDocType.type };
         schemaFetcher.headers = { properties: '*' };
-        return schemaFetcher.get().then(function(resp) {
+        return schemaFetcher.get().then(resp => {
           var doc = resp.data;
           if (properties) {
             for (var prop in properties) {

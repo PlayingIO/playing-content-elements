@@ -153,7 +153,7 @@ Custom property | Description | Default
           if (this.children.length == 1 && this.children[0].path === this.$.typeahead.typedValue) {
             this.hideResults();
           } else {
-            this.data = this.children.map(function(child) {
+            this.data = this.children.map(child => {
               return child.path
             });
             this.displayResults();
@@ -168,7 +168,7 @@ Custom property | Description | Default
             var newParentPath = (idx == 0 ? '/' : this.value.substring(0, idx));
             this._updateParent(newParentPath).then(() => {
               this._queryChildren(this.parent, this.value.substring(idx+1))
-            }).catch((err) => {
+            }).catch(err => {
               if (err.status === 403) {
                 this.children = [];
               }
@@ -188,7 +188,7 @@ Custom property | Description | Default
             }
           });
         } else {
-          return new Promise(function(resolve) {
+          return new Promise(resolve => {
             resolve();
           });
         }

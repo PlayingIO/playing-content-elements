@@ -194,10 +194,10 @@
         var uids = [];
 
         if (docs instanceof Array) {
-          docs.forEach(function (doc) {
+          docs.forEach((doc) => {
             this.$.storage.add(doc);
-          }.bind(this));
-          uids = docs.map(function(doc) {
+          });
+          uids = docs.map((doc) => {
             return doc.id;
           });
         }
@@ -235,7 +235,7 @@
       },
 
       _indexOf: function(doc) {
-        return this.documents.findIndex(function(e) {
+        return this.documents.findIndex(e => {
           return e.id === doc.id;
         });
       },
