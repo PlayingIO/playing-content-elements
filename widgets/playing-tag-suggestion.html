@@ -262,7 +262,7 @@
 
       _initSelection: function(element, callback) {
         return callback(
-          this.value.map((entry) => {
+          this.value.map(entry => {
             return { id: entry, label: entry };
           })
         );
