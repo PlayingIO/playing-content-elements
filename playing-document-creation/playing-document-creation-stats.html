@@ -44,9 +44,9 @@
       },
 
       ready: function() {
-        this.$.nxcon.connect().then(function(res) {
+        this.$.nxcon.connect().then(res => {
           this.name =  res.id + '-document-creation-stats';
-        }.bind(this));
+        });
       },
 
       initialize: function() {
@@ -83,9 +83,9 @@
 
       mostCommonType: function(n) {
         this.$.storage.reload();
-        var sorted = Object.keys(this.creationStats.frequency).sort(function(a, b) {
+        var sorted = Object.keys(this.creationStats.frequency).sort((a, b) => {
           return this.creationStats.frequency[a] < this.creationStats.frequency[b];
-        }.bind(this)).filter(function(elem, index, self) {
+        }).filter((elem, index, self) => {
           return index === self.indexOf(elem);
         });
         return sorted.slice(0, Math.min((n ? n : 1), sorted.length));

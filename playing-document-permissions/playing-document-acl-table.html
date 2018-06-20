@@ -236,8 +236,8 @@ Element displaying a table with document ACLs.
           acls = acls.filter(this._aclFilter.bind(this));
         }
         var aces = [];
-        acls.forEach((acl) => {
-          acl.aces.forEach((ace) => {
+        acls.forEach(acl => {
+          acl.aces.forEach(ace => {
             if (this._aceFilter(ace)) {
               ace.aclName = acl.name;
               aces.push(ace);
@@ -340,11 +340,9 @@ Element displaying a table with document ACLs.
 
       sendEmailExternalSharing: function(e, i) {
         var item = e.model.dataHost.dataHost.ace;
-        this.$.sendNotificationEmailPermissionOp.params = {
-          id: item.id
-        };
+        this.$.sendNotificationEmailPermissionOp.params = { id: item.id };
         var self = this;
-        this.$.sendNotificationEmailPermissionOp.execute().then(function() {
+        this.$.sendNotificationEmailPermissionOp.execute().then(() => {
           self.fire('notification');
         });
       }
