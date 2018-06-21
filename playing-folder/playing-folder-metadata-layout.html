@@ -43,6 +43,11 @@
       <div name="coverage">[[formatVocabulary(document.coverage)]]</div>
     </div>
 
+    <div role="widget" hidden$="[[!document.ordered]]">
+      <label>[[i18n('label.document.ordered')]]</label>
+      <div name="ordered">[[document.ordered]]</div>
+    </div>
+
     <div role="widget" hidden$="[[!document.expiredAt]]">
       <label>[[i18n('label.dublincore.expiredAt')]]</label>
       <mostly-date name="expiredAt" datetime="[[document.expiredAt]]"></mostly-date>

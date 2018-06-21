@@ -43,6 +43,10 @@
             min-chars="0">
     </playing-vocabulary-suggestion>
 
+    <paper-checkbox role="widget" name="ordered" checked="{{document.ordered}}" noink>
+      [[i18n('label.document.ordered.placeholder')]]
+    </paper-checkbox>
+
     <mostly-date-picker role="widget" label="[[i18n('label.dublincore.expiredAt')]]"
             name="expiredAt"
             value="{{document.expiredAt}}">
