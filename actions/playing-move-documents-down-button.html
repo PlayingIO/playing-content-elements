@@ -29,8 +29,8 @@ A button element for moving documents down within an OrderedFolder.
 
     <mostly-operation id="moveDownOp"
             path="documents"
-            op="reorder"
-            params="[[_computeParams(_beforeUid)]]"
+            op="move"
+            params="[[_computeParams(_beforeId)]]"
             sync-indexing
             input="[[_sortedDocuments]]"></mostly-operation>
 
@@ -73,7 +73,7 @@ A button element for moving documents down within an OrderedFolder.
 
         _available : Boolean,
 
-        _beforeUid: Document,
+        _beforeId: Document,
 
         _sortedDocuments: Array
       },
@@ -133,14 +133,14 @@ A button element for moving documents down within an OrderedFolder.
             if (isSequence) return;
             this._focusIndex = this.documents.indexOf(this._sortedDocuments[0]) - sequenceBreakIdx;
             this._sortedDocuments.splice(0, sequenceBreakIdx);
-            this._beforeUid = this.documents[this._focusIndex + 1].id;
+            this._beforeId = this.documents[this._focusIndex + 1].id;
           } else {
             var tmpIdx = this.documents.indexOf(this._sortedDocuments[0]);
             if (tmpIdx < this.documents.length - 2) {
-              this._beforeUid = this.documents[tmpIdx + 2].id;
+              this._beforeId = this.documents[tmpIdx + 2].id;
               this._focusIndex = tmpIdx + 1;
             } else {
-              this._beforeUid = null;
+              this._beforeId = null;
               this._focusIndex = this.documents.length - 1;
             }
           }
@@ -152,7 +152,7 @@ A button element for moving documents down within an OrderedFolder.
       },
 
       _computeParams: function() {
-        return this._beforeUid ? { 'before': this._beforeUid } : {};
+        return this._beforeId ? { 'before': this._beforeId } : {};
       }
 
     });

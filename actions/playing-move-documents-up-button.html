@@ -29,8 +29,8 @@ A button element for moving documents up within an OrderedFolder.
 
     <mostly-operation id="moveUpOp"
             path="documents"
-            op="reorder"
-            params='{"before": "[[_beforeUid]]"}'
+            op="move"
+            params='{"before": "[[_beforeId]]"}'
             sync-indexing
             input="[[_sortedDocuments]]"></mostly-operation>
 
@@ -73,7 +73,7 @@ A button element for moving documents up within an OrderedFolder.
 
         _available : Boolean,
 
-        _beforeUid: Document,
+        _beforeId: Document,
 
         _sortedDocuments: Array
       },
@@ -136,7 +136,7 @@ A button element for moving documents up within an OrderedFolder.
           } else {
             this._focusIndex = this.documents.indexOf(this._sortedDocuments[0]) - 1;
           }
-          this._beforeUid = this.documents[this._focusIndex].id;
+          this._beforeId = this.documents[this._focusIndex].id;
           this._available = true;
         }
       }
