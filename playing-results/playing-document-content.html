@@ -376,7 +376,7 @@
       },
 
       _canSort: function(document) {
-        return !(document && this.hasType(document, 'orderedFolder'));
+        return !(document && this.hasFacet(document, 'Orderable'));
       },
 
       _displaySort: function(document, field) {
