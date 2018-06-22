@@ -220,9 +220,9 @@
   <template>
     <mostly-filter document="[[document]]" facet="Orderable">
       <template>
-        <playing-move-documents-up-button selected-documents="[[selectedItems]]" documents="[[items]]">
+        <playing-move-documents-up-button parent="[[document]]" selected-documents="[[selectedItems]]" documents="[[items]]">
         </playing-move-documents-up-button>
-        <playing-move-documents-down-button selected-documents="[[selectedItems]]" documents="[[items]]">
+        <playing-move-documents-down-button parent="[[document]]" selected-documents="[[selectedItems]]" documents="[[items]]">
         </playing-move-documents-down-button>
       </template>
     </mostly-filter>
