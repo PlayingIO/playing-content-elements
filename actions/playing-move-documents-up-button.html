@@ -27,18 +27,10 @@ A button element for moving documents up within an OrderedFolder.
       }
     </style>
 
-    <mostly-operation id="moveUpOp"
-            path="documents"
-            op="move"
-            params='{"before": "[[_beforeId]]"}'
-            sync-indexing
-            input="[[_sortedDocuments]]"></mostly-operation>
+    <mostly-operation id="moveUpOp" path="documents" op="move" sync-indexing></mostly-operation>
 
     <template id="availability" is="dom-if" if="[[_available]]">
-      <paper-icon-button noink
-        id="upButton"
-        icon="icons:arrow-upward">
-      </paper-icon-button>
+      <paper-icon-button noink id="upButton" icon="icons:arrow-upward"></paper-icon-button>
       <paper-tooltip for="upButton" position="[[tooltipPosition]]">
         [[i18n('moveDocumentButton.up.tooltip')]]
       </paper-tooltip>
@@ -53,6 +45,11 @@ A button element for moving documents up within an OrderedFolder.
       behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
 
       properties: {
+        /**
+         * Parent document
+         */
+        parent: Object,
+
         /**
          * All sibling documents.
          */
@@ -73,7 +70,7 @@ A button element for moving documents up within an OrderedFolder.
 
         _available : Boolean,
 
-        _beforeId: Document,
+        _targetId: String,
 
         _sortedDocuments: Array
       },
@@ -87,16 +84,23 @@ A button element for moving documents up within an OrderedFolder.
       ],
 
       move: function() {
-        this.$.moveUpOp.execute().then(() => {
-          for (var i = this._sortedDocuments.length - 1; i >= 0; i--) {
-            this.documents.splice(this.documents.indexOf(this._sortedDocuments[i]), 1);
-            this.documents.splice(this._focusIndex, 0, this._sortedDocuments[i]);
-          }
-          this._sortedDocuments = [];
-          this.fire('refresh-display', { 'focusIndex': this._focusIndex });
-        }).catch(() => {
-          this.fire('notify', { 'message': this.i18n('moveDocumentButton.error') });
-        });
+        if (this._sortedDocuments && this._sortedDocuments.length > 0) {
+          this.$.moveUpOp.input = this.parent.id;
+          this.$.moveUpOp.params = {
+            target: this._targetId,
+            selects: this._sortedDocuments.map(doc => doc.id)
+          };
+          this.$.moveUpOp.execute().then(() => {
+            for (var i = this._sortedDocuments.length - 1; i >= 0; i--) {
+              this.documents.splice(this.documents.indexOf(this._sortedDocuments[i]), 1);
+              this.documents.splice(this._focusIndex, 0, this._sortedDocuments[i]);
+            }
+            this._sortedDocuments = [];
+            this.fire('refresh-display', { 'focusIndex': this._focusIndex });
+          }).catch(() => {
+            this.fire('notify', { 'message': this.i18n('moveDocumentButton.error') });
+          });
+        }
       },
 
       _isAvailable: function() {
@@ -136,7 +140,7 @@ A button element for moving documents up within an OrderedFolder.
           } else {
             this._focusIndex = this.documents.indexOf(this._sortedDocuments[0]) - 1;
           }
-          this._beforeId = this.documents[this._focusIndex].id;
+          this._targetId = this.documents[this._focusIndex].id;
           this._available = true;
         }
       }
