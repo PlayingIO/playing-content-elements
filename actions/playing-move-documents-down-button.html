@@ -27,18 +27,10 @@ A button element for moving documents down within an OrderedFolder.
       }
     </style>
 
-    <mostly-operation id="moveDownOp"
-            path="documents"
-            op="move"
-            params="[[_computeParams(_beforeId)]]"
-            sync-indexing
-            input="[[_sortedDocuments]]"></mostly-operation>
+    <mostly-operation id="moveDownOp" path="documents" op="move" sync-indexing></mostly-operation>
 
-    <template id="availability" is="dom-if" if="[[_available]]">
-      <paper-icon-button noink
-        id="downButton"
-        icon="icons:arrow-downward">
-      </paper-icon-button>
+    <template is="dom-if" if="[[_available]]">
+      <paper-icon-button noink id="downButton" icon="icons:arrow-downward"></paper-icon-button>
       <paper-tooltip for="downButton" position="[[tooltipPosition]]">
         [[i18n('moveDocumentButton.down.tooltip')]]
       </paper-tooltip>
@@ -53,6 +45,11 @@ A button element for moving documents down within an OrderedFolder.
       behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
 
       properties: {
+        /**
+         * Parent document
+         */
+        parent: Object,
+
         /**
          * All sibling documents.
          */
@@ -73,7 +70,7 @@ A button element for moving documents down within an OrderedFolder.
 
         _available : Boolean,
 
-        _beforeId: Document,
+        _targetId: String,
 
         _sortedDocuments: Array
       },
@@ -87,16 +84,23 @@ A button element for moving documents down within an OrderedFolder.
       ],
 
       move: function() {
-        this.$.moveDownOp.execute().then(() => {
-          for (var i = 0; i < this._sortedDocuments.length; i++) {
-            this.documents.splice(this.documents.indexOf(this._sortedDocuments[i]), 1);
-            this.documents.splice(this._focusIndex, 0, this._sortedDocuments[i]);
-          }
-          this._sortedDocuments = [];
-          this.fire('refresh-display', { 'focusIndex': this._focusIndex + 1 });
-        }).catch(() => {
-          this.fire('notify', { 'message': this.i18n('moveDocumentButton.error') });
-        });
+        if (this._sortedDocuments && this._sortedDocuments.length > 0) {
+          this.$.moveDownOp.input = this.parent.id;
+          this.$.moveDownOp.params = {
+            target: this._targetId,
+            selects: this._sortedDocuments.map(doc => doc.id)
+          };
+          this.$.moveDownOp.execute().then(() => {
+            for (var i = 0; i < this._sortedDocuments.length; i++) {
+              this.documents.splice(this.documents.indexOf(this._sortedDocuments[i]), 1);
+              this.documents.splice(this._focusIndex, 0, this._sortedDocuments[i]);
+            }
+            this._sortedDocuments = [];
+            this.fire('refresh-display', { 'focusIndex': this._focusIndex + 1 });
+          }).catch(() => {
+            this.fire('notify', { 'message': this.i18n('moveDocumentButton.error') });
+          });
+        }
       },
 
       _isAvailable: function() {
@@ -133,14 +137,14 @@ A button element for moving documents down within an OrderedFolder.
             if (isSequence) return;
             this._focusIndex = this.documents.indexOf(this._sortedDocuments[0]) - sequenceBreakIdx;
             this._sortedDocuments.splice(0, sequenceBreakIdx);
-            this._beforeId = this.documents[this._focusIndex + 1].id;
+            this._targetId = this.documents[this._focusIndex + 1].id;
           } else {
             var tmpIdx = this.documents.indexOf(this._sortedDocuments[0]);
             if (tmpIdx < this.documents.length - 2) {
-              this._beforeId = this.documents[tmpIdx + 2].id;
+              this._targetId = this.documents[tmpIdx + 2].id;
               this._focusIndex = tmpIdx + 1;
             } else {
-              this._beforeId = null;
+              this._targetId = this.documents[this.documents.length - 1].id;
               this._focusIndex = this.documents.length - 1;
             }
           }
@@ -149,10 +153,6 @@ A button element for moving documents down within an OrderedFolder.
           });
           this._available = true;
         }
-      },
-
-      _computeParams: function() {
-        return this._beforeId ? { 'before': this._beforeId } : {};
       }
 
     });
