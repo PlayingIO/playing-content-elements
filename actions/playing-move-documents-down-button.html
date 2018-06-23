@@ -106,7 +106,7 @@ A button element for moving documents down within an OrderedFolder.
       _isAvailable: function() {
         this._available = false;
         if (this.selectedDocuments && this.selectedDocuments.length > 0) {
-          // Let's sort
+          // Let's sort in reverse (desc)
           this._sortedDocuments = this.selectedDocuments.slice(0);
           try {
             this._sortedDocuments.sort((a, b) => {
@@ -135,19 +135,22 @@ A button element for moving documents down within an OrderedFolder.
           });
           if (this._sortedDocuments[0].id === this.documents[this.documents.length - 1].id) {
             if (isSequence) return;
+            // splice the rest documents not in sequence
             this._focusIndex = this.documents.indexOf(this._sortedDocuments[0]) - sequenceBreakIdx;
             this._sortedDocuments.splice(0, sequenceBreakIdx);
             this._targetId = this.documents[this._focusIndex + 1].id;
           } else {
+            // the last selected document in sequence
             var tmpIdx = this.documents.indexOf(this._sortedDocuments[0]);
             if (tmpIdx < this.documents.length - 2) {
-              this._targetId = this.documents[tmpIdx + 2].id;
+              this._targetId = this.documents[tmpIdx + 1].id;
               this._focusIndex = tmpIdx + 1;
             } else {
               this._targetId = this.documents[this.documents.length - 1].id;
               this._focusIndex = this.documents.length - 1;
             }
           }
+          // Sort in asc
           this._sortedDocuments.sort((a, b) => {
             return this.documents.indexOf(a) - this.documents.indexOf(b);
           });
