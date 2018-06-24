@@ -81,8 +81,8 @@
     </mostly-page-provider>
 
     <mostly-results id="results"
-            display-mode="table"
             name="[[document.id]]-trashed"
+            display-mode="table"
             nx-provider="[[nxProvider]]"
             selected-items="{{selectedItems}}"
             document="[[document]]">
@@ -269,7 +269,7 @@
 
         provider: {
           type: String,
-          value: 'documents/trashes'
+          value: 'trashes'
         },
 
         pageSize: {
