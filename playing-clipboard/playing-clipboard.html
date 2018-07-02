@@ -191,21 +191,18 @@
       },
 
       add: function (docs) {
-        var uids = [];
+        var docIds = [];
 
         if (docs instanceof Array) {
-          docs.forEach((doc) => {
+          docs.forEach(doc => {
             this.$.storage.add(doc);
           });
-          uids = docs.map((doc) => {
-            return doc.id;
-          });
-        }
-        else {
+          docIds = docs.map(doc => doc.id);
+        } else {
           this.$.storage.add(docs);
-          uids.push(docs.id);
+          docIds.push(docs.id);
         }
-        this.fire('added-to-clipboard', {docIds : uids});
+        this.fire('added-to-clipboard', { docIds });
       },
 
       contains: function(doc) {
