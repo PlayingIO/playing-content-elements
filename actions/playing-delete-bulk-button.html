@@ -89,7 +89,7 @@
             if (more.length > 0) {
               this.$.deleteOp.params.more = more.join(',');
             }
-            this.$.deleteOp.params.$soft = this.hard;
+            this.$.deleteOp.params.$soft = !this.hard;
             this.$.deleteOp.execute().then(() => {
               this.fire('bulk-documents-deleted', { documents: this.documents });
               this.documents = [];
