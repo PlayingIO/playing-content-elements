@@ -165,7 +165,7 @@ Custom property | Description | Default
         if(this.value && !this.disabled) {
           var idx = this.value.lastIndexOf('/');
           if (idx > -1) {
-            var newParentPath = (idx == 0 ? '/' : this.value.substring(0, idx));
+            var newParentPath = (idx == 0? '/' : this.value.substring(0, idx));
             this._updateParent(newParentPath).then(() => {
               this._queryChildren(this.parent, this.value.substring(idx+1))
             }).catch(err => {

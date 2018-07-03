@@ -277,7 +277,7 @@ An element for selecting one or more documents.
           property: this.idProperty
         };
         this.$.op.execute().then(res => {
-          callback(this.multiple ? res.entries : (res.entries.length > 0 ? res.entries[0] : null));
+          callback(this.multiple? res.entries : (res.entries.length > 0? res.entries[0] : null));
         });
       },
 

@@ -320,16 +320,16 @@
       },
 
       _expandIcon: function(opened) {
-        return 'hardware:keyboard-arrow-' + (opened ? 'down' : 'right');
+        return 'hardware:keyboard-arrow-' + (opened? 'down' : 'right');
       },
 
       _icon: function(opened) {
-        return opened ? 'icons:folder-open' : 'icons:folder';
+        return opened? 'icons:folder-open' : 'icons:folder';
       },
 
       _title: function(item) {
         return (item.type === 'folder' && item.title === 'Root')
-          ? this.i18n('browse.root') : item.title;
+         ? this.i18n('browse.root') : item.title;
       },
 
       removeDocuments: function(documents) {

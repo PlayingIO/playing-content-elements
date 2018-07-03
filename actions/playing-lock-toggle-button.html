@@ -116,13 +116,13 @@ Example:
         if (locked && this.document.lockOwner && this.document.lockedAt) {
           return this.i18n('lockToggleButton.tooltip.lockedBy', this.document.locker, this.formatDate(this.document.lockedAt));
         } else {
-          return this.i18n('lockToggleButton.tooltip.' + (locked ? 'unlock' : 'lock'));
+          return this.i18n('lockToggleButton.tooltip.' + (locked? 'unlock' : 'lock'));
         }
 
       },
 
       _computeIcon: function(locked) {
-        return locked ? 'mostly:lock' : 'mostly:unlock';
+        return locked? 'mostly:lock' : 'mostly:unlock';
       },
 
       _documentChanged: function() {

@@ -112,9 +112,9 @@
       },
 
       _suggesterChildrenChanged: function() {
-        var valid = (this.parent ? this.targetPath.replace(/(.+)\/$/, "$1") === this.parent.path : false)
-         || (this.suggesterParent ? this.targetPath.replace(/(.+)\/$/, "$1") === this.suggesterParent.path : false)
-         || (this.suggesterChildren ? this.suggesterChildren.some(child => {
+        var valid = (this.parent? this.targetPath.replace(/(.+)\/$/, "$1") === this.parent.path : false)
+         || (this.suggesterParent? this.targetPath.replace(/(.+)\/$/, "$1") === this.suggesterParent.path : false)
+         || (this.suggesterChildren? this.suggesterChildren.some(child => {
               return this.targetPath === child.path;
             }) : false);
         this.set('isValidTargetPath', valid);
@@ -154,7 +154,7 @@
       },
 
       _formatErrorMessage: function() {
-        return this.errorMessage ? 'error' : '';
+        return this.errorMessage? 'error' : '';
       },
 
       _canCreateIn: function(document) {
@@ -176,11 +176,11 @@
       },
 
       _getTypeLabel: function(type) {
-        return this._isValidType(type) ? this.i18n('label.document.type.' + type.id) : '';
+        return this._isValidType(type)? this.i18n('label.document.type.' + type.id) : '';
       },
 
       _getTypeIcon: function(type) {
-        return this._isValidType(type) ? 'bower_components/playing-content-elements/images/doctypes/' + type.id + '.svg' : '';
+        return this._isValidType(type)? 'bower_components/playing-content-elements/images/doctypes/' + type.id + '.svg' : '';
       },
 
       // extension point

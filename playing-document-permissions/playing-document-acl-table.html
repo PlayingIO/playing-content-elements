@@ -264,7 +264,7 @@ Element displaying a table with document ACLs.
         } else {
           var aBegin = moment(a.begin);
           var bBegin = moment(b.begin);
-          return aBegin.isBefore(bBegin) ? -1 : 1;
+          return aBegin.isBefore(bBegin)? -1 : 1;
         }
       },
 
@@ -296,11 +296,11 @@ Element displaying a table with document ACLs.
         var untilMiddleStr = ' ' + this.i18n('documentAclTable.untilMiddle') + ' ';
 
         if (begin && !end) {
-          return (now.isAfter(begin) ? sinceStr : fromStr) + moment(begin).format(format);
+          return (now.isAfter(begin)? sinceStr : fromStr) + moment(begin).format(format);
         } else if (!begin && end) {
           return untilStr + moment(end).format(format);
         } else if (begin && end) {
-          return (now.isAfter(begin) ? sinceStr : fromStr) + moment(begin).format(format) + untilMiddleStr + moment(end).format(format);
+          return (now.isAfter(begin)? sinceStr : fromStr) + moment(begin).format(format) + untilMiddleStr + moment(end).format(format);
         } else {
           return this.i18n('documentAclTable.permanent');
         }

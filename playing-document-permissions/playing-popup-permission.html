@@ -252,13 +252,13 @@
         var dateBased = this.selectedTimeFrame === 'datebased';
 
         if (this.params.begin && dateBased) {
-          this.params.begin = this.params.begin.length > 0 ? moment(new Date(this.params.begin)).format() : null;
+          this.params.begin = this.params.begin.length > 0? moment(new Date(this.params.begin)).format() : null;
         } else {
           this.params.begin = null;
         }
 
         if (this.params.end && dateBased) {
-          this.params.end = this.params.end.length > 0 ? moment(new Date(this.params.end)).format() : null;
+          this.params.end = this.params.end.length > 0? moment(new Date(this.params.end)).format() : null;
         } else {
           this.params.end = null;
         }
@@ -290,7 +290,7 @@
           this.set('params.end', null);
           this.set('params.notify', true);
           this.set('params.comment', '');
-          this.set('selectedTimeFrame', this.shareWithExternal ? 'datebased' : 'permanent');
+          this.set('selectedTimeFrame', this.shareWithExternal? 'datebased' : 'permanent');
         }
       },
 

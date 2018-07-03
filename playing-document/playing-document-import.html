@@ -712,12 +712,12 @@
       },
 
       _canImport: function() {
-        return (this.hasLocalFiles ? this.hasLocalFilesUploaded : this.hasRemoteFiles)
+        return (this.hasLocalFiles? this.hasLocalFilesUploaded : this.hasRemoteFiles)
           && this.canCreate && !this._creating;
       },
 
       _isUploadingOrImporting: function() {
-        return this._creating || this.hasLocalFiles ? !this.hasLocalFilesUploaded : false;
+        return this._creating || this.hasLocalFiles? !this.hasLocalFilesUploaded : false;
       },
 
       _canImportWithMetadata: function() {
@@ -766,12 +766,12 @@
         if (this.localFiles && this.remoteFiles) {
           return this.localFiles.concat(this.remoteFiles);
         } else {
-          return this.localFiles ? this.localFiles : this.remoteFiles;
+          return this.localFiles? this.localFiles : this.remoteFiles;
         }
       },
 
       _getTotalFileCount: function() {
-        return (this.localFiles ? this.localFiles.length : 0) + (this.remoteFiles ? this.remoteFiles.length : 0);
+        return (this.localFiles? this.localFiles.length : 0) + (this.remoteFiles? this.remoteFiles.length : 0);
       },
 
       _getCurrentFile: function() {
@@ -808,12 +808,12 @@
 
       _getCurrentFileTitle: function() {
         var currentFile = this._getCurrentFile();
-        return currentFile ? currentFile.name : '';
+        return currentFile? currentFile.name : '';
       },
 
       _getRemainingDocs: function() {
         var count = this._getTotalFileCount();
-        return count > 1 ? this.i18n('documentImportForm.addProperties.otherDocuments', count - 1 - this.docIdx) : '';
+        return count > 1? this.i18n('documentImportForm.addProperties.otherDocuments', count - 1 - this.docIdx) : '';
       },
 
       _copyFileData: function(originIdx, destIdx) {
@@ -933,11 +933,11 @@
       },
 
       _selectedLocalDocStyle: function(index) {
-        return index === this.docIdx ? 'selected' : '';
+        return index === this.docIdx? 'selected' : '';
       },
 
       _selectedRemoteDocStyle: function(index) {
-        return (index + this.localFiles.length) === this.docIdx ? 'selected' : '';
+        return (index + this.localFiles.length) === this.docIdx? 'selected' : '';
       },
 
       _cancel: function() {
@@ -1018,7 +1018,7 @@
           this.cancelBatch();
           this._clear();
           if (!response.data || response.data.length === 1) {
-            this.navigateTo('browse', (response.data ? response.data[0] : response.data).path);
+            this.navigateTo('browse', (response.data? response.data[0] : response.data).path);
           } else {
             this.fire('document-updated');
             this.navigateTo('browse', this.targetPath);
@@ -1081,7 +1081,7 @@
               }).catch(error => {
                 return error;
               })
-            })(i >= self.localFiles.length ? remoteIndexes : localIndexes, index));
+            })(i >= self.localFiles.length? remoteIndexes : localIndexes, index));
         }
         Promise.all(promises).then(results => {
           var errorFree = results.filter(result => {
@@ -1109,14 +1109,16 @@
         var blobProperty = this.documentBlobProperties[file.docData.type.id] ||
                            this.documentBlobProperties['default'];
         // XXX if fileData.type == Note, then the file's contents should be passed instead
-        this.document[blobProperty] = file.providerId ? {
-          'providerId': file.providerId,
-          'user': file.user,
-          'fileId': file.fileId
-        } : {
-          'batch': this.batchId,
-          'index': String(file.index)
-        };
+        this.document[blobProperty] = file.providerId
+          ? {
+              'providerId': file.providerId,
+              'user': file.user,
+              'fileId': file.fileId
+            }
+          : {
+              'batch': this.batchId,
+              'index': String(file.index)
+            };
         return this.$.docRequest.post();
       },
 
@@ -1155,7 +1157,7 @@
       },
 
       _styleFileCheck: function(e) {
-        return (e.base && ('checked' in e.base)) ? (e.base.checked ? 'checked' : 'unchecked') : 'hidden';
+        return (e.base && ('checked' in e.base))? (e.base.checked? 'checked' : 'unchecked') : 'hidden';
       },
 
       _checkTappedLocal: function(e) {

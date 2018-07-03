@@ -84,18 +84,18 @@ Example:
       },
 
       _computeIcon: function(hard) {
-        return hard ? 'mostly:delete-permanently' : 'mostly:delete';
+        return hard? 'mostly:delete-permanently' : 'mostly:delete';
       },
 
       _computeTooltip: function(hard) {
-        return this.i18n(hard ? 'deleteButton.tooltip.permanently' : 'deleteButton.tooltip');
+        return this.i18n(hard? 'deleteButton.tooltip.permanently' : 'deleteButton.tooltip');
       },
 
       _delete: function() {
         if (!confirm(this.i18n('deleteButton.confirm'))) {
           return;
         }
-        var op = this.hard ? this.$.deleteOp : this.$.trashOp;
+        var op = this.hard? this.$.deleteOp : this.$.trashOp;
         op.execute().then(() => {
           this.fire('document-deleted', { doc: this.document });
         }).catch((error) => {
