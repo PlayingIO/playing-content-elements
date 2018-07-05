@@ -45,19 +45,19 @@ element.
       /**Inherited properties of mostly-resource: TODO -> USE EXTENDS WHEN AVAILABLE**/
 
       /* The id of a mostly-connection to use. */
-      connectionId: {type: String, value: ''},
+      connectionId: { type: String, value: '' },
 
       /* If true, automatically execute the operation when either `path` or `params` changes. */
-      auto: {type: Boolean, value: false},
+      auto: { type: Boolean, value: false },
 
       /* The HTTP method to use ('GET', 'POST', 'PUT', or 'DELETE'). Default is 'GET' */
-      method: { type: String, value: 'get'},
+      method: { type: String, value: 'get' },
 
       /* The document id. Either 'docId' or 'docPath' must be defined. */
-      docId: { type: String, value: ''},
+      docId: { type: String, value: '' },
 
       /* The document path. Either 'docId' or 'docPath' must be defined. */
-      docPath: { type: String, value: ''},
+      docPath: { type: String, value: '' },
 
       /* The path of the resource. */
       path: {
@@ -66,13 +66,13 @@ element.
       },
 
       /* The parameters to send. */
-      params: {type: Object, value: null},
+      params: { type: Object, value: null },
 
       /* The data to pass to the server. */
-      data: {type: Object, value: null},
+      data: { type: Object, value: null },
 
       /* The response from the server. */
-      response: {type: Object, value: null, notify: true},
+      response: { type: Object, value: null, notify: true },
 
       document: {
         type: Object,
@@ -81,21 +81,21 @@ element.
       },
 
       /* The `entity-type` of the resource. */
-      type: {type: String, value: ''},
+      type: { type: String, value: '' },
 
       /* The headers of the request.
        * 'Accept': 'text/plain,application/json' is already set by default.
        */
-      headers: {type: Object, value: null},
+      headers: { type: Object, value: null },
 
       /* The `content enricher` of the resource. */
-      enrichers: {type: String, value: ''},
+      enrichers: { type: String, value: '' },
 
       /**
        * List of comma separated values of the document schemas to be returned.
        * All document schemas are returned by default.
        */
-      schemas: {type: String, value: ''},
+      schemas: { type: String, value: '' },
 
       /**
        * If true, documents changed by the call will be reindexed synchronously server side.

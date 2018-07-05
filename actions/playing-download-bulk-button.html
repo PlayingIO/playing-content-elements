@@ -85,13 +85,13 @@
           }
           this.$.bulkDownloadOp.execute().then(res => {
             if (res.status === 204) {
-              this.fire('notify', {"message": this.i18n('bulkDownload.empty')});
+              this.fire('notify', { "message": this.i18n('bulkDownload.empty') });
               return;
             }
-            this.fire('notify', {"message": this.i18n('bulkDownload.preparing')});
+            this.fire('notify', { "message": this.i18n('bulkDownload.preparing') });
             window.setTimeout(this._watchDownload.bind(this), 1000, res.key);
           }).catch(err => {
-            this.fire('notify', {"message": err});
+            this.fire('notify', { "message": err });
           });
         }
       },
@@ -99,7 +99,7 @@
       _watchDownload: function(key) {
         this.$.nx.http(this.$.nx.url + "/nxblobstatus/" + key).then(res => {
           if (res.completed) {
-            this.fire('notify', {"message": this.i18n('bulkDownload.completed')});
+            this.fire('notify', { "message": this.i18n('bulkDownload.completed') });
             var a = document.createElement('a');
             a.style = 'display: none';
             a.download = true;
@@ -109,11 +109,11 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(a.href);
           } else {
-            this.fire('notify', {"message": this.i18n('bulkDownload.preparing')});
+            this.fire('notify', { "message": this.i18n('bulkDownload.preparing') });
             window.setTimeout(this._watchDownload.bind(this), 1000, key);
           }
         }).catch(() => {
-          this.fire('notify', {"message": this.i18n('bulkDownload.error')});
+          this.fire('notify', { "message": this.i18n('bulkDownload.error') });
         });
       }
 

@@ -53,7 +53,7 @@
       _loadLayout: function (document, layout) {
         if (document) {
           if (!this.previousDocument || (document.type === this.previousDocument.type)) {
-            this._model = {document: document};
+            this._model = { document };
           }
           if (!this.previousDocument || (document.id !== this.previousDocument.id)) {
             this._href = null; // force layout restamp
@@ -70,7 +70,7 @@
       },
 
       _elementChanged: function() {
-        this._model = {document: this.document};
+        this._model = { document: this.document };
         // forward document path change events
         if (this.element) {
           this.element.addEventListener('document-changed', e => {

@@ -1029,11 +1029,11 @@
       _handleError: function(error) {
         this.set('_creating', false);
         this.set('errorMessage', this.i18n('documentImport.error.importFailed'));
-        this.fire('notify', {message: this.i18n('label.error').toUpperCase() + ': ' + error.message});
+        this.fire('notify', { message: this.i18n('label.error').toUpperCase() + ': ' + error.message });
       },
 
       _mergeResponses: function() {
-        var response = {'type': 'document', 'entries': []};
+        var response = { 'type': 'document', 'entries': [] };
         for (var i = 0; i < arguments.length; i++) {
           var current = arguments[i];
           if (current && current.entries) {
@@ -1074,7 +1074,7 @@
             (function(indexesToRemove, index) {
               return ((arr[index].docData && arr[index].checked)
                 ? self._processFileWithMetadata(arr[index])
-                : Promise.resolve({'type': 'document', 'data': []})
+                : Promise.resolve({ 'type': 'document', 'data': [] })
               ).then(result => {
                 indexesToRemove.push(index);
                 return result;

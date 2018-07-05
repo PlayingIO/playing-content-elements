@@ -318,10 +318,10 @@
 
       _emptyTrash: function() {
         this.$.opEmptyTrash.execute().then(() => {
-          this.fire('notify', {message: this.i18n('documentTrashContent.emptyTrash.success')});
+          this.fire('notify', { message: this.i18n('documentTrashContent.emptyTrash.success') });
           this._refresh();
         }).catch(() => {
-          this.fire('notify', {message: this.i18n('documentTrashContent.emptyTrash.error')});
+          this.fire('notify', { message: this.i18n('documentTrashContent.emptyTrash.error') });
         });
       },
 

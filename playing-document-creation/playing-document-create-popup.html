@@ -164,7 +164,7 @@
         this.selectedTab = 'import';
         this._fetchParent().then(() => {
           if (this._noPermission) {
-            this.fire('notify', {message: this.i18n('documentCreationBehavior.error.noPermission')});
+            this.fire('notify', { message: this.i18n('documentCreationBehavior.error.noPermission') });
           } else {
             this.$$('#bulkCreation').init(files);
             this.$.createDocDialog.toggle();
@@ -175,7 +175,7 @@
       toggleDialog: function() {
         this._fetchParent().then(() => {
           if (this._noPermission) {
-            this.fire('notify', {message: this.i18n('documentCreationBehavior.error.noPermission')});
+            this.fire('notify', { message: this.i18n('documentCreationBehavior.error.noPermission') });
           } else {
             this.$$('#bulkCreation').init();
             this.$.createDocDialog.toggle();

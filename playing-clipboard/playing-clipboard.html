@@ -186,7 +186,7 @@
 
       _observeDocuments: function() {
         if (this.documents) {
-          this.fire('nx-clipboard-updated', {docCount: this.documents.length});
+          this.fire('nx-clipboard-updated', { docCount: this.documents.length });
         }
       },
 
@@ -211,7 +211,7 @@
 
       remove: function(doc) {
         this.$.storage.remove(doc);
-        this.fire('removed-from-clipboard', {docId : doc.id});
+        this.fire('removed-from-clipboard', { docId : doc.id });
       },
 
       canPaste: function(documents, doc) {

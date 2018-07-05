@@ -66,9 +66,9 @@ Example:
 
       _untrash: function() {
         this.$.operation.execute().then(res => {
-          this.fire('document-untrashed', {doc: res});
+          this.fire('document-untrashed', { doc: res });
         }).catch((error) => {
-          this.fire('document-untrashed', {error: error});
+          this.fire('document-untrashed', { error: error} );
         });
       }
 

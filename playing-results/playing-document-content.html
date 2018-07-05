@@ -398,7 +398,7 @@
       },
 
       _dragleaveImport: function() {
-        this.fire('notify', {close: true});
+        this.fire('notify', { close: true });
         this._toggleDragging(false);
         this.toggleClass('dragging', false, this.$.grid);
         this.toggleClass('dragging', false, this.$.table);
@@ -406,9 +406,9 @@
 
       _dropImport: function(e) {
         e.preventDefault();
-        this.fire('notify', {close: true});
+        this.fire('notify', { close: true });
         this._toggleDragging(false);
-        this.fire('create-document', {files: e.dataTransfer.files});
+        this.fire('create-document', { files: e.dataTransfer.files });
       },
 
       _toggleDragging: function(flag) {
@@ -422,7 +422,7 @@
       },
 
       _browseActionContext: function() {
-        return {document: this.document, selectedItems: this.selectedItems};
+        return { document: this.document, selectedItems: this.selectedItems };
       },
 
       _computeVisible: function() {

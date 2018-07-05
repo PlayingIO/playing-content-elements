@@ -102,12 +102,12 @@ Example:
         if (!this.locked && this._canLock()) {
           this.$.opLock.execute().then(doc => {
             this.locked = true;
-            this.fire('document-locked', {doc: doc});
+            this.fire('document-locked', { doc });
           });
         } else if (this._canUnlock()) {
           this.$.opUnlock.execute().then(doc => {
             this.locked = false;
-            this.fire('document-unlocked', {doc: doc});
+            this.fire('document-unlocked', { doc });
           });
         }
       },

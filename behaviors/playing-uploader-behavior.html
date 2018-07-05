@@ -88,7 +88,7 @@
           .params(params)
           .execute(options)
           .then(data => {
-            this.fire('response', {response: data});
+            this.fire('response', { response: data });
             this.response = data;
             return this.response;
           }).catch(error => {
@@ -165,7 +165,7 @@
     _batchFinished: function(batchId) {
       this.uploading = false;
       this.batchId = batchId;
-      this.fire('batchFinished', {batchId: batchId});
+      this.fire('batchFinished', { batchId: batchId });
     },
 
     _uploadStarted: function(fileIndex, file) {
@@ -181,11 +181,11 @@
     },
 
     _uploadProgressUpdated: function(index, file, progress) {
-      this._updateFile(index, {progress: progress}); // in percentage
+      this._updateFile(index, { progress }); // in percentage
     },
 
     _uploadSpeedUpdated: function(index, file, speed) {
-      this._updateFile(index, {speed: speed}); // in KB/sec
+      this._updateFile(index, { speed }); // in KB/sec
     },
 
     // DnD
